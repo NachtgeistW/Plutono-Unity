@@ -9,8 +9,11 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Assets.Scripts.Game.Song;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.Android;
 using Application = UnityEngine.Application;
 
 namespace Assets.Scripts.Util.FileManager
@@ -21,13 +24,20 @@ namespace Assets.Scripts.Util.FileManager
         //Resource directory of DeemoDIY 2.2 and 3.2 
         private static readonly string _storagePath = "/storage/emulated/0/DeemoDIY";
         private static readonly string _sdCardPath = "/sdcard/DeemoDIY";
-        
-        //general
-        private static readonly string _platformPath = Application.persistentDataPath + "Charon";
-        private static readonly string _unityEditorPath = Application.dataPath + "Charon";
 
+        //general
+        private static readonly string _platformPath = Application.persistentDataPath + "/Charon";
 
         Dictionary<string, SongModel> songDictionary = null;
+
+        public void RequestReadPermission()
+        {
+            Debug.Log("RequestReadPermission");
+            if (!Permission.HasUserAuthorizedPermission(Permission.ExternalStorageRead))
+            {
+                Permission.RequestUserPermission(Permission.ExternalStorageRead);
+            }
+        }
 
         private string[] GetAllLocalSongList(string path)
         {
@@ -35,44 +45,51 @@ namespace Assets.Scripts.Util.FileManager
             {
                 return null;
             }
-            return Directory.GetDirectories(path, "*", SearchOption.AllDirectories);
+            Debug.Log(Directory.GetFiles(path, "*.ini", SearchOption.AllDirectories));
+            return Directory.GetDirectories(path, "*", SearchOption.AllDirectories); ;
         }
 
         public string[] InitializeApplication()
         {
-            if (Application.platform == RuntimePlatform.Android)
+            string[] vs = null;
+            try
             {
-                Log.LogAndroid();
-                if (!Directory.Exists(_storagePath) &&
-                    !Directory.Exists(_sdCardPath) &&
-                    !Directory.Exists(_platformPath))
+                Log.LogPlatform();
+                if (Application.platform == RuntimePlatform.Android)
                 {
-
-                    Directory.CreateDirectory(_platformPath);
+                    if (!Directory.Exists(_platformPath))
+                        Directory.CreateDirectory(_platformPath);
+                    if (Directory.Exists(_storagePath))
+                    {
+                        vs = GetAllLocalSongList(_storagePath);
+                        foreach (var item in vs)
+                        {
+                            Debug.Log(item);
+                        }
+                    }
+                    if (Directory.Exists(_sdCardPath))
+                    {
+                        var temp = GetAllLocalSongList(_sdCardPath);
+                    }
+                    return vs;
                 }
+                else if (Application.platform == RuntimePlatform.IPhonePlayer)
+                {
+                    if (!Directory.Exists(_platformPath))
+                    {
+                        Directory.CreateDirectory(_platformPath);
+                    }
+                    return GetAllLocalSongList(_storagePath);
 
-                return GetAllLocalSongList(_storagePath);
+                }
+                else
+                    return null;
             }
-            else if (Application.platform == RuntimePlatform.IPhonePlayer)
+            catch (Exception e)
             {
-                Log.LogiOS();
-                if (!Directory.Exists(_platformPath))
-                {
-                    Directory.CreateDirectory(_platformPath);
-                }
-                return GetAllLocalSongList(_storagePath);
-
-            }
-            else if (Application.platform == RuntimePlatform.WindowsEditor)
-            {
-                if (!Directory.Exists(_unityEditorPath))
-                {
-                    Directory.CreateDirectory(_unityEditorPath);
-                }
-                return GetAllLocalSongList(_storagePath);
-            }
-            else
+                Debug.LogError(e.Message);
                 return null;
+            }
         }
     }
 }

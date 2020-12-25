@@ -10,30 +10,36 @@
  * 
  * History:
  *     2020.8.10 COPY from Deenote and EDIT
+ *     2020.9.03 COPY from Deenote(Refactor) and EDIT
  */
 
 using System.Collections.Generic;
+using JetBrains.Annotations;
+using Newtonsoft.Json;
 
-[System.Serializable]
-public class Note
+[JsonObject(IsReference = true)]
+public sealed class JsonNote
 {
-    public float position = 0.0f; //pos
-    protected int type = 0; //type
-    public float size = 0.0f; //size
-    public float time = 0.0f; //_time
-    public float shift = 0.0f; //shift
-    public List<PianoSound> sounds = new List<PianoSound>(); //sounds
-    public bool isLink = false; //Whether the note is a link note
-    //The two variables below are not used when isLink=false
-    public int prevLink = -1; //Index of previous link note in the same link, -1 means current note is the first
-    public int nextLink = -1; //Index of next link note in the same link, -1 means current note is the last
+    public int type;
+    [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+    [CanBeNull] public JsonPianoSound[] sounds;
+    public float pos;
+    public float size;
+    // ReSharper disable once InconsistentNaming
+    public float _time;
+    public float shift;
+    public float time;
 }
 
-[System.Serializable]
-public class PianoSound
+public sealed class JsonLink
 {
-    public float delay = 0.0f; //w
-    public float duration = 0.0f; //d
-    public int pitch = 0; //p
-    public int volume = 0; //v
+    [CanBeNull] public List<JsonNote> notes;
+}
+
+public sealed class JsonPianoSound
+{
+    public float delay; //w
+    public float duration; //d
+    public short pitch; //p
+    public short volume; //v
 }

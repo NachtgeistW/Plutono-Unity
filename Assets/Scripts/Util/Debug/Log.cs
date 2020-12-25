@@ -11,4 +11,8 @@ public class Log : MonoBehaviour
     {
         Debug.Log("iOS");
     }
+    public static void LogPlatform()
+    {
+        Debug.Log(Application.platform);
+    }
 }

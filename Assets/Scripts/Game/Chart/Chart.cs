@@ -4,19 +4,17 @@
  *      This class includes the speed, difficulty, level, beats and notes property.
  *
  * History
- *      2020.7.29 Copy from Deenote.
+ *     2020.7.29 Copy from Deenote.
+ *     2020.9.03 COPY from Deenote(Refactor) and EDIT.
  */
-using System.Collections.Generic;
+using JetBrains.Annotations;
 
 namespace Assets.Scripts.Game.Chart
 {
-    [System.Serializable]
-    public class Chart
+    public sealed class Chart
     {
-        private readonly float speed = 0;
-        private readonly int difficulty = 0;
-        private readonly string level = "";
-        private readonly List<float> beats = new List<float>(); // For quantifying the note
-        private readonly List<Note> notes = new List<Note>();
+        public float speed;
+        [CanBeNull] public JsonNote[] notes;
+        [CanBeNull] public System.Collections.Generic.List<JsonLink> links;
     }
 }

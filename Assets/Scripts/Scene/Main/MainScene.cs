@@ -9,6 +9,7 @@ namespace Assets.Scripts.Scene.Main
         void Awake()
         {
             ResourceManger resourceManager = new ResourceManger();
+            resourceManager.RequestReadPermission();
             resourceManager.InitializeApplication();
         }
 
