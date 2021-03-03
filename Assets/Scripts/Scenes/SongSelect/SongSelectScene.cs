@@ -1,14 +1,13 @@
-﻿using UnityEngine;
-using System.Collections;
-using Assets.Scripts.Util.FileManager;
+﻿using Assets.Scripts.Util.FileManager;
+using UnityEngine;
 
-namespace Assets.Scripts.Scene.Main
+namespace Assets.Scripts.Scene.SongSelect
 {
-    public class MainScene : MonoBehaviour
+    public class SongSelectScene : MonoBehaviour
     {
         void Awake()
         {
-            ResourceManger resourceManager = new ResourceManger();
+            var resourceManager = new ResourceManger();
             resourceManager.RequestReadPermission();
             resourceManager.InitializeApplication();
         }
