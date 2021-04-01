@@ -1,10 +1,21 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts.Util.FileManager;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class JumpToMainScene : MonoBehaviour
+namespace Assets.Scripts.Scenes.Welcome
 {
-    public void OnClick()
+    public class JumpToMainScene : MonoBehaviour
     {
-        SceneManager.LoadScene("SongSelectScene");
+        private void Awake()
+        {
+            var resourceManager = gameObject.AddComponent<ResourceManger>();
+            resourceManager.RequestReadPermission();
+            resourceManager.InitializeApplication();
+        }
+
+        public void OnClick()
+        {
+            SceneManager.LoadScene("SongSelectScene");
+        }
     }
 }

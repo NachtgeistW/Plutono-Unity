@@ -1,15 +1,19 @@
 ﻿/*
  * class ResourceManager -- Save and load resources (include charts, audios).
  *
- *      This class has below function:
+ * Function
+ *      void::RequestReadPermission -- request read permission in order to read files.
+ *      string[]::GetAllLocalSongList -- scan specific file paths and detect the chart.
+ *      string[]::InitializeApplication -- call the GetAllLocalSongList with different path by different platform.
  *
  * History
- *      2020.8.12 Created.
+ *      2020.8.12 CREATE.
  */
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Assets.Scripts.Game.Plutono;
 using Assets.Scripts.Game.Song;
 using UnityEditor;
 using UnityEngine;

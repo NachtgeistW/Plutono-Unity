@@ -5,13 +5,13 @@ namespace Assets.Scripts.Scene.SongSelect
 {
     public class SongSelectScene : MonoBehaviour
     {
-        void Awake()
+/*        void Awake()
         {
             var resourceManager = new ResourceManger();
             resourceManager.RequestReadPermission();
             resourceManager.InitializeApplication();
         }
-
+*/
         // Use this for initialization
         void Start()
         {
