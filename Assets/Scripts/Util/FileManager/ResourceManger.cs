@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Assets.Scripts.Game.Deemo;
 using Assets.Scripts.Game.Plutono;
 using Assets.Scripts.Game.Song;
 using UnityEditor;
@@ -25,15 +26,6 @@ namespace Assets.Scripts.Util.FileManager
     [Serializable]
     public class ResourceManger : MonoBehaviour
     {
-        //Resource directory of DeemoDIY 2.2 and 3.2 
-        //private static readonly string StoragePath = "/storage/emulated/0/DeemoDIY";
-        private static readonly string SdCardPath = "/sdcard/DeemoDIY";
-
-        //general
-        private static readonly string PlatformPath = Application.persistentDataPath + "/Plutono";
-
-        Dictionary<string, SongModel> songDictionary = null;
-
         public void RequestReadPermission()
         {
             if (Permission.HasUserAuthorizedPermission(Permission.ExternalStorageRead)) return;
@@ -41,52 +33,90 @@ namespace Assets.Scripts.Util.FileManager
             Permission.RequestUserPermission(Permission.ExternalStorageRead);
         }
 
-        private string[] GetAllLocalSongList(string path)
+        private List<string> GetAllLocalSongList(string path)
         {
+            var songPathList = new List<string>();
+
             if (string.IsNullOrEmpty(path))
             {
                 return null;
             }
 
-            var d = Directory.GetDirectories(path, "*", SearchOption.TopDirectoryOnly);
-            foreach (var variable in d)
+            var bookPath = Directory.GetDirectories(path, "*", SearchOption.TopDirectoryOnly);
+            foreach (var s in bookPath)
             {
-                Debug.Log(variable);
+                var songPath = Directory.GetDirectories(s, "*", SearchOption.TopDirectoryOnly);
+                songPathList.AddRange(songPath);
             }
-            return Directory.GetDirectories(path, "*", SearchOption.TopDirectoryOnly); ;
+            return songPathList;
         }
 
-        public string[] InitializeApplication()
+        public List<string> InitializeApplication()
         {
-            string[] vs = null;
+            //Resource directory of DeemoDIY 2.2 and 3.2 
+            //private static readonly string StoragePath = "/storage/emulated/0/DeemoDIY";
+            const string sdCardPath = "/sdcard/DeemoDIY";
+
+            //general
+            string platformPath = Application.persistentDataPath + "/Plutono";
+
+            Dictionary<string, SongModel> songDictionary = null;
+
+            var songPathList = new List<string>();
+            var songPackList = new List<PackInfo>();
             try
             {
                 Log.LogPlatform();
                 switch (Application.platform)
                 {
+                    case RuntimePlatform.WindowsEditor:
+                        {
+                            if (!Directory.Exists(platformPath))
+                                Directory.CreateDirectory(platformPath);
+                            if (Directory.Exists("C:\\Users\\night\\Desktop\\G2 Collection_vol.7"))
+                            {
+                                songPathList = GetAllLocalSongList("C:\\Users\\night\\Desktop\\G2 Collection_vol.7");
+                            }
+                            foreach (var filePath in songPathList)
+                            {
+                                var iniInfo = new IniInfo();
+                                var iniPathArray = Directory.GetFiles(filePath, "*.ini");
+                                foreach (var iniPath in iniPathArray)
+                                {
+                                    iniInfo = iniInfo.ReadIniConfig(iniPath);
+                                }
+                                songPackList.Add(iniInfo.IniToPackInfo(filePath));
+                            }
+                            return songPathList;
+                        }
                     case RuntimePlatform.Android:
-                    {
-                        if (!Directory.Exists(PlatformPath))
-                            Directory.CreateDirectory(PlatformPath);
-/*                        if (Directory.Exists(StoragePath))
                         {
-                            vs = GetAllLocalSongList(StoragePath);
+                            if (!Directory.Exists(platformPath))
+                                Directory.CreateDirectory(platformPath);
+                            if (Directory.Exists(sdCardPath))
+                            {
+                                songPathList = GetAllLocalSongList(sdCardPath);
+                            }
+                            foreach (var filePath in songPathList)
+                            {
+                                var iniInfo = new IniInfo();
+                                var iniPathArray = Directory.GetFiles(filePath, "*.ini");
+                                foreach (var iniPath in iniPathArray)
+                                {
+                                    iniInfo = iniInfo.ReadIniConfig(iniPath);
+                                }
+                                songPackList.Add(iniInfo.IniToPackInfo(filePath));
+                            }
+                            return songPathList;
                         }
-*/                        
-                        if (Directory.Exists(SdCardPath))
-                        {
-                            vs = GetAllLocalSongList(SdCardPath);
-                        }
-                        return vs;
-                    }
                     case RuntimePlatform.IPhonePlayer:
-                    {
-                        if (!Directory.Exists(PlatformPath))
                         {
-                            Directory.CreateDirectory(PlatformPath);
+                            if (!Directory.Exists(platformPath))
+                            {
+                                Directory.CreateDirectory(platformPath);
+                            }
+                            return GetAllLocalSongList(platformPath);
                         }
-                        return GetAllLocalSongList(PlatformPath);
-                    }
                     default:
                         return null;
                 }

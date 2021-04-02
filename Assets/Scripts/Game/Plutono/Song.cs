@@ -16,6 +16,7 @@ using UnityEngine.UI;
 
 namespace Assets.Scripts.Game.Song
 {
+    [System.Serializable]
     public class Song : MonoBehaviour
     {
         public SongModel Model { get; set; }

@@ -21,6 +21,7 @@ using Assets.Scripts.Game.Note;
 
 namespace Assets.Scripts.Game.Plutono
 {
+    [System.Serializable]
     public sealed class GameChart
     {
         public List<float> beats = new List<float>();

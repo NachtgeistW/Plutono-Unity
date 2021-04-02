@@ -17,15 +17,12 @@
  *      2021.03.19  ADD function ToJsonNote() and variable IsShown
  */
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Assets.Scripts.Game.Deemo;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 
-namespace Assets.Scripts.Game.Note
+namespace Assets.Scripts.Game.Plutono
 {
     [System.Serializable]
     public class GameNote

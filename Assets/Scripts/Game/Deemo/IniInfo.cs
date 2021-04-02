@@ -15,7 +15,7 @@
  *
  * Function
  *      IniInfo::ReadIniConfig -- read ini info from a ini file.
- *      PackInfo::IniToJsonConfig -- convert ini to a config file used in Plutono.
+ *      PackInfo::IniToPackInfo -- convert ini to a config file used in Plutono.
  *
  * History
  *      2020.03.31  CREATE.
@@ -28,6 +28,7 @@ using IniParser;
 
 namespace Assets.Scripts.Game.Deemo
 {
+    [System.Serializable]
     public class IniInfo
     {
         public string songName = "";
@@ -42,6 +43,7 @@ namespace Assets.Scripts.Game.Deemo
         public IniInfo ReadIniConfig(string iniPath)
         {
             var parser = new FileIniDataParser();
+            //TODO: 判定ini路径是否合法
             var data = parser.ReadFile(iniPath);
             var info = new IniInfo
             {
@@ -61,12 +63,12 @@ namespace Assets.Scripts.Game.Deemo
                 info.levelUltra = uint.Parse(data["Song"]["Ultra"]);
             return info;
         }
-        public PackInfo IniToJsonConfig(string iniDocumentPath)
+        public PackInfo IniToPackInfo(string iniDocumentPath)
         {
             var packInfo = new PackInfo { songName = songName, composer = artist };
             if (levelEasy != 0)
             {
-                var jChart = Utility.JsonToJChart(iniDocumentPath + "easy.json");
+                var jChart = Utility.JsonToJChart(iniDocumentPath + "/easy.json");
                 var chart = jChart.ToGChart();
                 chart.level = levelEasy.ToString();
                 chart.chartDesigner = artist;
@@ -74,7 +76,7 @@ namespace Assets.Scripts.Game.Deemo
             }
             if (levelNormal != 0)
             {
-                var jChart = Utility.JsonToJChart(iniDocumentPath + "normal.json");
+                var jChart = Utility.JsonToJChart(iniDocumentPath + "/normal.json");
                 var chart = jChart.ToGChart();
                 chart.level = levelNormal.ToString();
                 chart.chartDesigner = artist;
@@ -82,7 +84,7 @@ namespace Assets.Scripts.Game.Deemo
             }
             if (levelHard != 0)
             {
-                var jChart = Utility.JsonToJChart(iniDocumentPath + "hard.json");
+                var jChart = Utility.JsonToJChart(iniDocumentPath + "/hard.json");
                 var chart = jChart.ToGChart();
                 chart.level = levelHard.ToString();
                 chart.chartDesigner = artist;
@@ -90,7 +92,7 @@ namespace Assets.Scripts.Game.Deemo
             }
             if (levelExtra != "")
             {
-                var jChart = Utility.JsonToJChart(iniDocumentPath + "extra.json");
+                var jChart = Utility.JsonToJChart(iniDocumentPath + "/extra.json");
                 var chart = jChart.ToGChart();
                 chart.level = levelExtra;
                 chart.chartDesigner = artist;
@@ -98,13 +100,12 @@ namespace Assets.Scripts.Game.Deemo
             }
             if (levelUltra != 0)
             {
-                var jChart = Utility.JsonToJChart(iniDocumentPath + "ultra.json");
+                var jChart = Utility.JsonToJChart(iniDocumentPath + "/ultra.json");
                 var chart = jChart.ToGChart();
                 chart.level = levelUltra.ToString();
                 chart.chartDesigner = artist;
                 packInfo.charts.Add(chart);
             }
-
             Debug.Log(packInfo.songName);
             return packInfo;
         }

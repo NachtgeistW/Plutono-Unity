@@ -1,27 +1,15 @@
 ﻿using Assets.Scripts.Util.FileManager;
 using UnityEngine;
 
-namespace Assets.Scripts.Scene.SongSelect
+namespace Assets.Scripts.Scenes.SongSelect
 {
     public class SongSelectScene : MonoBehaviour
     {
-/*        void Awake()
+        void Awake()
         {
-            var resourceManager = new ResourceManger();
+            var resourceManager = gameObject.AddComponent<ResourceManger>();
             resourceManager.RequestReadPermission();
             resourceManager.InitializeApplication();
-        }
-*/
-        // Use this for initialization
-        void Start()
-        {
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
         }
     }
 }

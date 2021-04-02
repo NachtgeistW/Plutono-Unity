@@ -18,6 +18,7 @@ using Assets.Scripts.Game.Plutono;
 
 namespace Assets.Scripts.Game.Deemo
 {
+    [System.Serializable]
     public class JsonChart
     {
         public float speed = 0.0f;
@@ -29,11 +30,11 @@ namespace Assets.Scripts.Game.Deemo
             var gChart = new GameChart();
             foreach (var jNote in notes)
             {
-                GameNote note = new GameNote()
+                var note = new GameNote()
                 {
                     pos = jNote.pos,
                     size = jNote.size,
-                    time = jNote.time,
+                    time = jNote._time,
                 };
                 gChart.notes.Add(note);
             }

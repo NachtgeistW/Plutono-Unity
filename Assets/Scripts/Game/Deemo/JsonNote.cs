@@ -26,15 +26,14 @@
  *      2021.03.19  ADD function ToGameNote
  */
 
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using Cysharp.Threading.Tasks;
+using Assets.Scripts.Game.Note;
+using Assets.Scripts.Game.Plutono;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 
-namespace Assets.Scripts.Game.Note
+namespace Assets.Scripts.Game.Deemo
 {
+    [System.Serializable]
     [JsonObject(IsReference = true)]
     public sealed class JsonNote
     {
@@ -50,7 +49,6 @@ namespace Assets.Scripts.Game.Note
         [CanBeNull] public JsonPianoSound[] sounds;
         public uint type;
 
-
         public JsonNote ToJson() => new JsonNote()
         {
             pos = pos,
@@ -59,7 +57,7 @@ namespace Assets.Scripts.Game.Note
             type = type,
             _time = time,
             time = time,
-            sounds = sounds.Select(sound => sound.ToJson()).ToArray()
+            //sounds = sounds.Select(sound => sound.ToJson()).ToArray()
         };
 
         public GameNote ToGameNote(JsonNote note) => new GameNote()
@@ -69,10 +67,6 @@ namespace Assets.Scripts.Game.Note
             type = note.type,
             time = note.time,
         };
-
-        public void ImportChartFromJSONFile(int diff)
-        {
-        }
     }
 
     /*    public sealed class JsonLink
@@ -80,6 +74,7 @@ namespace Assets.Scripts.Game.Note
             [CanBeNull] public List<JsonNote> notes;
         }
     */
+    [System.Serializable]
     public sealed class JsonPianoSound
     {
         public float w; //w
