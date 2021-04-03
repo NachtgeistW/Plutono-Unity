@@ -1,27 +1,19 @@
-﻿using Assets.Scripts.Util.FileManager;
+﻿using System.Collections.Generic;
+using Assets.Scripts.Game.Plutono;
+using Assets.Scripts.Game.Song;
+using Assets.Scripts.Util.FileManager;
 using UnityEngine;
 
-namespace Assets.Scripts.Scene.SongSelect
+namespace Assets.Scripts.Scenes.SongSelect
 {
     public class SongSelectScene : MonoBehaviour
     {
+        public List<PackInfo> songPackList = new List<PackInfo>();
         void Awake()
         {
-            var resourceManager = new ResourceManger();
+            var resourceManager = gameObject.AddComponent<ResourceManger>();
             resourceManager.RequestReadPermission();
-            resourceManager.InitializeApplication();
-        }
-
-        // Use this for initialization
-        void Start()
-        {
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
+            resourceManager.InitializeApplication(songPackList);
         }
     }
 }

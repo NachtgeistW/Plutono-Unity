@@ -1,4 +1,6 @@
-﻿namespace Assets.Scripts.Util.FileManager.ProjectInfo
+﻿/*using Assets.Scripts.Game.Plutono;
+
+namespace Assets.Scripts.Util.FileManager.ProjectInfo
 {
     [System.Serializable]
     public class SerializableProjectData //Saves all the project data including the audio clip data
@@ -18,4 +20,4 @@
         public byte[] audio = { };
         public string audioType;
     }
-}
+}*/

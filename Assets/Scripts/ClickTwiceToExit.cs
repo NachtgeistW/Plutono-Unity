@@ -4,27 +4,25 @@ using UnityEngine;
 //待解决
 public class ClickTwiceToExit : MonoBehaviour
 {
-    public GameObject quitobject;
-    private bool clickedBefore = false;
+    public GameObject quitObject;
+    private bool _clickedBefore = false;
 
     void Update()
     {
         //Check input for the first time
-        if (Input.GetKeyDown(KeyCode.Escape) && !clickedBefore)
-        {
-            Debug.Log("Back Button pressed for the first time");
-            //Set to false so that this input is not checked again. It will be checked in the coroutine function instead
-            clickedBefore = true;
+        if (!Input.GetKeyDown(KeyCode.Escape) || _clickedBefore) return;
+        Debug.Log("Back Button pressed for the first time");
+        //Set to false so that this input is not checked again. It will be checked in the coroutine function instead
+        _clickedBefore = true;
 
-            //Activate Quit Object
-            quitobject.SetActive(true);
+        //Activate Quit Object
+        quitObject.SetActive(true);
 
-            //Start quit timer
-            StartCoroutine(quitingTimer());
-        }
+        //Start quit timer
+        StartCoroutine(QuittingTimer());
     }
 
-    IEnumerator quitingTimer()
+    private IEnumerator QuittingTimer()
     {
         //Wait for a frame so that Input.GetKeyDown is no longer true
         yield return null;
@@ -52,12 +50,12 @@ public class ClickTwiceToExit : MonoBehaviour
         Debug.Log("Timer finished...Back Button was NOT pressed for the second time within: '" + timerTime + "' seconds");
 
         //Timer has finished and NO QUIT(NO second press) so deactivate
-        quitobject.SetActive(false);
+        quitObject.SetActive(false);
         //Reset clickedBefore so that Input can be checked again in the Update function
-        clickedBefore = false;
+        _clickedBefore = false;
     }
 
-    void Quit()
+    static void Quit()
     {
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;

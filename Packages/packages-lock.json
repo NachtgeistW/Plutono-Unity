@@ -1,11 +1,39 @@
 {
   "dependencies": {
+    "com.coffee.ui-effect": {
+      "version": "https://github.com/mob-sakai/UIEffect.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "b43e40508b167d143330d8b9eff0d5c9965cdf3c"
+    },
+    "com.cysharp.unitask": {
+      "version": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "18f2746f0d30a1b870d9835f2f16d15b56476a33"
+    },
+    "com.kink3d.pooling": {
+      "version": "https://github.com/Kink3d/kPooling.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "3e94f4e2e9146b6b61cc9deec5e8b3a21c55bce7"
+    },
     "com.monitor1394.xcharts": {
       "version": "https://github.com/monitor1394/unity-ugui-XCharts.git#2.0-upm",
       "depth": 0,
       "source": "git",
       "dependencies": {},
       "hash": "6af0e6d42779c8a42afbe23024457fa95e42c1aa"
+    },
+    "com.neuecc.unirx": {
+      "version": "https://github.com/neuecc/UniRx.git?path=Assets/Plugins/UniRx/Scripts",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "284d5c50d3f1ddd9fa7df3d382ea904732a9c2ff"
     },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
@@ -44,15 +72,6 @@
       "dependencies": {},
       "url": "https://packages.unity.cn"
     },
-    "com.unity.doc_zh": {
-      "version": "0.1.0-preview.10",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {
-        "com.unity.uiwidgets": "1.5.4-preview.12"
-      },
-      "url": "https://packages.unity.cn"
-    },
     "com.unity.ext.nunit": {
       "version": "1.0.0",
       "depth": 1,
@@ -74,15 +93,6 @@
       "depth": 0,
       "source": "registry",
       "dependencies": {},
-      "url": "https://packages.unity.cn"
-    },
-    "com.unity.messenger": {
-      "version": "1.0.7-preview",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {
-        "com.unity.uiwidgets": "1.5.4-preview.12"
-      },
       "url": "https://packages.unity.cn"
     },
     "com.unity.multiplayer-hlapi": {
@@ -143,13 +153,6 @@
         "com.unity.modules.ui": "1.0.0"
       }
     },
-    "com.unity.uiwidgets": {
-      "version": "1.5.4-preview.12",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://packages.unity.cn"
-    },
     "com.unity.xr.legacyinputhelpers": {
       "version": "2.1.4",
       "depth": 0,
@@ -163,6 +166,13 @@
       "source": "git",
       "dependencies": {},
       "hash": "b8a1d9f726608a3517fade7d045c7c629a57c302"
+    },
+    "jp.setchi.fancyscrollview": {
+      "version": "https://github.com/setchi/FancyScrollView.git#upm",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "e5d10d3e5961848f93be43c2911344750b509a88"
     },
     "nuget.mono-cecil": {
       "version": "0.1.6-preview",
