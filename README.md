@@ -1,4 +1,4 @@
-# Charon
+# Plutono
 
 A Deemo simulator.
 
