@@ -3,11 +3,12 @@
  *
  * Function
  *      void::RequestReadPermission -- request read permission in order to read files.
- *      string[]::GetAllLocalSongList -- scan specific file paths and detect the chart.
- *      string[]::InitializeApplication -- call the GetAllLocalSongList with different path by different platform.
+ *      List<string>::GetAllLocalSongList -- scan specific file paths and detect the chart.
+ *      List<string>::InitializeApplication -- call the GetAllLocalSongList with different path by different platform.
  *
  * History
- *      2020.8.12 CREATE.
+ *      2020.08.12  CREATE.
+ *      2021.04.03  ADD InitializeApplication function
  */
 using System;
 using System.Collections.Generic;
@@ -51,7 +52,7 @@ namespace Assets.Scripts.Util.FileManager
             return songPathList;
         }
 
-        public List<string> InitializeApplication()
+        public List<string> InitializeApplication(List<PackInfo> songPackList)
         {
             //Resource directory of DeemoDIY 2.2 and 3.2 
             //private static readonly string StoragePath = "/storage/emulated/0/DeemoDIY";
@@ -63,12 +64,12 @@ namespace Assets.Scripts.Util.FileManager
             Dictionary<string, SongModel> songDictionary = null;
 
             var songPathList = new List<string>();
-            var songPackList = new List<PackInfo>();
             try
             {
                 Log.LogPlatform();
                 switch (Application.platform)
                 {
+                    //TODO::将case分支里面的重复代码抽取出来
                     case RuntimePlatform.WindowsEditor:
                         {
                             if (!Directory.Exists(platformPath))

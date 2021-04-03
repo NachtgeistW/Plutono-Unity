@@ -65,46 +65,47 @@ namespace Assets.Scripts.Game.Deemo
         }
         public PackInfo IniToPackInfo(string iniDocumentPath)
         {
+            //TODO::将if分支里面的重复代码抽取出来
             var packInfo = new PackInfo { songName = songName, composer = artist };
             if (levelEasy != 0)
             {
                 var jChart = Utility.JsonToJChart(iniDocumentPath + "/easy.json");
-                var chart = jChart.ToGChart();
-                chart.level = levelEasy.ToString();
-                chart.chartDesigner = artist;
-                packInfo.charts.Add(chart);
+                var gChart = jChart.ToGChart();
+                gChart.level = levelEasy.ToString();
+                gChart.chartDesigner = chartDesigner;
+                packInfo.charts.Add(gChart);
             }
             if (levelNormal != 0)
             {
                 var jChart = Utility.JsonToJChart(iniDocumentPath + "/normal.json");
-                var chart = jChart.ToGChart();
-                chart.level = levelNormal.ToString();
-                chart.chartDesigner = artist;
-                packInfo.charts.Add(chart);
+                var gChart = jChart.ToGChart();
+                gChart.level = levelNormal.ToString();
+                gChart.chartDesigner = chartDesigner;
+                packInfo.charts.Add(gChart);
             }
             if (levelHard != 0)
             {
                 var jChart = Utility.JsonToJChart(iniDocumentPath + "/hard.json");
-                var chart = jChart.ToGChart();
-                chart.level = levelHard.ToString();
-                chart.chartDesigner = artist;
-                packInfo.charts.Add(chart);
+                var gChart = jChart.ToGChart();
+                gChart.level = levelHard.ToString();
+                gChart.chartDesigner = chartDesigner;
+                packInfo.charts.Add(gChart);
             }
             if (levelExtra != "")
             {
                 var jChart = Utility.JsonToJChart(iniDocumentPath + "/extra.json");
-                var chart = jChart.ToGChart();
-                chart.level = levelExtra;
-                chart.chartDesigner = artist;
-                packInfo.charts.Add(chart);
+                var gChart = jChart.ToGChart();
+                gChart.level = levelExtra;
+                gChart.chartDesigner = chartDesigner;
+                packInfo.charts.Add(gChart);
             }
             if (levelUltra != 0)
             {
                 var jChart = Utility.JsonToJChart(iniDocumentPath + "/ultra.json");
-                var chart = jChart.ToGChart();
-                chart.level = levelUltra.ToString();
-                chart.chartDesigner = artist;
-                packInfo.charts.Add(chart);
+                var gChart = jChart.ToGChart();
+                gChart.level = levelUltra.ToString();
+                gChart.chartDesigner = chartDesigner;
+                packInfo.charts.Add(gChart);
             }
             Debug.Log(packInfo.songName);
             return packInfo;
