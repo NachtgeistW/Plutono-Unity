@@ -9,6 +9,7 @@
  * History
  *      2020.08.12  CREATE.
  *      2021.04.03  ADD InitializeApplication function
+ *      2021.04.07  CHANGE the platformPath
  */
 using System;
 using System.Collections.Generic;
@@ -24,7 +25,7 @@ using Application = UnityEngine.Application;
 namespace Assets.Scripts.Util.FileManager
 {
     [Serializable]
-    public class ResourceManger : MonoBehaviour
+    public class ResourceManger
     {
         public void RequestReadPermission()
         {
@@ -58,7 +59,7 @@ namespace Assets.Scripts.Util.FileManager
             const string sdCardPath = "/sdcard/DeemoDIY";
 
             //general
-            string platformPath = Application.persistentDataPath + "/Plutono";
+            const string platformPath = "/sdcard/Plutono";
 
             Dictionary<string, SongModel> songDictionary = null;
 

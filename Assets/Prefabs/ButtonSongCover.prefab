@@ -90,7 +90,7 @@ GameObject:
   - component: {fileID: 4386366360794326629}
   - component: {fileID: 5914441665399690531}
   - component: {fileID: 1077464434977820356}
-  - component: {fileID: 6447073157874353506}
+  - component: {fileID: 4609678985294420584}
   m_Layer: 5
   m_Name: ButtonCover
   m_TagString: Untagged
@@ -198,7 +198,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6447073157874353506}
+      - m_Target: {fileID: 4609678985294420584}
         m_MethodName: JumpToChartSelectScene
         m_Mode: 1
         m_Arguments:
@@ -209,7 +209,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &6447073157874353506
+--- !u!114 &4609678985294420584
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -221,3 +221,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e85354d7be87779429b4dc7cf867942b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _text: {fileID: 1245407002702073741}
