@@ -9,8 +9,10 @@ using UnityEngine;
 
 namespace Assets.Scripts.Controller
 {
-    public class GameController : MonoBehaviour
+    public class InGameController : MonoBehaviour
     {
+        public bool isGamePlaying { get; private set; }
+
         // Start is called before the first frame update
         void Start()
         {

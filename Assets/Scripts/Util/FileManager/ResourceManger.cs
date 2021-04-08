@@ -34,25 +34,25 @@ namespace Assets.Scripts.Util.FileManager
             Permission.RequestUserPermission(Permission.ExternalStorageRead);
         }
 
-        private List<string> GetAllLocalSongList(string path)
+        private List<string> GetAllIniPathList(string path)
         {
-            var songPathList = new List<string>();
 
             if (string.IsNullOrEmpty(path))
             {
                 return null;
             }
 
+            var iniPathList = new List<string>();
             var bookPath = Directory.GetDirectories(path, "*", SearchOption.TopDirectoryOnly);
             foreach (var s in bookPath)
             {
-                var songPath = Directory.GetDirectories(s, "*", SearchOption.TopDirectoryOnly);
-                songPathList.AddRange(songPath);
+                var iniPath = Directory.GetDirectories(s, "*", SearchOption.TopDirectoryOnly);
+                iniPathList.AddRange(iniPath);
             }
-            return songPathList;
+            return iniPathList;
         }
 
-        public List<string> InitializeApplication(List<PackInfo> songPackList)
+        public List<PackInfo> InitializeApplication()
         {
             //Resource directory of DeemoDIY 2.2 and 3.2 
             //private static readonly string StoragePath = "/storage/emulated/0/DeemoDIY";
@@ -62,8 +62,8 @@ namespace Assets.Scripts.Util.FileManager
             const string platformPath = "/sdcard/Plutono";
 
             Dictionary<string, SongModel> songDictionary = null;
-
-            var songPathList = new List<string>();
+            var songPackList = new List<PackInfo>();
+            var iniPathList = new List<string>();
             try
             {
                 Log.LogPlatform();
@@ -76,19 +76,17 @@ namespace Assets.Scripts.Util.FileManager
                                 Directory.CreateDirectory(platformPath);
                             if (Directory.Exists("C:\\Users\\night\\Desktop\\G2 Collection_vol.7"))
                             {
-                                songPathList = GetAllLocalSongList("C:\\Users\\night\\Desktop\\G2 Collection_vol.7");
-                            }
-                            foreach (var filePath in songPathList)
-                            {
-                                var iniInfo = new IniInfo();
-                                var iniPathArray = Directory.GetFiles(filePath, "*.ini");
-                                foreach (var iniPath in iniPathArray)
-                                {
-                                    iniInfo = iniInfo.ReadIniConfig(iniPath);
-                                }
-                                songPackList.Add(iniInfo.IniToPackInfo(filePath));
-                            }
-                            return songPathList;
+                                iniPathList = GetAllIniPathList("C:\\Users\\night\\Desktop\\G2 Collection_vol.7");
+                            } 
+                            /*foreach (var iniPath in iniPathList)
+                              {
+                                songPackList.Add(
+                                IniInfo.ReadIniFromPath(Directory.GetFiles(iniPath, "*.ini").Single()).IniToPackInfo(iniPath));
+                              }
+                            */
+                            songPackList.AddRange(iniPathList.Select(iniPath => 
+                                IniInfo.ReadIniFromPath(Directory.GetFiles(iniPath, "*.ini").Single()).IniToPackInfo(iniPath)));
+                            return songPackList;
                         }
                     case RuntimePlatform.Android:
                         {
@@ -96,19 +94,11 @@ namespace Assets.Scripts.Util.FileManager
                                 Directory.CreateDirectory(platformPath);
                             if (Directory.Exists(sdCardPath))
                             {
-                                songPathList = GetAllLocalSongList(sdCardPath);
+                                iniPathList = GetAllIniPathList(sdCardPath);
                             }
-                            foreach (var filePath in songPathList)
-                            {
-                                var iniInfo = new IniInfo();
-                                var iniPathArray = Directory.GetFiles(filePath, "*.ini");
-                                foreach (var iniPath in iniPathArray)
-                                {
-                                    iniInfo = iniInfo.ReadIniConfig(iniPath);
-                                }
-                                songPackList.Add(iniInfo.IniToPackInfo(filePath));
-                            }
-                            return songPathList;
+                            songPackList.AddRange(iniPathList.Select(iniPath => 
+                                IniInfo.ReadIniFromPath(Directory.GetFiles(iniPath, "*.ini").Single()).IniToPackInfo(iniPath)));
+                            return songPackList;
                         }
                     case RuntimePlatform.IPhonePlayer:
                         {
@@ -116,10 +106,10 @@ namespace Assets.Scripts.Util.FileManager
                             {
                                 Directory.CreateDirectory(platformPath);
                             }
-                            return GetAllLocalSongList(platformPath);
+                            return null;
                         }
                     default:
-                        return null;
+                        throw new NotSupportedException();
                 }
             }
             catch (Exception e)

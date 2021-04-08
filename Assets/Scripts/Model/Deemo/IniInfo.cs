@@ -14,7 +14,7 @@
  *            the rest data in ini wouldn't be convert.
  *
  * Function
- *      IniInfo::ReadIniConfig -- read ini info from a ini file.
+ *      IniInfo::ReadIniFromPath -- read ini info from a ini file.
  *      PackInfo::IniToPackInfo -- convert ini to a config file used in Plutono.
  *
  * History
@@ -40,11 +40,11 @@ namespace Assets.Scripts.Model.Deemo
         public string levelExtra = "";
         public uint levelUltra = 0;
 
-        public IniInfo ReadIniConfig(string iniPath)
+        public static IniInfo ReadIniFromPath(string iniFilePath)
         {
             var parser = new FileIniDataParser();
             //TODO: 判定ini路径是否合法
-            var data = parser.ReadFile(iniPath);
+            var data = parser.ReadFile(iniFilePath);
             var info = new IniInfo
             {
                 songName = data["Song"]["Name"],

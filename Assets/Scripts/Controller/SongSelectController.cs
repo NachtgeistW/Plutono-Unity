@@ -8,6 +8,7 @@
  *      2020.08.12  CREATE.
  *      2021.04.04  RENAME to SongSelectController.
  *      2021.04.07  ADD function PopulateSong.
+ *      2021.04.08  Import GameManager Singleton.
  */
 
 
@@ -16,32 +17,27 @@ using Assets.Scripts.Model.Plutono;
 using Assets.Scripts.Util.FileManager;
 using Assets.Scripts.Views;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 namespace Assets.Scripts.Controller
 {
     public class SongSelectController : MonoBehaviour
     {
-        private List<PackInfo> _songPackList = new List<PackInfo>();
         [Header("(放prefab不是script！)包含曲绘和曲名的button prefab。")]
-        [SerializeField]private PrefabCoverView _prefabCoverView;
+        [SerializeField] private PrefabCoverView prefabCoverView;
 
-        void Start()
+        private void Start()
         {
-            var resourceManager = new ResourceManger();
-            resourceManager.RequestReadPermission();
-            resourceManager.InitializeApplication(_songPackList);
-
-            PopulateSong();
+            PopulateSong(GameManager.Instance.songPackList);
         }
 
-        public void PopulateSong()
+        public void PopulateSong(List<PackInfo> songPackList)
         {
-            foreach (var packInfo in _songPackList)
+            uint songIndex = 0;
+            foreach (var packInfo in songPackList)
             {
-                var newButton = Instantiate(_prefabCoverView, transform);
-                newButton.SetSongInfo(packInfo);
+                var newButton = Instantiate(prefabCoverView, transform);
+                newButton.SetSongInfo(packInfo, songIndex);
+                songIndex++;
             }
         }
     }
