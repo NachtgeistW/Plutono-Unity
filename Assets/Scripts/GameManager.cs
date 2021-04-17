@@ -4,31 +4,32 @@
  * History:
  *  2021.04.07 CREATE
  */
-using System.Collections;
+
 using System.Collections.Generic;
-using Assets.Scripts.Controller;
 using Assets.Scripts.Model.Plutono;
-using Assets.Scripts.Util;
-using Assets.Scripts.Views;
-using UnityEngine;
+using Controller;
+using Model.Plutono;
+using Util;
 
 public class GameManager : MonoSingleton<GameManager>
 {
     //list for storing song information
     public List<PackInfo> songPackList;
+    public List<string> songPathList;
 
     //Welcome scene
     private WelcomeController _welcomeController;
 
     //Song Select Scene
     private SongSelectController _songSelectController;
-    public uint songIndex;
+    public PackInfo packInfo;
+    public string songPath;
 
     //Chart Select Scene
     private ChartSelectController _chartSelectController;
-    public uint chartIndex;
+    public GameChart gameChart;
 
     //Game Playing Scene
-    private InGameController _gameController;
+    public PlayingController playingController;
 
 }

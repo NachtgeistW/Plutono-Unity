@@ -344,6 +344,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   songPackList: []
+  packInfo:
+    songName: 
+    composer: 
+    charts: []
+  chartIndex: 0
 --- !u!4 &308409328
 Transform:
   m_ObjectHideFlags: 0

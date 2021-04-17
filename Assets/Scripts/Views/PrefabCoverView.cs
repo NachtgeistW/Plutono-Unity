@@ -1,37 +1,42 @@
 ﻿/*
- * class PrefabCoverView -- Control the events happened in Song Select Scene.
+ * class PrefabCoverView -- Store the object and function that change UI on the Prefab ButtonSongCover.
+ *      _songName: private Text, the song name attached to this button.
+ *      PackInfoOnButton: public PackInfo, property, the song pack info attached to this button.
  *
  * Function
  *      void::SetSongInfo -- Set the cover and song name to a prefab.
  *      void::JumpToChartSelectScene -- Jump to chart select scene.
  *
  * History
- *      2020.08.12  CREATE.
- *      2021.04.04  RENAME to SongSelectController.
- *      2021.04.04  ADD function PopulateSong.
- *      2021.04.08  Import GameManager Singleton.
+ *      2021.04.07  CREATE.
+ *      2021.04.08  REFACTOR with GameManager Singleton.
  */
 
-using Assets.Scripts.Model.Plutono;
+using Model.Plutono;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-namespace Assets.Scripts.Views
+namespace Views
 {
     public class PrefabCoverView : MonoBehaviour
     {
-        [SerializeField] private Text _text;
-        private uint songIndex;
-        public void SetSongInfo(PackInfo packInfo, uint index)
+        [SerializeField] private Text songName;
+
+        public PackInfo PackInfoOnButton { get; set; }
+        public string MusicSourcePath { get; set; }
+
+        public void SetSongInfo(PackInfo packInfo, string musicPath)
         {
-            _text.text = packInfo.songName;
-            songIndex = index;
+            songName.text = packInfo.songName;
+            PackInfoOnButton = packInfo;
+            MusicSourcePath = musicPath;
         }
 
         public void JumpToChartSelectScene()
         {
-            GameManager.Instance.songIndex = songIndex;
+            GameManager.Instance.packInfo = PackInfoOnButton;
+            GameManager.Instance.songPath = MusicSourcePath;
             SceneManager.LoadScene("ChartSelectScene");
         }
     }

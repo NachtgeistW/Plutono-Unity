@@ -12,9 +12,12 @@ EditorBuildSettings:
     path: Assets/Scenes/SongSelectScene.unity
     guid: 9d3dadc1b75842b4699a84534920a23a
   - enabled: 1
+    path: Assets/Scenes/ChartSelectScene.unity
+    guid: dcaf35374a8f5a74e910a9b2c0f0a5eb
+  - enabled: 1
     path: Assets/Scenes/GamePlayScene.unity
     guid: c6d15a7b82f60124eaa8e618146d734b
   - enabled: 1
-    path: Assets/Scenes/ChartSelectScene.unity
-    guid: dcaf35374a8f5a74e910a9b2c0f0a5eb
+    path: Assets/Scenes/ResultScene.unity
+    guid: 972c6936515cc7a4db118290a191a161
   m_configObjects: {}

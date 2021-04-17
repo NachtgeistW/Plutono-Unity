@@ -11,18 +11,19 @@
  *      2021.04.03  ADD InitializeApplication function
  *      2021.04.07  CHANGE the platformPath
  */
+
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Assets.Scripts.Model.Deemo;
 using Assets.Scripts.Model.Plutono;
-using UnityEditor;
+using Model.Deemo;
+using Model.Plutono;
 using UnityEngine;
 using UnityEngine.Android;
 using Application = UnityEngine.Application;
 
-namespace Assets.Scripts.Util.FileManager
+namespace Util.FileManager
 {
     [Serializable]
     public class ResourceManger
@@ -77,7 +78,9 @@ namespace Assets.Scripts.Util.FileManager
                             if (Directory.Exists("C:\\Users\\night\\Desktop\\G2 Collection_vol.7"))
                             {
                                 iniPathList = GetAllIniPathList("C:\\Users\\night\\Desktop\\G2 Collection_vol.7");
-                            } 
+                                GameManager.Instance.songPathList = iniPathList;
+                            }
+
                             /*foreach (var iniPath in iniPathList)
                               {
                                 songPackList.Add(
@@ -95,7 +98,9 @@ namespace Assets.Scripts.Util.FileManager
                             if (Directory.Exists(sdCardPath))
                             {
                                 iniPathList = GetAllIniPathList(sdCardPath);
+                                GameManager.Instance.songPathList = iniPathList;
                             }
+
                             songPackList.AddRange(iniPathList.Select(iniPath => 
                                 IniInfo.ReadIniFromPath(Directory.GetFiles(iniPath, "*.ini").Single()).IniToPackInfo(iniPath)));
                             return songPackList;

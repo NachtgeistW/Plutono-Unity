@@ -14,8 +14,9 @@
  */
 
 using System.Collections.Generic;
+using Assets.Scripts.Model.Plutono;
 
-namespace Assets.Scripts.Model.Plutono
+namespace Model.Plutono
 {
     [System.Serializable]
     public class PackInfo

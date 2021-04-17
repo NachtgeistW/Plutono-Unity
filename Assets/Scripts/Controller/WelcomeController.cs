@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-using Assets.Scripts.Model.Plutono;
-using Assets.Scripts.Util.FileManager;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+using Util.FileManager;
 
-namespace Assets.Scripts.Controller
+namespace Controller
 {
     public class WelcomeController : MonoBehaviour
     {

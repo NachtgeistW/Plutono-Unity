@@ -7,4 +7,12 @@ public class Log : MonoBehaviour
     {
         Debug.Log(Application.platform);
     }
+
+    public static void LogStr(string str)
+    {
+        if (Application.isEditor)
+        {
+            Debug.Log(str);
+        }
+    }
 }

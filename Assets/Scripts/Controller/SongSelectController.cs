@@ -13,12 +13,11 @@
 
 
 using System.Collections.Generic;
-using Assets.Scripts.Model.Plutono;
-using Assets.Scripts.Util.FileManager;
-using Assets.Scripts.Views;
+using Model.Plutono;
 using UnityEngine;
+using Views;
 
-namespace Assets.Scripts.Controller
+namespace Controller
 {
     public class SongSelectController : MonoBehaviour
     {
@@ -27,17 +26,21 @@ namespace Assets.Scripts.Controller
 
         private void Start()
         {
-            PopulateSong(GameManager.Instance.songPackList);
+            PopulateSong(GameManager.Instance.songPackList, GameManager.Instance.songPathList);
         }
 
-        public void PopulateSong(List<PackInfo> songPackList)
+        public void PopulateSong(List<PackInfo> songPackList, List<string> musicPathList)
         {
-            uint songIndex = 0;
-            foreach (var packInfo in songPackList)
+/*            foreach (var packInfo in songPackList)
             {
                 var newButton = Instantiate(prefabCoverView, transform);
-                newButton.SetSongInfo(packInfo, songIndex);
-                songIndex++;
+                newButton.SetSongInfo(packInfo);
+            }
+*/
+            for (int i = 0; i < songPackList.Count; i++)
+            {
+                var newButton = Instantiate(prefabCoverView, transform);
+                newButton.SetSongInfo(songPackList[i], musicPathList[i]);
             }
         }
     }

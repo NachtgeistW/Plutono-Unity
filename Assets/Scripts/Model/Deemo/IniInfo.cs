@@ -21,12 +21,11 @@
  *      2020.03.31  CREATE.
  */
 
-using Assets.Scripts.Model.Plutono;
-using Assets.Scripts.Util;
+using Assets.Scripts.Model.Deemo;
 using IniParser;
-using UnityEngine;
+using Model.Plutono;
 
-namespace Assets.Scripts.Model.Deemo
+namespace Model.Deemo
 {
     [System.Serializable]
     public class IniInfo
@@ -107,7 +106,7 @@ namespace Assets.Scripts.Model.Deemo
                 gChart.chartDesigner = chartDesigner;
                 packInfo.charts.Add(gChart);
             }
-            Debug.Log(packInfo.songName);
+            Log.LogStr(packInfo.songName);
             return packInfo;
         }
     }

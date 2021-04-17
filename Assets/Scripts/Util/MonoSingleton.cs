@@ -7,7 +7,7 @@
 
 using UnityEngine;
 
-namespace Assets.Scripts.Util
+namespace Util
 {
     public class MonoSingleton<T> : MonoBehaviour
         where T : MonoBehaviour
