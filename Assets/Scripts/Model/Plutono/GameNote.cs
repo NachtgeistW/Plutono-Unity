@@ -19,11 +19,11 @@
  */
 
 using System.Collections.Generic;
-using Assets.Scripts.Model.Deemo;
 using JetBrains.Annotations;
+using Model.Deemo;
 using Newtonsoft.Json;
 
-namespace Assets.Scripts.Model.Plutono
+namespace Model.Plutono
 {
     [System.Serializable]
     public class GameNote
@@ -40,7 +40,7 @@ namespace Assets.Scripts.Model.Plutono
 
         public enum NoteType
         {
-            Black, Yellow, White
+            Piano, Slide, Blank
         }
 
         [System.Serializable]

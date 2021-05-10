@@ -469,9 +469,9 @@ MonoBehaviour:
   waveSpriteRenderer: {fileID: 5204384520451942606}
   lightSpriteRenderer: {fileID: 5204384520973166644}
   circleSpriteRenderer: {fileID: 5204384520089163436}
-  pianoNoteSprite: {fileID: 21300000, guid: 8f6a344fe634d9c458503c8d2d96fdaf, type: 3}
-  blankNoteSprite: {fileID: 21300000, guid: 3f7abe9e10e183c45bdaf0ae9cfbb5a8, type: 3}
-  slideNoteSprite: {fileID: 21300000, guid: 2844ce5ad29371b4a9256ea57cffd7bb, type: 3}
+  pianoNoteSprite: {fileID: 21300000, guid: c69542fc2ad41da4ea74377046b3865f, type: 3}
+  blankNoteSprite: {fileID: 21300000, guid: 4e013709f148c0a42ae7a1ca8adb1427, type: 3}
+  slideNoteSprite: {fileID: 21300000, guid: 88216f26344129a4392565001ef9359b, type: 3}
   circleSprite: {fileID: 21300000, guid: e79805534f914894590881e4f9e5dbe8, type: 3}
   waveSprite: {fileID: 21300000, guid: dc8e64ff33e79a746a3ad567c7ad9bb1, type: 3}
   lightSprite: {fileID: 21300000, guid: 46e2eb201e86ed74f9cdbbad34982b82, type: 3}

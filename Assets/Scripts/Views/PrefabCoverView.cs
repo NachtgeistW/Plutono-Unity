@@ -23,6 +23,8 @@ namespace Views
     {
         [SerializeField] private Text songName;
 
+        [SerializeField] private Image cover;
+
         public PackInfo PackInfoOnButton { get; set; }
         public string MusicSourcePath { get; set; }
 
@@ -31,6 +33,7 @@ namespace Views
             songName.text = packInfo.songName;
             PackInfoOnButton = packInfo;
             MusicSourcePath = musicPath;
+            cover.sprite = packInfo.cover;
         }
 
         public void JumpToChartSelectScene()

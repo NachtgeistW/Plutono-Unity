@@ -13,6 +13,7 @@
  */
 
 using Assets.Scripts.Model.Plutono;
+using Model.Plutono;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;

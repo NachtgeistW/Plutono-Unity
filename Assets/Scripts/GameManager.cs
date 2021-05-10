@@ -9,27 +9,35 @@ using System.Collections.Generic;
 using Assets.Scripts.Model.Plutono;
 using Controller;
 using Model.Plutono;
+using UnityEngine;
 using Util;
 
 public class GameManager : MonoSingleton<GameManager>
 {
     //list for storing song information
-    public List<PackInfo> songPackList;
-    public List<string> songPathList;
+    [HideInInspector] public List<PackInfo> songPackList;
+    [HideInInspector] public List<string> songPathList;
 
     //Welcome scene
-    private WelcomeController _welcomeController;
+    [HideInInspector] private WelcomeController _welcomeController;
 
     //Song Select Scene
-    private SongSelectController _songSelectController;
-    public PackInfo packInfo;
-    public string songPath;
+    [HideInInspector] private SongSelectController _songSelectController;
+    [HideInInspector] public PackInfo packInfo;
+    [HideInInspector] public string songPath;
 
     //Chart Select Scene
-    private ChartSelectController _chartSelectController;
-    public GameChart gameChart;
+    [HideInInspector] private ChartSelectController _chartSelectController;
+    [HideInInspector] public GameChart gameChart;
 
     //Game Playing Scene
-    public PlayingController playingController;
+    [HideInInspector] public PlayingController playingController;
+    [HideInInspector] public int pCount;  //perfect
+    [HideInInspector] public int gCount;  //good
+    [HideInInspector] public int bCount;  //bad
+    [HideInInspector] public int mCount;  //miss
+    [HideInInspector] public int score;   //score
+    [HideInInspector] public int bonus;   //bonus
+
 
 }

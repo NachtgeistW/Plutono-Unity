@@ -62,7 +62,7 @@ namespace Util.FileManager
             //general
             const string platformPath = "/sdcard/Plutono";
 
-            Dictionary<string, SongModel> songDictionary = null;
+            //Dictionary<string, SongModel> songDictionary = null;
             var songPackList = new List<PackInfo>();
             var iniPathList = new List<string>();
             try

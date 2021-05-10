@@ -12,6 +12,8 @@
 using Assets.Scripts.Views;
 using Model.Plutono;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using Views;
 
 namespace Controller
@@ -21,10 +23,12 @@ namespace Controller
         [Header("(放prefab不是script！)旁边列表用的选谱面用的prefab。")]
         [SerializeField]private PrefabButtonChartSelectView _prefab;
         [SerializeField]private ChartSelectView _view;
+        [SerializeField] private Image cover;
 
         private void Start()
         {
             var pack = GameManager.Instance.packInfo;
+            cover.sprite = pack.cover;
             SetSongInfo(pack);
             PopulateChart(pack);
         }
@@ -41,6 +45,11 @@ namespace Controller
                 var newButton = Instantiate(_prefab, transform);
                 newButton.SetChartInfo(chart);
             }
+        }
+
+        public void OnBack()
+        {
+            SceneManager.LoadScene("SongSelectScene");
         }
     }
 }

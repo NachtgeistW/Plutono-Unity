@@ -11,6 +11,10 @@ namespace Assets.Scripts.Util
 {
     public static class Parameters
     {
+        //Judge
+        public static float PerfectDeltaTime = 0.05f;
+        public static float GoodDeltaTime = 0.07f;
+        public static float BadDeltaTime = 0.1f;
         //Note moving
         public static float noteSpeed1FallTime = 18.0f;
         public static float maximumNoteRange = 240.0f;

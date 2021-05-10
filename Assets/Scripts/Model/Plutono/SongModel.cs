@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Assets.Scripts.Model.Plutono
+namespace Model.Plutono
 {
     public class SongModel
     {

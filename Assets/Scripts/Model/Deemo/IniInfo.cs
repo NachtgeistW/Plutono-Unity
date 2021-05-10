@@ -21,9 +21,11 @@
  *      2020.03.31  CREATE.
  */
 
+using System.IO;
 using Assets.Scripts.Model.Deemo;
 using IniParser;
 using Model.Plutono;
+using UnityEngine;
 
 namespace Model.Deemo
 {
@@ -106,8 +108,35 @@ namespace Model.Deemo
                 gChart.chartDesigner = chartDesigner;
                 packInfo.charts.Add(gChart);
             }
+
+            if (File.Exists(iniDocumentPath + "/cover.png"))
+            {
+                var PixelsPerUnit = 100.0f;
+                SpriteMeshType spriteType = SpriteMeshType.Tight;
+                Texture2D SpriteTexture = LoadTexture(iniDocumentPath + "/cover.png");
+                packInfo.cover = Sprite.Create(SpriteTexture, new Rect(0, 0, SpriteTexture.width, SpriteTexture.height), new Vector2(0, 0), PixelsPerUnit, 0, spriteType);
+            }
             Log.LogStr(packInfo.songName);
             return packInfo;
+        }
+
+        public static Texture2D LoadTexture(string FilePath)
+        {
+
+            // Load a PNG or JPG file from disk to a Texture2D
+            // Returns null if load fails
+
+            Texture2D Tex2D;
+            byte[] FileData;
+
+            if (File.Exists(FilePath))
+            {
+                FileData = File.ReadAllBytes(FilePath);
+                Tex2D = new Texture2D(2, 2);           // Create new "empty" texture
+                if (Tex2D.LoadImage(FileData))           // Load the imagedata into the texture (size is set automatically)
+                    return Tex2D;                 // If data = readable -> return texture
+            }
+            return null;                     // Return null if load failed
         }
     }
 }

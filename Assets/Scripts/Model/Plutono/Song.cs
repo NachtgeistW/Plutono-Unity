@@ -8,6 +8,7 @@
  */
 
 using System.Collections.Generic;
+using Model.Plutono;
 using UnityEngine;
 using UnityEngine.UI;
 

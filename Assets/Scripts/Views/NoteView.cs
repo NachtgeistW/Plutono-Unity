@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts.Model.Plutono;
 using Assets.Scripts.Util;
+using Model.Plutono;
 using UnityEngine;
 
 namespace Views
@@ -7,8 +8,8 @@ namespace Views
     public class NoteView : MonoBehaviour
     {
         public uint id;
-        private GameNote _note;                     //note实例
-        private float time;                         //？
+        public GameNote _note;                     //note实例
+        private float _time;                         //？
         public SpriteRenderer noteSpriteRenderer;
         public SpriteRenderer frameSpriteRenderer;
         public SpriteRenderer waveSpriteRenderer;
@@ -26,13 +27,16 @@ namespace Views
         private float _slideNoteScale = 4.5f;
         private float noteEffectScale = 8.5f;
         private Color waveColor;
-        private bool inViewableRage = false;
+        public bool InViewableRage { get; set; }
+        public bool IsZEqualsToZero { get; set; }
 
-        private float _x;
+        private float x;
+        public float leftRange;
+        public float rightRange;
 
         private void Update()
         {
-            time = GameManager.Instance.playingController.timeSlider.value;
+            _time = GameManager.Instance.playingController.timeSlider.value;
             UpdatePosition();
         }
 
@@ -40,7 +44,7 @@ namespace Views
         {
             _note = note;
             id = note.id;
-            if (note.sounds == null)
+            if (note.type == GameNote.NoteType.Blank)
             {
                 noteSpriteRenderer.sprite = blankNoteSprite;
                 noteSpriteRenderer.transform.localScale = BlankNoteScale * new Vector3(note.size, 1.0f, 1.0f);
@@ -55,32 +59,35 @@ namespace Views
 
             if (note.pos > 2.0f || note.pos < -2.0f)
             {
-                inViewableRage = false;
+                InViewableRage = false;
                 circleSpriteRenderer.sprite = null;
                 waveSpriteRenderer.sprite = null;
                 lightSpriteRenderer.sprite = null;
             }
             else
             {
-                inViewableRage = true;
+                InViewableRage = true;
                 circleSpriteRenderer.sprite = circleSprite;
                 waveSpriteRenderer.transform.localScale = Vector3.zero;
                 waveSpriteRenderer.sprite = waveSprite;
                 lightSpriteRenderer.sprite = lightSprite;
             }
-            //noteSpriteRenderer.color = new Color(1.0f, 1.0f, 1.0f, 0.0f);
             noteSpriteRenderer.color = new Color(1.0f, 1.0f, 1.0f, 0.0f);
             gameObject.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
             
-            _x = Parameters.maximumNoteWidth * _note.pos;
+            x = Parameters.maximumNoteWidth * _note.pos;
+            leftRange = Parameters.maximumNoteWidth * (_note.pos - 0.5f * _note.size);
+            rightRange = Parameters.maximumNoteWidth * (_note.pos + 0.5f * _note.size);
         }
 
+        //TODO:只让少量的note移动，而不是全部一起
         public void UpdatePosition()
         {
             var z = Parameters.maximumNoteRange /
-                Parameters.NoteFallTime(GameManager.Instance.playingController.chartPlaySpeed) * (_note.time - time);
-            if (inViewableRage)
+                Parameters.NoteFallTime(GameManager.Instance.playingController.chartPlaySpeed) * (_note.time - _time);
+            if (InViewableRage)
             {
+                IsZEqualsToZero = false;
                 //根据note位移改变透明度达到渐显效果
                 if (z < Parameters.maximumNoteRange && z >= Parameters.alpha1NoteRange)
                 {
@@ -98,11 +105,14 @@ namespace Views
                 noteSpriteRenderer.color = new Color(1.0f, 1.0f, 1.0f, 0.0f);
 
             if (z <= 0.0f)
+            {
                 z = 0.0f;
+                IsZEqualsToZero = true;
+            }
             else
                 frameSpriteRenderer.sprite = null;
 
-            gameObject.transform.localPosition = new Vector3(_x, 0.0f, z);
+            gameObject.transform.localPosition = new Vector3(x, 0.0f, z);
         }
     }
 }

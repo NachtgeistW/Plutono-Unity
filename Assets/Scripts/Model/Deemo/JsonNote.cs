@@ -28,15 +28,17 @@
 
 using Assets.Scripts.Model.Plutono;
 using JetBrains.Annotations;
+using Model.Plutono;
 using Newtonsoft.Json;
 
-namespace Assets.Scripts.Model.Deemo
+namespace Model.Deemo
 {
     [System.Serializable]
     [JsonObject(IsReference = true)]
     public sealed class JsonNote
     {
-        public uint id;
+        [JsonProperty(PropertyName = "$id")]
+        public uint Id { get; set; }
         public float pos;
         public float shift;
         public float size;
@@ -61,11 +63,12 @@ namespace Assets.Scripts.Model.Deemo
 
         public GameNote ToGameNote() => new GameNote
         {
+            id = Id,
             pos = pos,
             size = size,
             time = time,
             //TODO:判断黄条
-            type = sounds != null ? GameNote.NoteType.Black : GameNote.NoteType.White
+            type = sounds != null ? GameNote.NoteType.Piano : GameNote.NoteType.Blank
         };
     }
 

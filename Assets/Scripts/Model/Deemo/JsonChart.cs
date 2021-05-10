@@ -18,6 +18,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Assets.Scripts.Model.Plutono;
+using Model.Deemo;
+using Model.Plutono;
 using Newtonsoft.Json;
 
 namespace Assets.Scripts.Model.Deemo
@@ -41,9 +43,11 @@ namespace Assets.Scripts.Model.Deemo
 
         public static JsonChart JsonToJChart(string jsonPath)
         {
+            var settings = new JsonSerializerSettings();
+            settings.MetadataPropertyHandling = MetadataPropertyHandling.Ignore;
             var r = new StreamReader(jsonPath);
             var json = r.ReadToEnd();
-            var jChart = JsonConvert.DeserializeObject<JsonChart>(json);
+            var jChart = JsonConvert.DeserializeObject<JsonChart>(json, settings);
             return jChart;
         }
     }

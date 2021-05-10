@@ -15,6 +15,7 @@
 
 using System.Collections.Generic;
 using Assets.Scripts.Model.Plutono;
+using UnityEngine;
 
 namespace Model.Plutono
 {
@@ -24,5 +25,6 @@ namespace Model.Plutono
         public string songName = "";
         public string composer = "";
         public List<GameChart> charts = new List<GameChart>();
+        public Sprite cover;
     }
 }

@@ -103,7 +103,7 @@
       "url": "https://packages.unity.cn"
     },
     "com.unity.multiplayer-hlapi": {
-      "version": "1.0.6",
+      "version": "1.0.8",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -112,7 +112,7 @@
       "url": "https://packages.unity.cn"
     },
     "com.unity.purchasing": {
-      "version": "3.0.1",
+      "version": "3.0.2",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -174,13 +174,6 @@
         "com.unity.modules.xr": "1.0.0"
       },
       "url": "https://packages.unity.cn"
-    },
-    "com.vladfaust.unitywakatime": {
-      "version": "https://github.com/vladfaust/unity-wakatime.git#package",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "b8a1d9f726608a3517fade7d045c7c629a57c302"
     },
     "jp.setchi.fancyscrollview": {
       "version": "https://github.com/setchi/FancyScrollView.git#upm",
