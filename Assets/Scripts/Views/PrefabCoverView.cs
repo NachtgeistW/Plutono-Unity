@@ -1,4 +1,10 @@
-﻿/*
+﻿
+
+
+
+
+
+/*
  * class PrefabCoverView -- Store the object and function that change UI on the Prefab ButtonSongCover.
  *      _songName: private Text, the song name attached to this button.
  *      PackInfoOnButton: public PackInfo, property, the song pack info attached to this button.

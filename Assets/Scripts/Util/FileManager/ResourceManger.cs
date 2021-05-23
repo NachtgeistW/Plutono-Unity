@@ -30,9 +30,13 @@ namespace Util.FileManager
     {
         public void RequestReadPermission()
         {
-            if (Permission.HasUserAuthorizedPermission(Permission.ExternalStorageRead)) return;
-            Debug.Log("RequestReadPermission");
-            Permission.RequestUserPermission(Permission.ExternalStorageRead);
+            if (!Permission.HasUserAuthorizedPermission(Permission.ExternalStorageRead))
+            { 
+                Debug.Log("RequestReadPermission");
+                Permission.RequestUserPermission(Permission.ExternalStorageRead);
+            }
+            Permission.RequestUserPermission("android.permission.INTERNET");
+            
         }
 
         private List<string> GetAllIniPathList(string path)
@@ -56,7 +60,8 @@ namespace Util.FileManager
         public List<PackInfo> InitializeApplication()
         {
             //Resource directory of DeemoDIY 2.2 and 3.2 
-            //private static readonly string StoragePath = "/storage/emulated/0/DeemoDIY";
+            const string StoragePath = "/storage/emulated/0/DeemoDIY";
+            //string StoragePath = Application.persistentDataPath + "DeemoDIY";
             const string sdCardPath = "/sdcard/DeemoDIY";
 
             //general
@@ -95,9 +100,9 @@ namespace Util.FileManager
                         {
                             if (!Directory.Exists(platformPath))
                                 Directory.CreateDirectory(platformPath);
-                            if (Directory.Exists(sdCardPath))
+                            if (Directory.Exists(StoragePath))
                             {
-                                iniPathList = GetAllIniPathList(sdCardPath);
+                                iniPathList = GetAllIniPathList(StoragePath);
                                 GameManager.Instance.songPathList = iniPathList;
                             }
 

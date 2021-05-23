@@ -19,7 +19,7 @@ namespace Assets.Scripts.Controller
         {
             textSongName.text = GameManager.Instance.packInfo.songName;
             textScore.text = Convert.ToString(GameManager.Instance.score) + " + "
-                + Convert.ToString(GameManager.Instance.bonus);
+                + Convert.ToString(GameManager.Instance.bonus * 100000 / 1024);
             textPerfect.text = "P " + Convert.ToString(GameManager.Instance.pCount);
             textGood.text = "G " + Convert.ToString(GameManager.Instance.gCount);
             textBad.text = "B " + Convert.ToString(GameManager.Instance.bCount);

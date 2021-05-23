@@ -4,17 +4,20 @@
 
 #endregion
 
-using System;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
-using Cysharp.Threading.Tasks;
-using JetBrains.Annotations;
-using UnityEngine;
-using UnityEngine.Networking;
-
-namespace Util.FileManager
+namespace Models.IO
 {
+    using System;
+    using System.IO;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    using Cysharp.Threading.Tasks;
+
+    using JetBrains.Annotations;
+
+    using UnityEngine;
+    using UnityEngine.Networking;
+
     public static class AudioClipFileManager
     {
         public static AudioType GetAudioType([NotNull] string path) =>
@@ -34,9 +37,17 @@ namespace Util.FileManager
             );
             if (request == null) return null;
 
-            request.SendWebRequest();
-            SpinWait.SpinUntil(() => request.isDone);
-            return DownloadHandlerAudioClip.GetContent(request);
+            if (request.result == UnityWebRequest.Result.ProtocolError || request.result == UnityWebRequest.Result.ConnectionError)
+            {
+                Debug.Log(request.error);
+                return null;
+            }
+            else
+            {
+                request.SendWebRequest();
+                SpinWait.SpinUntil(() => request.isDone);
+                return DownloadHandlerAudioClip.GetContent(request);
+            }
         }
 
         [NotNull]
@@ -48,13 +59,6 @@ namespace Util.FileManager
             var op = request?.SendWebRequest();
             return op is null ? null : DownloadHandlerAudioClip.GetContent(await op);
         }
-
-        public static void Write([NotNull] string path, [NotNull] AudioClip clip) =>
-            File.WriteAllBytes(path, clip.GetBytes());
-
-        [NotNull]
-        public static Task WriteAsync([NotNull] string path, [NotNull] AudioClip clip) =>
-            Task.Run(() => File.WriteAllBytes(path, clip.GetBytes()));
 
         [NotNull]
         public static float[] GetData([NotNull] this AudioClip clip)

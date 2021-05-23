@@ -9,10 +9,12 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using Assets.Scripts.Util;
 using Lean.Touch;
 using Model.Plutono;
+using Models.IO;
 using UnityEngine;
 using UnityEngine.Pool;
 using UnityEngine.SceneManagement;
@@ -89,8 +91,8 @@ namespace Controller
         private int bonus;
         private int score = 0;
         private int xRayScale = 50;
-        public const float YRayStart = -0.45f;
-        private const float YRayEnd = -0.55f;
+        public const float YRayStart = -0.40f;
+        private const float YRayEnd = -0.60f;
         private float StartTime;
         private float time;
         public float Offset { get; set; }
@@ -224,16 +226,8 @@ namespace Controller
                 Debug.Log("You click at " + point.direction.y + ". Out of judge line.");
                 return;
             }
-
+            
             NoteView note = SearchForBestNote(time);
-            //note range
-            /*                var x = point.direction.x * 50;
-                            if (x > note.rightRange || x < note.leftRange)
-                            {
-                                Debug.Log("You click at " + point.direction.x * 50 + ". Its left range is "+ note.leftRange + " and its right range is " + note.rightRange + ". Out of note.");
-                                return;
-                            }
-            */
             if (note == null)
                 if (isCompleted) return;
 
@@ -272,6 +266,7 @@ namespace Controller
                 notes.Remove(note);
                 _comboCount++;
                 gCount++;
+                CalculateBonus(Judgment.Good);
                 return;
             }
             if (deltaTouchTime < Parameters.BadDeltaTime)
@@ -281,6 +276,7 @@ namespace Controller
                 notes.Remove(note);
                 _comboCount = 0;
                 bCount++;
+                CalculateBonus(Judgment.Bad);
                 return;
             }
         }
@@ -302,6 +298,14 @@ namespace Controller
             {
                 if (bestNote == null)
                     bestNote = notes.First();
+                    //note range
+/*                var x = point.direction.x * 50;
+                if (x > note.rightRange || x < note.leftRange)
+                {
+                    Debug.Log("You click at " + point.direction.x * 50 + ". Its left range is "+ note.leftRange + " and its right range is " + note.rightRange + ". Out of note.");
+                    return;
+                }
+*/
                 var curDeltaTime = Mathf.Abs(curNote._note.time - touchTime);
                 var bestDeltaTime = Mathf.Abs(bestNote._note.time - touchTime);
                 if (curDeltaTime < bestDeltaTime)
@@ -332,7 +336,7 @@ namespace Controller
                     break;
                 case Judgment.Bad:
                 case Judgment.Miss:
-                    bonus -= 8192 / Mathf.Min(1024, noteCount);
+                    bonus -= 4096 / Mathf.Min(1024, noteCount);
                     break;
                 default:
                     throw new Exception("unknown judgment");
@@ -346,7 +350,11 @@ namespace Controller
         //Music
         private void InitializeMusicSource()
         {
-            musicSource.clip = AudioClipFileManager.Read(GameManager.Instance.songPath + "\\music.mp3");
+            var filePath = "file://" + GameManager.Instance.songPath + "/music.mp3";
+            Debug.Log(filePath);
+            Debug.Log(File.Exists(GameManager.Instance.songPath + "/music.mp3"));
+            
+            musicSource.clip = AudioClipFileManager.Read(filePath);
             musicLength = musicSource.clip.length;
             timeSlider.maxValue = musicLength;
             musicSource.time = 0;
