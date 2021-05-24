@@ -32,22 +32,23 @@ namespace Models.IO
 
         public static AudioClip Read([NotNull] string path)
         {
-            using var request = UnityWebRequestMultimedia.GetAudioClip(
-                Path.GetFullPath(path), GetAudioType(path)
-            );
-            if (request == null) return null;
+            var request = UnityWebRequestMultimedia.GetAudioClip(new Uri(path), GetAudioType(path));
+            if (request == null)
+                return null;
+
+            Debug.Log(request.uri.Scheme);
+            Debug.Log(request.uri.OriginalString);
+
+            request.SendWebRequest();
+            SpinWait.SpinUntil(() => request.isDone);
 
             if (request.result == UnityWebRequest.Result.ProtocolError || request.result == UnityWebRequest.Result.ConnectionError)
             {
                 Debug.Log(request.error);
                 return null;
             }
-            else
-            {
-                request.SendWebRequest();
-                SpinWait.SpinUntil(() => request.isDone);
-                return DownloadHandlerAudioClip.GetContent(request);
-            }
+
+            return DownloadHandlerAudioClip.GetContent(request);
         }
 
         [NotNull]
