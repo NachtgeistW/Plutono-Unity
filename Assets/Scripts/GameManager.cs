@@ -28,7 +28,7 @@ public class GameManager : MonoSingleton<GameManager>
 
     //Chart Select Scene
     [HideInInspector] private ChartSelectController _chartSelectController;
-    [HideInInspector] public GameChart gameChart;
+    [HideInInspector] public GameChartModel gameChart;
 
     //Game Playing Scene
     [HideInInspector] public PlayingController playingController;

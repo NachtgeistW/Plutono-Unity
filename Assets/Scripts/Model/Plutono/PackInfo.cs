@@ -19,12 +19,16 @@ using UnityEngine;
 
 namespace Model.Plutono
 {
+    /// <summary>
+    /// Store the information of chart collection of a single song.
+    /// This class includes the song name, composer, charts and cover.
+    /// </summary>
     [System.Serializable]
     public class PackInfo
     {
         public string songName = "";
         public string composer = "";
-        public List<GameChart> charts = new List<GameChart>();
+        public List<GameChartModel> charts = new List<GameChartModel>();
         public Sprite cover;
     }
 }

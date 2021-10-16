@@ -464,15 +464,39 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 0
+  _note:
+    id: 0
+    pos: 0
+    size: 0
+    time: 0
+    type: 0
+    sounds: []
   noteSpriteRenderer: {fileID: 5204384521091268994}
   frameSpriteRenderer: {fileID: 1574699793733557996}
   waveSpriteRenderer: {fileID: 5204384520451942606}
   lightSpriteRenderer: {fileID: 5204384520973166644}
   circleSpriteRenderer: {fileID: 5204384520089163436}
-  pianoNoteSprite: {fileID: 21300000, guid: c69542fc2ad41da4ea74377046b3865f, type: 3}
-  blankNoteSprite: {fileID: 21300000, guid: 4e013709f148c0a42ae7a1ca8adb1427, type: 3}
-  slideNoteSprite: {fileID: 21300000, guid: 88216f26344129a4392565001ef9359b, type: 3}
+  pianoNoteSprite: {fileID: 21300000, guid: 284af0a3eebc2514d9f3ac0d270ad0e7, type: 3}
+  blankNoteSprite: {fileID: 21300000, guid: fa5df0dfe987c93459f47076722328a1, type: 3}
+  slideNoteSprite: {fileID: 21300000, guid: 05712f0d0d02ef64fbff631ad7214786, type: 3}
   circleSprite: {fileID: 21300000, guid: e79805534f914894590881e4f9e5dbe8, type: 3}
   waveSprite: {fileID: 21300000, guid: dc8e64ff33e79a746a3ad567c7ad9bb1, type: 3}
   lightSprite: {fileID: 21300000, guid: 46e2eb201e86ed74f9cdbbad34982b82, type: 3}
-  noteEffectFrames: []
+  noteEffectFrames:
+  - {fileID: 21300000, guid: 5d1f315deca16b04eb84993c06fb9c00, type: 3}
+  - {fileID: 21300000, guid: 3f9b54f467c39f749a5e13a32f93169e, type: 3}
+  - {fileID: 21300000, guid: 53430605bb57bdb48bb4d10bc73d3cf8, type: 3}
+  - {fileID: 21300000, guid: aa815b7da57c73d418dcf99d210d96b6, type: 3}
+  - {fileID: 21300000, guid: 8b97ae8f5675b5e4eb2d0f59aa2f5936, type: 3}
+  - {fileID: 21300000, guid: 6f4d15f4f3b0f844493dd09e76ec0f31, type: 3}
+  - {fileID: 21300000, guid: 984686f5048a7264c9a07161a402c005, type: 3}
+  - {fileID: 21300000, guid: 32adf45529b9cc244a0c41c42ec9addd, type: 3}
+  - {fileID: 21300000, guid: a25871ef49b259941b399297e2b41825, type: 3}
+  - {fileID: 21300000, guid: 81f443651e6d50041969dade2061b832, type: 3}
+  - {fileID: 21300000, guid: ac66c50b9d89bb94a9631d15adaeee0c, type: 3}
+  - {fileID: 21300000, guid: caeacfd83e4c4bc4ab76394e05c4d186, type: 3}
+  - {fileID: 21300000, guid: 1313744e964d9a74ba715ff7921486b0, type: 3}
+  - {fileID: 21300000, guid: 25dce8e07672b9847951a688a744781a, type: 3}
+  - {fileID: 21300000, guid: f3596df22d6a1a747a27599ddb8abdac, type: 3}
+  touchableLeftRange: 0
+  touchableRightRange: 0

@@ -9,7 +9,7 @@
 
 using UnityEngine;
 
-namespace Assets.Scripts.Model.Plutono
+namespace Model.Plutono
 {
     public class NoteSpawner : MonoBehaviour
     {

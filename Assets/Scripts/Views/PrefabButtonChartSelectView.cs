@@ -24,9 +24,9 @@ namespace Views
     {
         [SerializeField] private Text _level;
         [SerializeField] private Text _chartDesigner;
-        public GameChart ChartOnButton { get; set; }
+        public GameChartModel ChartOnButton { get; set; }
 
-        public void SetChartInfo(GameChart chart)
+        public void SetChartInfo(GameChartModel chart)
         {
             ChartOnButton = chart;
             _level.text = chart.level;

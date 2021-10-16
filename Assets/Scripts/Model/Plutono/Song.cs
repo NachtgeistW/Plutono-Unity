@@ -19,7 +19,7 @@ namespace Assets.Scripts.Model.Plutono
     {
         public SongModel Model { get; set; }
 
-        public void LoadSongData(List<GameChart> fileChart, Image fileCover, AudioClip fileMusic, AudioClip filePreview)
+        public void LoadSongData(List<GameChartModel> fileChart, Image fileCover, AudioClip fileMusic, AudioClip filePreview)
         {
             Model.chart = fileChart;
             Model.cover = fileCover;

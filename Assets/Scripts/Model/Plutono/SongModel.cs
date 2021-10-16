@@ -16,12 +16,12 @@ namespace Model.Plutono
 {
     public class SongModel
     {
-        public List<GameChart> chart;
+        public List<GameChartModel> chart;
         public Image cover;
         public AudioClip music;
         public AudioClip preview;
 
-        public SongModel(List<GameChart> chart, AudioClip music, AudioClip preview, Image cover)
+        public SongModel(List<GameChartModel> chart, AudioClip music, AudioClip preview, Image cover)
         {
             this.chart = chart;
             this.music = music;

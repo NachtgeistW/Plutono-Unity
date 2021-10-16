@@ -1,5 +1,5 @@
 ﻿/*
- * class SongSelectSceneController -- Control the events happened on game.
+ * class PlayingController -- Control the events happened on game.
  *
  * History
  *      2021.04.04  CREATE.
@@ -8,10 +8,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
 using System.Linq;
 using Assets.Scripts.Util;
+using Controller.Game;
 using Lean.Touch;
 using Model.Plutono;
 using Models.IO;
@@ -19,7 +18,6 @@ using UnityEngine;
 using UnityEngine.Pool;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using Util.FileManager;
 using Views;
 
 namespace Controller
@@ -28,43 +26,28 @@ namespace Controller
     {
         public bool IsGamePlaying { get; private set; }
 
-        [Header("-Text-")]
+        //UI
+        public UIController uiController;
 
-        [SerializeField] private Text textReady;
-
-        [SerializeField] private Text textSongName;
-        [SerializeField] private Text textScore;
-        [SerializeField] private Text textLevel;
-        [SerializeField] private Text textMode;
-
-        [SerializeField] private Text textCombo;
-        [SerializeField] private Text textComboCount;
-
-        [SerializeField] private Text textEarly;
-        [SerializeField] private Text textLate;
-
-        private PackInfo _packInfo;
-        private GameChart _chartInfo;
+        private PackInfo packInfo;
+        private GameChartModel chartInfo;
 
         [Header("-Note controlling-")]
 
         //-Note controlling- --Chlorie
-        private uint prevNoteID;
-        private uint returnNoteID;
-        private List<uint> inGameNoteIDs = new List<uint>();
-        private List<NoteView> notes = new List<NoteView>();
-        [SerializeField] private Transform _noteParentTransform;
+        private readonly List<NoteView> notes = new List<NoteView>();
+        [SerializeField] private Transform noteParentTransform;
 
         //-Editor settings- --Chlorie
         public int chartPlaySpeed = 10; //Twice the speed of that in the game
-        private uint _comboCount;
+        private uint comboCount = 0;
 
         public Button buttonMenu;
 
         //Object Pool
         [SerializeField] private bool collectionChecks = true;
         [SerializeField] private int maxPoolSize = 20;
-        private ObjectPool<NoteView> _notePool;
+        private ObjectPool<NoteView> notePool;
 
         [Tooltip("(放prefab不是script！)note prefab。")]
         [SerializeField] private NoteView prefabNoteView;
@@ -80,20 +63,19 @@ namespace Controller
         private bool isMusicEnds;
 
         //Judge System
-        private bool isCompleted = false;
-        private bool isFailed = false;
+        private bool isCompleted;
+        private readonly bool isFailed = false;
 
-        private int pCount = 0;  //perfect
-        private int gCount = 0;  //good
-        private int bCount = 0;  //bad
-        private int mCount = 0;  //miss
+        private int pCount; //perfect
+        private int gCount; //good
+        private int bCount; //bad
+        private int mCount; //miss
         private int noteCount;
-        private int bonus;
-        private int score = 0;
-        private int xRayScale = 50;
+        private int comboScore;
+        private int basicScore;
         public const float YRayStart = -0.40f;
         private const float YRayEnd = -0.60f;
-        private float StartTime;
+        private float startTime;
         private float time;
         public float Offset { get; set; }
 
@@ -113,60 +95,64 @@ namespace Controller
             Application.targetFrameRate = 120;
 
             GameManager.Instance.playingController = this;
-            _packInfo = GameManager.Instance.packInfo;
-            _chartInfo = GameManager.Instance.gameChart;
+            packInfo = GameManager.Instance.packInfo;
+            chartInfo = GameManager.Instance.gameChart;
             noteCount = GameManager.Instance.gameChart.notes.Count;
         }
 
-        void Start()
+        private void Start()
         {
             //UI
-            InitializeUI();
+            uiController.InitializeUI(packInfo.songName, chartInfo.level);
 
             //Screen
-            _notePool = new ObjectPool<NoteView>(OnCreatePooledItem, OnTakeFromPool, OnReturnToPool, OnDestroyPoolObject, collectionChecks, 10, maxPoolSize);
+            notePool = new ObjectPool<NoteView>(OnCreatePooledItem, OnTakeFromPool, OnReturnToPool,
+                OnDestroyPoolObject, collectionChecks, 10, maxPoolSize);
             PlaceNewNote();
 
             //Judge System
             cam = Camera.main;
             notes.Sort(SortByTime);
-            StartTime = Time.time;
-            Offset = 0.21f;
 
             LeanTouch.OnFingerTap += OnFingerTap;
 
             //Music
             InitializeMusicSource();
-            musicSource.Play();
+            var nowDspTime = AudioSettings.dspTime;
+            musicSource.PlayScheduled(nowDspTime + 1);
+            startTime = -1f;
         }
 
-        void Update()
+        private void Update()
         {
             //TODO:latency adjust system
-            var musicSourceTime = musicSource.time;
+            startTime += Time.unscaledDeltaTime;
+            var musicSourceTime = startTime;
             timeSlider.value = musicSourceTime - Offset;
             time = musicSourceTime;
 
-            if (Math.Abs(musicSourceTime - musicLength) < 0.01)
-            {
-                EndGame();
-            }
+            if (musicSourceTime > musicLength) EndGame();
 
+            if (notes.Count == 0)
+                isCompleted = true;
             ClearMissNote();
 
-            score = CalculateJudgmentPoint();
-            ChangeScoreText();
+            basicScore = CalculateBasicScore();
+            uiController.ChangeScoreText(basicScore);
 
-            if (_comboCount > 5)
-                showCombo();
+            if (comboCount > 5)
+                uiController.ShowCombo(comboCount);
             else
-                hideCombo();
+                uiController.HideCombo();
+
+            uiController.HideEarly();
+            uiController.HideLate();
         }
 
         private void OnDestroy()
         {
             //solve the memory leak problem
-            _notePool.Dispose();
+            notePool.Dispose();
         }
 
         //Game Float
@@ -176,8 +162,8 @@ namespace Controller
             GameManager.Instance.gCount = gCount;
             GameManager.Instance.bCount = bCount;
             GameManager.Instance.mCount = mCount;
-            GameManager.Instance.score = score;
-            GameManager.Instance.bonus = bonus;
+            GameManager.Instance.score = basicScore;
+            GameManager.Instance.bonus = comboScore;
             SceneManager.LoadScene("ResultScene");
         }
 
@@ -186,38 +172,27 @@ namespace Controller
         {
             if (noteView1._note.time > noteView2._note.time)
                 return 1;
-            else if (noteView1._note.time < noteView2._note.time)
+            if (noteView1._note.time < noteView2._note.time)
                 return -1;
-            else
-                return 0;
+            return 0;
         }
 
         private void ClearMissNote()
         {
             if (notes.Count == 0) return;
             var note = notes.First();
-            if (!note.IsZEqualsToZero) return;
+            if (!note.IsNoteShouldBeClear) return;
             note.gameObject.SetActive(false);
             notes.Remove(note);
-            _comboCount = 0;
-            CalculateBonus(Judgment.Miss);
+            comboCount = 0;
+            CalculateComboScore(Judgment.Miss);
             mCount++;
-        }
-
-        public void OnFingerDown(LeanFinger finger)
-        {
-            if (isCompleted || isFailed) return;
-            var point = cam.ScreenToWorldPoint(finger.ScreenPosition);
-        }
-
-        public void OnFingerUp(LeanFinger finger)
-        {
-            if (isCompleted || isFailed) return;
+            uiController.ShowLate();
         }
 
         public void OnFingerTap(LeanFinger finger)
         {
-            //if (isCompleted || isFailed) return;
+            if (isCompleted || isFailed) return;
             var point = cam.ScreenPointToRay(finger.ScreenPosition);
 
             //judge line range
@@ -226,10 +201,11 @@ namespace Controller
                 Debug.Log("You click at " + point.direction.y + ". Out of judge line.");
                 return;
             }
-            
-            NoteView note = SearchForBestNote(time);
+
+            var note = SearchForBestNote(time);
             if (note == null)
-                if (isCompleted) return;
+                if (isCompleted)
+                    return;
 
             //too early
             if (note._note.time > time + Parameters.BadDeltaTime)
@@ -237,6 +213,7 @@ namespace Controller
                 Debug.Log("You click at " + time + ", which should be " + note._note.time + ". You are too early.");
                 return;
             }
+
             //miss, remove, it shouldn't be there now
             /*if (note._note.time < time - Parameters.BadDeltaTime)
             {
@@ -250,42 +227,49 @@ namespace Controller
             var deltaTouchTime = Mathf.Abs(note._note.time - time);
             if (deltaTouchTime < Parameters.PerfectDeltaTime)
             {
-                Debug.Log("You click at " + time + ", which should be " + note._note.time + ". Perfect.");
                 note.gameObject.SetActive(false);
                 notes.Remove(note);
-                _comboCount++;
+                comboCount++;
                 pCount++;
-                CalculateBonus(Judgment.Perfect);
+                CalculateComboScore(Judgment.Perfect);
+                Debug.Log("You click at " + time + ", which should be " + note._note.time + ". Perfect.");
                 return;
             }
 
             if (deltaTouchTime < Parameters.GoodDeltaTime)
             {
-                Debug.Log("You click at " + time + ", which should be " + note._note.time + ". Good.");
                 note.gameObject.SetActive(false);
                 notes.Remove(note);
-                _comboCount++;
+                comboCount++;
                 gCount++;
-                CalculateBonus(Judgment.Good);
+                CalculateComboScore(Judgment.Good);
+                if (note._note.time - time < 0)
+                    uiController.ShowEarly();
+                else
+                    uiController.ShowLate();
+                Debug.Log("You click at " + time + ", which should be " + note._note.time + ". Good.");
                 return;
             }
+
             if (deltaTouchTime < Parameters.BadDeltaTime)
             {
-                Debug.Log("You click at " + time + ", which should be " + note._note.time + ". Bad.");
                 note.gameObject.SetActive(false);
                 notes.Remove(note);
-                _comboCount = 0;
+                comboCount = 0;
                 bCount++;
-                CalculateBonus(Judgment.Bad);
-                return;
+                CalculateComboScore(Judgment.Bad);
+                if (note._note.time - time < 0)
+                    uiController.ShowEarly();
+                else
+                    uiController.ShowLate();
+                Debug.Log("You click at " + time + ", which should be " + note._note.time + ". Bad.");
             }
         }
 
-        private float GetClosedBestNoteRange(float timeRange)
+        private static float GetClosedBestNoteRange(float timeRange)
         {
             if (timeRange < Parameters.PerfectDeltaTime) return Parameters.PerfectDeltaTime;
-            else if (timeRange < Parameters.GoodDeltaTime) return Parameters.GoodDeltaTime;
-            else return Parameters.BadDeltaTime;
+            return timeRange < Parameters.GoodDeltaTime ? Parameters.GoodDeltaTime : Parameters.BadDeltaTime;
         }
 
         private NoteView SearchForBestNote(float touchTime)
@@ -298,11 +282,11 @@ namespace Controller
             {
                 if (bestNote == null)
                     bestNote = notes.First();
-                    //note range
+                //note range
 /*                var x = point.direction.x * 50;
-                if (x > note.rightRange || x < note.leftRange)
+                if (x > note.touchableRightRange || x < note.touchableLeftRange)
                 {
-                    Debug.Log("You click at " + point.direction.x * 50 + ". Its left range is "+ note.leftRange + " and its right range is " + note.rightRange + ". Out of note.");
+                    Debug.Log("You click at " + point.direction.x * 50 + ". Its left range is "+ note.touchableLeftRange + " and its right range is " + note.touchableRightRange + ". Out of note.");
                     return;
                 }
 */
@@ -313,47 +297,48 @@ namespace Controller
                     bestNote = curNote;
                     continue;
                 }
+
                 if (curDeltaTime > GetClosedBestNoteRange(bestDeltaTime))
                     return bestNote;
             }
+
             //没找到，应该为miss
             return null;
         }
 
-        public int CalculateJudgmentPoint()
+        public int CalculateBasicScore()
         {
-            return (int)(0.9 * (1000000 * (pCount + 0.7 * gCount + 0.3 * bCount) / noteCount));
+            return (int) (0.9 * (1000000 * (pCount + 0.7 * gCount + 0.3 * bCount) / noteCount));
         }
-        public int CalculateBonus(Judgment judgment)
+
+        public int CalculateComboScore(Judgment judgment)
         {
             switch (judgment)
             {
                 case Judgment.Perfect:
-                    bonus += 2048 / Mathf.Min(1024, noteCount);
+                    comboScore += 2048 / Mathf.Min(1024, noteCount);
                     break;
                 case Judgment.Good:
-                    bonus += 1024 / Mathf.Min(1024, noteCount);
+                    comboScore += 1024 / Mathf.Min(1024, noteCount);
                     break;
                 case Judgment.Bad:
                 case Judgment.Miss:
-                    bonus -= 4096 / Mathf.Min(1024, noteCount);
+                    comboScore -= 4096 / Mathf.Min(1024, noteCount);
                     break;
                 default:
                     throw new Exception("unknown judgment");
             }
 
-            if (bonus < 0) bonus = 0;       //completely closed
-            if (bonus > 1024) bonus = 1024; //completely opened
-            return bonus;
+            if (comboScore < 0) comboScore = 0; //completely closed
+            if (comboScore > 1024) comboScore = 1024; //completely opened
+            return comboScore;
         }
 
         //Music
         private void InitializeMusicSource()
         {
             var filePath = "file://" + GameManager.Instance.songPath + "/music.mp3";
-            Debug.Log(filePath);
-            Debug.Log(File.Exists(GameManager.Instance.songPath + "/music.mp3"));
-            
+
             musicSource.clip = AudioClipFileManager.Read(filePath);
             musicLength = musicSource.clip.length;
             timeSlider.maxValue = musicLength;
@@ -363,20 +348,20 @@ namespace Controller
         //Note
         private void PlaceNewNote()
         {
-            foreach (var note in _chartInfo.notes)
+            foreach (var note in chartInfo.notes)
                 InitNoteObject(note);
         }
 
-        private void InitNoteObject(GameNote note)
+        private void InitNoteObject(GameNoteModel note)
         {
-            var newNote = _notePool.Get();
+            var newNote = notePool.Get();
             newNote.SetNoteAppearance(note);
             notes.Add(newNote);
         }
 
         private NoteView OnCreatePooledItem()
         {
-            var newNote = Instantiate(prefabNoteView, _noteParentTransform);
+            var newNote = Instantiate(prefabNoteView, noteParentTransform);
             newNote.gameObject.SetActive(false);
             return newNote;
         }
@@ -395,60 +380,9 @@ namespace Controller
 
         // If the pool capacity is reached then any items returned will be destroyed.
         // We can control what the destroy behavior does, here we destroy the GameObject.
-        void OnDestroyPoolObject(NoteView note)
+        private void OnDestroyPoolObject(NoteView note)
         {
             Destroy(note.gameObject);
-        }
-
-        //UI
-        private void InitializeUI()
-        {
-            textSongName.text = _packInfo.songName;
-            textScore.text = Convert.ToString(0);
-            textLevel.text = "Lv." + _chartInfo.level;
-            _comboCount = 0;
-
-            hideCombo();
-            hideEarly();
-            hideLate();
-        }
-
-        public void hideCombo()
-        {
-            textCombo.enabled = false;
-            textComboCount.enabled = false;
-            textComboCount.text = Convert.ToString(_comboCount);
-        }
-
-        public void showCombo()
-        {
-            textCombo.enabled = true;
-            textComboCount.enabled = true;
-            textComboCount.text = Convert.ToString(_comboCount);
-        }
-
-        public void hideEarly()
-        {
-            textEarly.enabled = false;
-        }
-
-        public void showEarly()
-        {
-            textEarly.enabled = true;
-        }
-
-        public void hideLate()
-        {
-            textLate.enabled = false;
-        }
-
-        public void showLate()
-        {
-            textLate.enabled = true;
-        }
-        private void ChangeScoreText()
-        {
-            textScore.text = Convert.ToString(score);
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-//TODO:待解决
-namespace Assets.Scripts.Util
+//TODO:双击返回
+namespace Util
 {
     public class ClickTwiceToExit : MonoBehaviour
     {

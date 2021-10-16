@@ -80,9 +80,9 @@ namespace Util.FileManager
                         {
                             if (!Directory.Exists(platformPath))
                                 Directory.CreateDirectory(platformPath);
-                            if (Directory.Exists("C:\\Users\\night\\Desktop\\G2 Collection_vol.7"))
+                            if (Directory.Exists("C:\\Users\\night\\Desktop\\Plutono Test Chart"))
                             {
-                                iniPathList = GetAllIniPathList("C:\\Users\\night\\Desktop\\G2 Collection_vol.7");
+                                iniPathList = GetAllIniPathList("C:\\Users\\night\\Desktop\\Plutono Test Chart");
                                 GameManager.Instance.songPathList = iniPathList;
                             }
 

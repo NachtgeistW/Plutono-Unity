@@ -40,6 +40,7 @@ namespace Views
             PackInfoOnButton = packInfo;
             MusicSourcePath = musicPath;
             cover.sprite = packInfo.cover;
+            Debug.Log(packInfo.songName);
         }
 
         public void JumpToChartSelectScene()

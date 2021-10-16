@@ -2,7 +2,7 @@
  * class Utility -- Define some utility tools
  *
  * Function
- *      JsonChart::JsonToJChart -- read a single chart from specific json and return a JsonChart
+ *      JsonChartModel::JsonToJChart -- read a single chart from specific json and return a JsonChartModel
  *
  * History
  *      2021.03.31: ADD JsonToJChart function.
