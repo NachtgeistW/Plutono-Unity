@@ -12,7 +12,8 @@ namespace Controller.Game
         Perfect,
         Good,
         Bad,
-        Miss
+        Miss,
+        None
     }
     public static class NoteGradeJudgment
     {
@@ -29,7 +30,7 @@ namespace Controller.Game
                 case NoteGrade.Miss:
                     return 0;
                 default:
-                    return 0f;
+                    return 0;
             }
         }
     }

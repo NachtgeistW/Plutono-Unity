@@ -27,6 +27,7 @@
  *      2021.10.10  RENAME from JsonNote to JsonNoteModel
  */
 
+using Assets.Scripts.Model.Plutono;
 using JetBrains.Annotations;
 using Model.Plutono;
 using Newtonsoft.Json;

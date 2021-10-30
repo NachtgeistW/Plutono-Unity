@@ -24,7 +24,7 @@ using JetBrains.Annotations;
 using Model.Deemo;
 using Newtonsoft.Json;
 
-namespace Model.Plutono
+namespace Assets.Scripts.Model.Plutono
 {
     [System.Serializable]
     public class GameNoteModel

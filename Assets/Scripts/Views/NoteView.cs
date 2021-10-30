@@ -1,31 +1,28 @@
 ﻿using Assets.Scripts.Model.Plutono;
 using Assets.Scripts.Util;
-using Model.Plutono;
 using UnityEngine;
 
-namespace Views
+namespace Assets.Scripts.Views
 {
-    //TODO: 将note实例拆出去
     public class NoteView : MonoBehaviour
     {
         public uint id;
-        public GameNoteModel _note;                     //note实例
-        private float _time;                         //？
-        public SpriteRenderer noteSpriteRenderer;
-        public SpriteRenderer frameSpriteRenderer;
-        public SpriteRenderer waveSpriteRenderer;
-        public SpriteRenderer lightSpriteRenderer;
-        public SpriteRenderer circleSpriteRenderer;
-        public Sprite pianoNoteSprite;
-        public Sprite blankNoteSprite;
-        public Sprite slideNoteSprite;
-        public Sprite circleSprite;
-        public Sprite waveSprite;
-        public Sprite lightSprite;
-        public Sprite[] noteEffectFrames;
+        private float time;
+        [SerializeField] private SpriteRenderer noteSpriteRenderer;
+        [SerializeField] private SpriteRenderer frameSpriteRenderer;
+        [SerializeField] private SpriteRenderer waveSpriteRenderer;
+        [SerializeField] private SpriteRenderer lightSpriteRenderer;
+        [SerializeField] private SpriteRenderer circleSpriteRenderer;
+        [SerializeField] private Sprite pianoNoteSprite;
+        [SerializeField] private Sprite blankNoteSprite;
+        [SerializeField] private Sprite slideNoteSprite;
+        [SerializeField] private Sprite circleSprite;
+        [SerializeField] private Sprite waveSprite;
+        [SerializeField] private Sprite lightSprite;
+        [SerializeField] private Sprite[] noteEffectFrames;
         private const float PianoNoteScale = 7.0f;
         private const float BlankNoteScale = 4.5f;
-        private float _slideNoteScale = 4.5f;
+        private float slideNoteScale = 4.5f;
         private float noteEffectScale = 8.5f;
         private Color waveColor;
         public bool InViewableRage { get; set; }
@@ -35,30 +32,28 @@ namespace Views
         public float touchableLeftRange;
         public float touchableRightRange;
 
-        private void Update()
+        private void OnGameUpdate(GameNoteModel model, float curGameTime, int chartPlaySpeed)
         {
-            _time = GameManager.Instance.playingController.timeSlider.value;
-            UpdatePosition();
+            time = curGameTime;
+            UpdatePosition(model, chartPlaySpeed);
         }
 
-        public void SetNoteAppearance(GameNoteModel note)
+        public void SetNoteAppearance(GameNoteModel model)
         {
-            _note = note;
-            id = note.id;
-            if (note.type == GameNoteModel.NoteType.Blank)
+            if (model.type == GameNoteModel.NoteType.Blank)
             {
                 noteSpriteRenderer.sprite = blankNoteSprite;
-                noteSpriteRenderer.transform.localScale = BlankNoteScale * new Vector3(note.size, 1.0f, 1.0f);
+                noteSpriteRenderer.transform.localScale = BlankNoteScale * new Vector3(model.size, 1.0f, 1.0f);
                 waveColor = Color.black;
             }
             else
             {
                 noteSpriteRenderer.sprite = pianoNoteSprite;
-                noteSpriteRenderer.transform.localScale = BlankNoteScale * new Vector3(note.size, 1.0f, 1.0f);
+                noteSpriteRenderer.transform.localScale = BlankNoteScale * new Vector3(model.size, 1.0f, 1.0f);
                 waveColor = Color.black;
             }
 
-            if (note.pos > 2.0f || note.pos < -2.0f)
+            if (model.pos > 2.0f || model.pos < -2.0f)
             {
                 InViewableRage = false;
                 circleSpriteRenderer.sprite = null;
@@ -76,16 +71,16 @@ namespace Views
             noteSpriteRenderer.color = new Color(1.0f, 1.0f, 1.0f, 0.0f);
             gameObject.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
 
-            x = Parameters.maximumNoteWidth * _note.pos;
-            touchableLeftRange = Parameters.maximumNoteWidth * (_note.pos - 0.5f * _note.size);
-            touchableRightRange = Parameters.maximumNoteWidth * (_note.pos + 0.5f * _note.size);
+            x = Parameters.maximumNoteWidth * model.pos;
+            touchableLeftRange = Parameters.maximumNoteWidth * (model.pos - 0.5f * model.size);
+            touchableRightRange = Parameters.maximumNoteWidth * (model.pos + 0.5f * model.size);
         }
 
         //TODO:只让少量的note移动，而不是全部一起
-        public void UpdatePosition()
+        public void UpdatePosition(GameNoteModel note, int chartPlaySpeed)
         {
             var z = Parameters.maximumNoteRange /
-                Parameters.NoteFallTime(GameManager.Instance.playingController.chartPlaySpeed) * (_note.time - _time);
+                Parameters.NoteFallTime(chartPlaySpeed) * (note.time - time);
             if (InViewableRage)
             {
                 IsNoteShouldBeClear = false;
@@ -117,21 +112,21 @@ namespace Views
             gameObject.transform.localPosition = new Vector3(x, 0.0f, z);
         }
 
-        private void UpdateLight()
+        private void UpdateLight(GameNoteModel model)
         {
-            var dTime= _time - _note.time;
-            if (dTime >= 0.0f && dTime <= Parameters.lightIncTime)
+            var deltaTime = time - model.time;
+            if (deltaTime >= 0.0f && deltaTime <= Parameters.lightIncTime)
             {
-                float rate = dTime / Parameters.lightIncTime;
-                float height = rate * Parameters.lightHeight;
-                lightSpriteRenderer.transform.localScale = _note.size * new Vector3(Parameters.lightSize, height, height);
+                var rate = deltaTime / Parameters.lightIncTime;
+                var height = rate * Parameters.lightHeight;
+                lightSpriteRenderer.transform.localScale = model.size * new Vector3(Parameters.lightSize, height, height);
                 lightSpriteRenderer.color = new Color(1.0f, 1.0f, 1.0f, rate);
             }
-            else if (dTime > Parameters.lightIncTime && dTime <= Parameters.lightIncTime + Parameters.lightDecTime)
+            else if (deltaTime > Parameters.lightIncTime && deltaTime <= Parameters.lightIncTime + Parameters.lightDecTime)
             {
-                float rate = (1 - (dTime - Parameters.lightIncTime) / Parameters.lightDecTime);
-                float height = rate * Parameters.lightHeight;
-                lightSpriteRenderer.transform.localScale = _note.size * new Vector3(Parameters.lightSize, height, height);
+                var rate = (1 - (deltaTime - Parameters.lightIncTime) / Parameters.lightDecTime);
+                var height = rate * Parameters.lightHeight;
+                lightSpriteRenderer.transform.localScale = model.size * new Vector3(Parameters.lightSize, height, height);
                 lightSpriteRenderer.color = new Color(1.0f, 1.0f, 1.0f, rate);
             }
             else
@@ -141,11 +136,11 @@ namespace Views
             }
         }
 
-        private void UpdateEffectFrame()
+        private void UpdateEffectFrame(GameNoteModel model)
         {
-            var frame = Mathf.FloorToInt((_time - _note.time) / Parameters.frameSpeed);
-            if (frame >= 15 || !InViewableRage) 
-            { 
+            var frame = Mathf.FloorToInt((time - model.time) / Parameters.frameSpeed);
+            if (frame >= 15 || !InViewableRage)
+            {
                 frameSpriteRenderer.sprite = null;
                 noteSpriteRenderer.sprite = null;
             }
@@ -153,7 +148,7 @@ namespace Views
             {
                 noteSpriteRenderer.sprite = null;
                 frameSpriteRenderer.sprite = noteEffectFrames[frame];
-                frameSpriteRenderer.transform.localScale = noteEffectScale * new Vector3(_note.size, 1.0f, 1.0f);
+                frameSpriteRenderer.transform.localScale = noteEffectScale * new Vector3(model.size, 1.0f, 1.0f);
             }
         }
     }

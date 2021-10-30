@@ -9,6 +9,7 @@
  */
 
 using System.Collections.Generic;
+using Assets.Scripts.Model.Plutono;
 using UnityEngine;
 using UnityEngine.UI;
 

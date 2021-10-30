@@ -19,7 +19,7 @@
 
 using System.Collections.Generic;
 
-namespace Model.Plutono
+namespace Assets.Scripts.Model.Plutono
 {
     [System.Serializable]
     public sealed class GameChartModel

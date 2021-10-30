@@ -6,6 +6,7 @@
  */
 
 using System;
+using Assets.Scripts.Controller.Game;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -34,16 +35,54 @@ namespace Controller.Game
         private bool isEarlyShown;
         private bool isLateShown;
 
-        public void InitializeUI(string songName, string level)
+        public Slider timeSlider;
+        public void InitializeUi(string songName, string level, float musicLength)
         {
             textSongName.text = songName;
             textScore.text = Convert.ToString(0);
             textLevel.text = "Lv." + level;
-            //_comboCount = 0;
+            SetMode(GameMode.Arbo);
 
             HideCombo();
             textEarly.enabled = false;
             textLate.enabled = false;
+            timeSlider.maxValue = musicLength;
+        }
+
+        public void OnGameUpdate(float time, GameStatus status)
+        {
+            timeSlider.value = time; 
+            SetScoreText(status.BasicScore);
+
+            if (status.Combo > 5)
+                ShowCombo(status.Combo);
+            else
+                HideCombo();
+
+            HideEarly();
+            HideLate();
+        }
+
+        public void SetMode(GameMode mode)
+        {
+            switch (mode)
+            {
+                case GameMode.Stelo:
+                    textMode.text = "Stelo";
+                    break;
+                case GameMode.Arbo:
+                    textMode.text = "Arbo";
+                    break;
+                case GameMode.Floro:
+                    textMode.text = "Floro";
+                    break;
+                case GameMode.Persona:
+                    textMode.text = "Persona";
+                    break;
+                case GameMode.Ekzerco:
+                    textMode.text = "Ekzerco";
+                    break;
+            }
         }
 
         public void HideCombo()
@@ -52,7 +91,7 @@ namespace Controller.Game
             textComboCount.enabled = false;
         }
 
-        public void ShowCombo(uint comboCount)
+        public void ShowCombo(int comboCount)
         {
             textCombo.enabled = true;
             textComboCount.enabled = true;
@@ -62,7 +101,7 @@ namespace Controller.Game
         public void HideEarly()
         {
             if (!isEarlyShown) return;
-            earlyShowtime += Time.deltaTime;
+            earlyShowtime += Time.unscaledDeltaTime;
             if (!(earlyShowtime > EarlyAndLateLifetime)) return;
             textEarly.enabled = false;
             isEarlyShown = false;
@@ -78,7 +117,7 @@ namespace Controller.Game
         public void HideLate()
         {
             if (!isLateShown) return;
-            lateShowtime += Time.deltaTime;
+            lateShowtime += Time.unscaledDeltaTime;
             if (!(lateShowtime > EarlyAndLateLifetime)) return;
             textLate.enabled = false;
             isLateShown = false;
@@ -90,7 +129,7 @@ namespace Controller.Game
             textLate.enabled = true;
             lateShowtime = 0;
         }
-        public void ChangeScoreText(int score)
+        public void SetScoreText(int score)
         {
             textScore.text = Convert.ToString(score);
         }

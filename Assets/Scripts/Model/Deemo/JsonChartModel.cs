@@ -14,6 +14,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Assets.Scripts.Model.Plutono;
 using Model.Deemo;
 using Model.Plutono;
 using Newtonsoft.Json;
