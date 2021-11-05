@@ -23,7 +23,7 @@ namespace Assets.Scripts.Views
         private const float PianoNoteScale = 7.0f;
         private const float BlankNoteScale = 4.5f;
         private float slideNoteScale = 4.5f;
-        private float noteEffectScale = 8.5f;
+        private const float NoteEffectScale = 8.5f;
         private Color waveColor;
         public bool InViewableRage { get; set; }
         public bool IsNoteShouldBeClear { get; set; }
@@ -148,7 +148,7 @@ namespace Assets.Scripts.Views
             {
                 noteSpriteRenderer.sprite = null;
                 frameSpriteRenderer.sprite = noteEffectFrames[frame];
-                frameSpriteRenderer.transform.localScale = noteEffectScale * new Vector3(model.size, 1.0f, 1.0f);
+                frameSpriteRenderer.transform.localScale = NoteEffectScale * new Vector3(model.size, 1.0f, 1.0f);
             }
         }
     }

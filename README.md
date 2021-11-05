@@ -1,7 +1,7 @@
 # Plutono
 
-A Deemo simulator.
+A piano simulation music game.
 
-i e d o y d e m
+"The aria for a lost world."
 
 *Working in Process.*

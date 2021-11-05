@@ -19,18 +19,18 @@ namespace Assets.Scripts.Model.Plutono
 {
     public abstract class GameNote : MonoBehaviour
     {
-        public PlayingController Controller { get; private set; }
-        public bool IsInitialized { get; private set; }
-
         public GameNoteModel Model { get; set; }
         public NoteView NoteView{ get; set; }
         public NoteRenderer Renderer;
+        public GamePlayController Controller { get; private set; }
+        public bool IsInitialized { get; private set; }
+
         public float JudgmentOffset { get; set; }
 
         public float MissThreshold { get; set; }
         public bool IsCleared { get; set; }
 
-        protected virtual void Init(PlayingController controller)
+        protected virtual void Init(GamePlayController controller)
         {
             if (IsInitialized) return;
             IsInitialized = true;
@@ -38,7 +38,7 @@ namespace Assets.Scripts.Model.Plutono
             JudgmentOffset = 0f;
         }
 
-        public virtual void SetData(int noteID)
+        public virtual void SetData(int noteId)
         {
             
         }

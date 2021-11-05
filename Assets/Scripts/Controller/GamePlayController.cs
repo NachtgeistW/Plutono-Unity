@@ -1,11 +1,12 @@
 ﻿/*
- * class PlayingController -- Control the events happened on game.
+ * class GamePlayController -- Control the events happened on game.
  *
  * History
  *      2021.04.04  CREATE.
  *      2021.04.15  RENAME to PlayingController.
  *      2021.10.17  MOVE CalculateBasicScore and ComboScore to Class GameStatus.
- */
+ *      2021.11.04  RENAME to GamePlayController.
+    */
 
 using System;
 using System.Collections.Generic;
@@ -25,14 +26,14 @@ using Views;
 
 namespace Assets.Scripts.Controller
 {
-    public class PlayingController : MonoBehaviour
+    public class GamePlayController : MonoBehaviour
     {
         private Camera cam;
 
         public GameStatus Status { get; set; }
 
         //UI
-        public UIController uiController;
+        public UIController UiController;
 
         public PackInfo PackInfo { get; set; }
         public GameChartModel ChartInfo { get; set; }
@@ -78,11 +79,12 @@ namespace Assets.Scripts.Controller
 
         private void Awake()
         {
-            Application.targetFrameRate = 120;
-
             GameManager.Instance.playingController = this;
+
             PackInfo = GameManager.Instance.packInfo;
             ChartInfo = GameManager.Instance.gameChart;
+
+            Application.targetFrameRate = 120;
         }
 
         private void Start()
@@ -109,7 +111,7 @@ namespace Assets.Scripts.Controller
             musicSource.PlayScheduled(nowDspTime + 1);
 
             //UI
-            uiController.InitializeUi(PackInfo.songName, ChartInfo.level, musicLength);
+            UiController.InitializeUi(PackInfo.songName, ChartInfo.level, musicLength);
         }
 
         private void Update()
@@ -117,7 +119,7 @@ namespace Assets.Scripts.Controller
             //TODO:latency adjust system
 
             if (Time > musicLength) EndGame();
-            uiController.OnGameUpdate(Time, Status);
+            UiController.OnGameUpdate(Time, Status);
 
 /*            if (notes.Count == 0)
                 isCompleted = true;

@@ -32,7 +32,7 @@ public class GameManager : MonoSingleton<GameManager>
     [HideInInspector] public GameChartModel gameChart;
 
     //Game Playing Scene
-    [HideInInspector] public PlayingController playingController;
+    [HideInInspector] public GamePlayController playingController;
     [HideInInspector] public int pCount;  //perfect
     [HideInInspector] public int gCount;  //good
     [HideInInspector] public int bCount;  //bad

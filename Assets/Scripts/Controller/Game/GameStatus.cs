@@ -54,7 +54,7 @@ namespace Assets.Scripts.Controller.Game
 
         }
 
-        public GameStatus(PlayingController controller, GameMode mode)
+        public GameStatus(GamePlayController controller, GameMode mode)
         {
             Mode = mode;
             Level = int.Parse(controller.ChartInfo.level);
