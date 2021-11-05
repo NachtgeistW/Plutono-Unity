@@ -33,6 +33,7 @@
 ExportedObj/
 .consulo/
 *.csproj
+!NuGetReferences.csproj
 *.unityproj
 *.sln
 *.suo
