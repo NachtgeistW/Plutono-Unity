@@ -16,11 +16,15 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+
 using Assets.Scripts.Model.Plutono;
+
 using Model.Deemo;
 using Model.Plutono;
+
 using UnityEngine;
 using UnityEngine.Android;
+
 using Application = UnityEngine.Application;
 
 namespace Util.FileManager
@@ -31,12 +35,12 @@ namespace Util.FileManager
         public void RequestReadPermission()
         {
             if (!Permission.HasUserAuthorizedPermission(Permission.ExternalStorageRead))
-            { 
+            {
                 Debug.Log("RequestReadPermission");
                 Permission.RequestUserPermission(Permission.ExternalStorageRead);
             }
             Permission.RequestUserPermission("android.permission.INTERNET");
-            
+
         }
 
         private List<string> GetAllIniPathList(string path)
@@ -77,47 +81,47 @@ namespace Util.FileManager
                 {
                     //TODO::将case分支里面的重复代码抽取出来
                     case RuntimePlatform.WindowsEditor:
+                    {
+                        if (!Directory.Exists(platformPath))
+                            Directory.CreateDirectory(platformPath);
+                        if (Directory.Exists("C:\\Users\\night\\Desktop\\Plutono Test Chart"))
                         {
-                            if (!Directory.Exists(platformPath))
-                                Directory.CreateDirectory(platformPath);
-                            if (Directory.Exists("C:\\Users\\night\\Desktop\\Plutono Test Chart"))
-                            {
-                                iniPathList = GetAllIniPathList("C:\\Users\\night\\Desktop\\Plutono Test Chart");
-                                GameManager.Instance.songPathList = iniPathList;
-                            }
-
-                            /*foreach (var iniPath in iniPathList)
-                              {
-                                songPackList.Add(
-                                IniInfo.ReadIniFromPath(Directory.GetFiles(iniPath, "*.ini").Single()).IniToPackInfo(iniPath));
-                              }
-                            */
-                            songPackList.AddRange(iniPathList.Select(iniPath => 
-                                IniInfo.ReadIniFromPath(Directory.GetFiles(iniPath, "*.ini").Single()).IniToPackInfo(iniPath)));
-                            return songPackList;
+                            iniPathList = GetAllIniPathList("C:\\Users\\night\\Desktop\\Plutono Test Chart");
+                            GameManager.Instance.songPathList = iniPathList;
                         }
+
+                        /*foreach (var iniPath in iniPathList)
+                          {
+                            songPackList.Add(
+                            IniInfo.ReadIniFromPath(Directory.GetFiles(iniPath, "*.ini").Single()).IniToPackInfo(iniPath));
+                          }
+                        */
+                        songPackList.AddRange(iniPathList.Select(iniPath =>
+                            IniInfo.ReadIniFromPath(Directory.GetFiles(iniPath, "*.ini").Single()).IniToPackInfo(iniPath)));
+                        return songPackList;
+                    }
                     case RuntimePlatform.Android:
+                    {
+                        if (!Directory.Exists(platformPath))
+                            Directory.CreateDirectory(platformPath);
+                        if (Directory.Exists(StoragePath))
                         {
-                            if (!Directory.Exists(platformPath))
-                                Directory.CreateDirectory(platformPath);
-                            if (Directory.Exists(StoragePath))
-                            {
-                                iniPathList = GetAllIniPathList(StoragePath);
-                                GameManager.Instance.songPathList = iniPathList;
-                            }
+                            iniPathList = GetAllIniPathList(StoragePath);
+                            GameManager.Instance.songPathList = iniPathList;
+                        }
 
-                            songPackList.AddRange(iniPathList.Select(iniPath => 
-                                IniInfo.ReadIniFromPath(Directory.GetFiles(iniPath, "*.ini").Single()).IniToPackInfo(iniPath)));
-                            return songPackList;
-                        }
+                        songPackList.AddRange(iniPathList.Select(iniPath =>
+                            IniInfo.ReadIniFromPath(Directory.GetFiles(iniPath, "*.ini").Single()).IniToPackInfo(iniPath)));
+                        return songPackList;
+                    }
                     case RuntimePlatform.IPhonePlayer:
+                    {
+                        if (!Directory.Exists(platformPath))
                         {
-                            if (!Directory.Exists(platformPath))
-                            {
-                                Directory.CreateDirectory(platformPath);
-                            }
-                            return null;
+                            Directory.CreateDirectory(platformPath);
                         }
+                        return null;
+                    }
                     default:
                         throw new NotSupportedException();
                 }

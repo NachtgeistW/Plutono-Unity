@@ -76,5 +76,9 @@ crashlytics-build.properties
 # Bonus
 /bin
 /Packages
+Assets/Packages/
 !/Packages/manifest.json
 !/Packages/packages-lock.json
+
+.vscode/*
+.vsconfig
