@@ -1,9 +1,10 @@
-﻿using Assets.Scripts.Model.Plutono;
-using Assets.Scripts.Util;
-using UnityEngine;
-
-namespace Assets.Scripts.Views
+﻿namespace Assets.Scripts.Views
 {
+    using Assets.Scripts.Model.Plutono;
+    using Assets.Scripts.Util;
+
+    using UnityEngine;
+
     public class NoteView : MonoBehaviour
     {
         public uint id;

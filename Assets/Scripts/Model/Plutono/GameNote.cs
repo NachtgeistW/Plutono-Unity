@@ -5,18 +5,21 @@
  *      2021.10.17  CREATE.
  */
 
-using System;
-using Assets.Scripts.Controller;
-using Assets.Scripts.Controller.Game;
-using Assets.Scripts.Views;
-using Controller;
-using Controller.Game;
-using Model.Plutono;
-using UnityEngine;
-using Views;
-
 namespace Assets.Scripts.Model.Plutono
 {
+    using System;
+
+    using Controller;
+    using Controller.Game;
+
+    using global::Controller.Game;
+
+    using global::Model.Plutono;
+
+    using UnityEngine;
+
+    using Views;
+
     public abstract class GameNote : MonoBehaviour
     {
         public GameNoteModel Model { get; set; }
