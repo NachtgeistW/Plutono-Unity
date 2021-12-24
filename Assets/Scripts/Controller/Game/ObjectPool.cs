@@ -21,7 +21,7 @@ namespace Assets.Scripts.Controller.Game
         {
             var newNote = notePool.Get();
             newNote.Model = note;
-            newNote.NoteView.SetNoteAppearance(note);
+            newNote.BlankNoteView.SetNoteAppearance(note);
             notes.Add(newNote);
         }
 
@@ -35,7 +35,7 @@ namespace Assets.Scripts.Controller.Game
         // Called when an item is returned to the pool using Release
         private void OnReturnToPool(GameNote note)
         {
-            note.NoteView.gameObject.SetActive(false);
+            note.BlankNoteView.gameObject.SetActive(false);
         }
 
         // Called when an item is taken from the pool using Get

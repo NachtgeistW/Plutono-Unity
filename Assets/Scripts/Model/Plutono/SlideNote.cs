@@ -1,23 +1,22 @@
 ﻿/*
- * class PianoNote -- 存储游戏中PianoNote的数据、渲染与判定逻辑
+ * class PianoNote -- 存储游戏中SlideNote的数据、渲染与判定逻辑
  *
  * History
  *      2021.12.22  CREATE.
  */
-
 using Model.Plutono;
 
 namespace Assets.Scripts.Model.Plutono
 {
     using Views;
 
-    public class PianoNote : GameNote
+    public class SlideNote : GameNote
     {
-        public PianoNoteView PianoNoteView { get; set; }
+        public SlideNoteView SlideNoteView { get; set; }
 
         protected override void OnGameUpdate()
         {
-            PianoNoteView.UpdatePosition(Model.time, Controller.chartPlaySpeed);
+            SlideNoteView.UpdatePosition(Model.time, Controller.chartPlaySpeed);
         }
 
         public void PlayPianoSound()

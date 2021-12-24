@@ -50,8 +50,6 @@ namespace Assets.Scripts.Controller
         public Button buttonMenu;
 
         //Object Pool
-        [SerializeField] private bool collectionChecks = true;
-        [SerializeField] private int maxPoolSize = 20;
         private ObjectPool<GameNote> notePool;
 
         [Tooltip("(放prefab不是script！)note prefab。")]

@@ -19,13 +19,18 @@ namespace Assets.Scripts.Controller.Game
         [Tooltip("(·Åprefab²»ÊÇscript£¡)note prefab¡£")]
         [SerializeField] private GameNote prefabNoteView;
         [SerializeField] private Transform noteParentTransform;
+        [SerializeField] private bool collectionChecks = true;
+        [SerializeField] private int maxPoolSize = 20;
 
 
-        private ObjectPool<GameNote> notePool = new ObjectPool<GameNote>(OnCreatePooledItem, OnTakeFromPool, OnReturnToPool,
-        OnDestroyPoolObject, collectionChecks, 10, maxPoolSize);
+        private ObjectPool<GameNote> notePool;
 
-        //Note
-        public void PlaceNewNote(ref List<GameNote> notesList, GameChartModel chartModel)
+        NoteSpawner() =>
+            notePool = new ObjectPool<GameNote>(OnCreatePooledItem, OnTakeFromPool, OnReturnToPool,
+                OnDestroyPoolObject, collectionChecks, 10, maxPoolSize);
+
+        //Note pool
+        public void PlaceNewNote(ref ObjectPool<GameNote> notePool, ref List<GameNote> notesList, GameChartModel chartModel)
         {
             foreach (var note in chartModel.notes)
                 InitNoteObject(ref notesList, note);
@@ -35,7 +40,9 @@ namespace Assets.Scripts.Controller.Game
         {
             var newNote = notePool.Get();
             newNote.Model = note;
-            newNote.NoteView.SetNoteAppearance(note);
+            //if (note.type == GameNoteModel.NoteType.Blank)
+            //    newNote.BlankNoteView.SetNoteAppearance(note.size, note.pos);
+
             notesList.Add(newNote);
         }
 
@@ -46,5 +53,10 @@ namespace Assets.Scripts.Controller.Game
             return newNote;
         }
 
+        private void OnReturnToPool(GameNote note) => note.gameObject.SetActive(false);
+
+        private void OnTakeFromPool(GameNote note) => note.gameObject.SetActive(true);
+
+        private void OnDestroyPoolObject(GameNote note) => Destroy(note);
     }
 }

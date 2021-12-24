@@ -1,17 +1,7 @@
-﻿
-
-
-
-
-
-/*
+﻿/*
  * class PrefabCoverView -- Store the object and function that change UI on the Prefab ButtonSongCover.
  *      _songName: private Text, the song name attached to this button.
  *      PackInfoOnButton: public PackInfo, property, the song pack info attached to this button.
- *
- * Function
- *      void::SetSongInfo -- Set the cover and song name to a prefab.
- *      void::JumpToChartSelectScene -- Jump to chart select scene.
  *
  * History
  *      2021.04.07  CREATE.
@@ -34,6 +24,11 @@ namespace Views
         public PackInfo PackInfoOnButton { get; set; }
         public string MusicSourcePath { get; set; }
 
+        /// <summary>
+        /// Set the cover and song name to a prefab.
+        /// </summary>
+        /// <param name="packInfo"></param>
+        /// <param name="musicPath"></param>
         public void SetSongInfo(PackInfo packInfo, string musicPath)
         {
             songName.text = packInfo.songName;
@@ -43,6 +38,9 @@ namespace Views
             Debug.Log(packInfo.songName);
         }
 
+        /// <summary>
+        /// Jump to chart select scene.
+        /// </summary>
         public void JumpToChartSelectScene()
         {
             GameManager.Instance.packInfo = PackInfoOnButton;
