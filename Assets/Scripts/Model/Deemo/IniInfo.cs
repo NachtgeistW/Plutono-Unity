@@ -1,4 +1,4 @@
-﻿/*
+/*
  * class IniInfo -- 
  *
  *
@@ -11,19 +11,19 @@
  */
 
 using System.IO;
+
 using Assets.Scripts.Model.Deemo;
 using Assets.Scripts.Model.Plutono;
-using IniParser;
+using Assets.Scripts.Util;
+
 using Model.Plutono;
+
 using UnityEngine;
 
 namespace Model.Deemo
 {
     /// <summary>
     /// Store the information from a ini file.
-    ///  This class includes the song name, artist, chart designer and level info.
-    /// </summary>
-    [System.Serializable]
     public class IniInfo
     {
         public string songName = "";        //song name.
@@ -45,25 +45,24 @@ namespace Model.Deemo
         /// <returns>a initialized IniInfo class</returns>
         public static IniInfo ReadIniFromPath(string iniFilePath)
         {
-            var parser = new FileIniDataParser();
             //TODO: 判定ini路径是否合法
-            var data = parser.ReadFile(iniFilePath);
+            var data = IniFile.FromPath(iniFilePath).GetSection("Song");
             var info = new IniInfo
             {
-                songName = data["Song"]["Name"],
-                artist = data["Song"]["Artist"],
-                chartDesigner = data["Song"]["Noter"]
+                songName = data["Name"],
+                artist = data["Artist"],
+                chartDesigner = data["Noter"]
             };
-            if (data["Song"]["Easy"] != null)
-                info.levelEasy = uint.Parse(data["Song"]["Easy"]);
-            if (data["Song"]["Normal"] != null)
-                info.levelNormal = uint.Parse(data["Song"]["Normal"]);
-            if (data["Song"]["Hard"] != null)
-                info.levelHard = uint.Parse(data["Song"]["Hard"]);
-            if (data["Song"]["Extra"] != null)
-                info.levelExtra = data["Song"]["Extra"];
-            if (data["Song"]["Ultra"] != null)
-                info.levelUltra = uint.Parse(data["Song"]["Ultra"]);
+            if (data["Easy"] != null)
+                info.levelEasy = uint.Parse(data["Easy"]);
+            if (data["Normal"] != null)
+                info.levelNormal = uint.Parse(data["Normal"]);
+            if (data["Hard"] != null)
+                info.levelHard = uint.Parse(data["Hard"]);
+            if (data["Extra"] != null)
+                info.levelExtra = data["Extra"];
+            if (data["Ultra"] != null)
+                info.levelUltra = uint.Parse(data["Ultra"]);
             return info;
         }
 
@@ -98,7 +97,7 @@ namespace Model.Deemo
                 else if (File.Exists(filePathUpper))
                     gChart.notes = JsonChartModel.JsonToJsonChart(filePathUpper).ToGameChartNoteList();
                 else
-                    throw new System.Exception("Level Easy in Song " + songName + ", Level"+ levelEasy.ToString() +"has defined a difficulty but doesn't provide a chart.");
+                    throw new System.Exception("Level Easy in Song " + songName + ", Level" + levelEasy.ToString() + "has defined a difficulty but doesn't provide a chart.");
 
                 packInfo.charts.Add(gChart);
             }
