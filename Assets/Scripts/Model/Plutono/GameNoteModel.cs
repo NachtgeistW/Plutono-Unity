@@ -1,5 +1,5 @@
 ﻿/*
- * class GameNoteModel -- Store the information of a note in game.
+ * class GameNoteModel -- Store the data of a note in game.
  *
  *      This class includes the type, position, size, time, piano sounds property.
  *      id: uint, the id of this note (start from 1)
@@ -8,9 +8,6 @@
  *      size: float, the size of this note (from 0 to 4)
  *      time: float, the time when this note should be touched (start from 0)
  *      IsShown: bool, TRUE if this note should be shown
- *
- * Function:
- *
  *
  * History:
  *      2021.03.07  CREATED

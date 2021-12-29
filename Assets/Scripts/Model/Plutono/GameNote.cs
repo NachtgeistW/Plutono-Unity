@@ -1,26 +1,29 @@
 ﻿/*
- * class GameNote -- 存储游戏中单个note的数据、渲染与判定逻辑
+ * class GameNote -- 存储游戏中单个note的数据、渲染与判定逻辑的基类
  *
  * History
  *      2021.10.17  CREATE.
+ *      2021.12.24  MOVE some data to three subclass.
  */
-
-using System;
-using Assets.Scripts.Controller;
-using Assets.Scripts.Controller.Game;
-using Assets.Scripts.Views;
-using Controller;
-using Controller.Game;
-using Model.Plutono;
-using UnityEngine;
-using Views;
 
 namespace Assets.Scripts.Model.Plutono
 {
+    using System;
+
+    using Controller;
+    using Controller.Game;
+
+    using global::Controller.Game;
+
+    using global::Model.Plutono;
+
+    using UnityEngine;
+
+    using Views;
+
     public abstract class GameNote : MonoBehaviour
     {
         public GameNoteModel Model { get; set; }
-        public NoteView NoteView{ get; set; }
         public NoteRenderer Renderer;
         public GamePlayController Controller { get; private set; }
         public bool IsInitialized { get; private set; }
@@ -45,7 +48,7 @@ namespace Assets.Scripts.Model.Plutono
 
         protected virtual void OnGameUpdate()
         {
-            NoteView.UpdatePosition(Model, Controller.chartPlaySpeed);
+
         }
 
         protected virtual void OnTouch(Vector2 screenPos)
