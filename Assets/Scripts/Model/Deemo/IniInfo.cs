@@ -13,12 +13,13 @@
 using System.IO;
 using Assets.Scripts.Model.Deemo;
 using Assets.Scripts.Model.Plutono;
-using IniParser;
 using Model.Plutono;
 using UnityEngine;
 
 namespace Model.Deemo
 {
+    using Util;
+
     /// <summary>
     /// Store the information from a ini file.
     ///  This class includes the song name, artist, chart designer and level info.
@@ -45,10 +46,12 @@ namespace Model.Deemo
         /// <returns>a initialized IniInfo class</returns>
         public static IniInfo ReadIniFromPath(string iniFilePath)
         {
-            var parser = new FileIniDataParser();
+            
             //TODO: 判定ini路径是否合法
-            var data = parser.ReadFile(iniFilePath);
-            var info = new IniInfo
+            var data = IniFile.FromPath(iniFilePath);
+            var temp = data["Song"];
+            var info = new IniInfo();
+/*            var info = new IniInfo
             {
                 songName = data["Song"]["Name"],
                 artist = data["Song"]["Artist"],
@@ -64,7 +67,7 @@ namespace Model.Deemo
                 info.levelExtra = data["Song"]["Extra"];
             if (data["Song"]["Ultra"] != null)
                 info.levelUltra = uint.Parse(data["Song"]["Ultra"]);
-            return info;
+*/            return info;
         }
 
         /// <summary>
