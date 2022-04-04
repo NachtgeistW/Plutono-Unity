@@ -1,4 +1,4 @@
-namespace Util
+namespace Assets.Scripts.Util
 {
     using Microsoft.Extensions.Configuration;
 

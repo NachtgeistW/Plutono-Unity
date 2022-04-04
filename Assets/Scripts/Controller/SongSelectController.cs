@@ -37,7 +37,7 @@ namespace Controller
                 newButton.SetSongInfo(packInfo);
             }
 */
-            for (int i = 0; i < songPackList.Count; i++)
+            for (var i = 0; i < songPackList.Count; i++)
             {
                 var newButton = Instantiate(prefabCoverView, transform);
                 newButton.SetSongInfo(songPackList[i], musicPathList[i]);

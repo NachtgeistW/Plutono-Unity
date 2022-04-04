@@ -82,11 +82,12 @@ namespace Util.FileManager
                     //TODO::将case分支里面的重复代码抽取出来
                     case RuntimePlatform.WindowsEditor:
                     {
-                        if (!Directory.Exists(platformPath))
-                            Directory.CreateDirectory(platformPath);
-                        if (Directory.Exists("C:\\Users\\night\\Desktop\\Plutono Test Chart"))
+                        //const string path = "H:\\Desktop\\Plutono Test Chart";
+                        const string path = "C:\\Users\\night\\Desktop\\Plutono Test Chart";
+                        //if (Directory.Exists("C:\\Users\\night\\Desktop\\Plutono Test Chart"))
+                        if (Directory.Exists(path))
                         {
-                            iniPathList = GetAllIniPathList("C:\\Users\\night\\Desktop\\Plutono Test Chart");
+                            iniPathList = GetAllIniPathList(path);
                             GameManager.Instance.songPathList = iniPathList;
                         }
 

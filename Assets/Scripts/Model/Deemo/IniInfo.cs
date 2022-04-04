@@ -1,4 +1,4 @@
-﻿/*
+/*
  * class IniInfo -- 
  *
  *
@@ -10,31 +10,32 @@
  2020.03.31  CREATE.
  */
 
-using System.IO;
-using Assets.Scripts.Model.Deemo;
-using Assets.Scripts.Model.Plutono;
-using Model.Plutono;
-using UnityEngine;
-
 namespace Model.Deemo
 {
-    using Util;
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+
+    using Assets.Scripts.Model.Deemo;
+    using Assets.Scripts.Model.Plutono;
+    using Assets.Scripts.Util;
+
+    using Plutono;
+
+    using UnityEngine;
 
     /// <summary>
     /// Store the information from a ini file.
-    ///  This class includes the song name, artist, chart designer and level info.
-    /// </summary>
-    [System.Serializable]
     public class IniInfo
     {
         public string songName = "";        //song name.
         public string artist = "";          //the composer of this song.
         public string chartDesigner = "";   //the chart designer of this song.
-        public uint levelEasy = 0;          //the level of easy.
-        public uint levelNormal = 0;        //the level of normal.
-        public uint levelHard = 0;          //the level of hard.
+        public uint levelEasy;          //the level of easy.
+        public uint levelNormal;        //the level of normal.
+        public uint levelHard;          //the level of hard.
         public string levelExtra = "";      //the level of extra. (Can be ASCII)
-        public uint levelUltra = 0;         //the level of extra. (Used in Deemo 2.2, equal to Extra)
+        public uint levelUltra;         //the level of extra. (Used in Deemo 2.2, equal to Extra)
 
         //  Note: if level = 0 / = null, the chart of this level is not exist.
         //        the rest data in ini wouldn't be convert.
@@ -46,28 +47,25 @@ namespace Model.Deemo
         /// <returns>a initialized IniInfo class</returns>
         public static IniInfo ReadIniFromPath(string iniFilePath)
         {
-            
             //TODO: 判定ini路径是否合法
-            var data = IniFile.FromPath(iniFilePath);
-            var temp = data["Song"];
-            var info = new IniInfo();
-/*            var info = new IniInfo
+            var data = IniFile.FromPath(iniFilePath).GetSection("Song");
+            var info = new IniInfo
             {
-                songName = data["Song"]["Name"],
-                artist = data["Song"]["Artist"],
-                chartDesigner = data["Song"]["Noter"]
+                songName = data["Name"],
+                artist = data["Artist"],
+                chartDesigner = data["Noter"]
             };
-            if (data["Song"]["Easy"] != null)
-                info.levelEasy = uint.Parse(data["Song"]["Easy"]);
-            if (data["Song"]["Normal"] != null)
-                info.levelNormal = uint.Parse(data["Song"]["Normal"]);
-            if (data["Song"]["Hard"] != null)
-                info.levelHard = uint.Parse(data["Song"]["Hard"]);
-            if (data["Song"]["Extra"] != null)
-                info.levelExtra = data["Song"]["Extra"];
-            if (data["Song"]["Ultra"] != null)
-                info.levelUltra = uint.Parse(data["Song"]["Ultra"]);
-*/            return info;
+            if (data["Easy"] != null)
+                info.levelEasy = uint.Parse(data["Easy"]);
+            if (data["Normal"] != null)
+                info.levelNormal = uint.Parse(data["Normal"]);
+            if (data["Hard"] != null)
+                info.levelHard = uint.Parse(data["Hard"]);
+            if (data["Extra"] != null)
+                info.levelExtra = data["Extra"];
+            if (data["Ultra"] != null)
+                info.levelUltra = uint.Parse(data["Ultra"]);
+            return info;
         }
 
         /// <summary>
@@ -78,108 +76,96 @@ namespace Model.Deemo
         public PackInfo IniToPackInfo(string iniDocumentPath)
         {
             //TODO::将if分支里面的重复代码抽取出来
-            try
-            {
-
-            }
-            catch (System.Exception)
-            {
-
-                throw;
-            }
             var packInfo = new PackInfo { songName = songName, composer = artist };
             if (levelEasy != 0)
             {
-                GameChartModel gChart = new GameChartModel();
-                gChart.level = levelEasy.ToString();
-                gChart.chartDesigner = chartDesigner;
+                GameChartModel gChart = new() {level = levelEasy.ToString(), chartDesigner = chartDesigner};
 
+                var gameNoteModelList = new List<GameNoteModel>();
                 var filePathUpper = iniDocumentPath + "/Easy.json";
                 var filePathLower = iniDocumentPath + "/easy.json";
                 if (File.Exists(filePathLower))
-                    gChart.notes = JsonChartModel.JsonToJsonChart(filePathLower).ToGameChartNoteList();
+                {
+                    JsonChartModel.JsonToJsonChart(filePathLower).ToGameChartNoteList(gameNoteModelList);
+                }
                 else if (File.Exists(filePathUpper))
-                    gChart.notes = JsonChartModel.JsonToJsonChart(filePathUpper).ToGameChartNoteList();
+                    JsonChartModel.JsonToJsonChart(filePathLower).ToGameChartNoteList(gameNoteModelList);
                 else
-                    throw new System.Exception("Level Easy in Song " + songName + ", Level"+ levelEasy.ToString() +"has defined a difficulty but doesn't provide a chart.");
+                    throw new Exception("Level Easy in Song " + songName + ", Level" + levelEasy + "has defined a difficulty but doesn't provide a chart.");
 
                 packInfo.charts.Add(gChart);
             }
             if (levelNormal != 0)
             {
-                GameChartModel gChart = new GameChartModel();
-                gChart.level = levelNormal.ToString();
-                gChart.chartDesigner = chartDesigner;
+                GameChartModel gChart = new() {level = levelNormal.ToString(), chartDesigner = chartDesigner};
 
+                var gameNoteModelList = new List<GameNoteModel>();
                 var filePathUpper = iniDocumentPath + "/Normal.json";
                 var filePathLower = iniDocumentPath + "/normal.json";
                 if (File.Exists(filePathLower))
-                    gChart.notes = JsonChartModel.JsonToJsonChart(filePathLower).ToGameChartNoteList();
+                    JsonChartModel.JsonToJsonChart(filePathLower).ToGameChartNoteList(gameNoteModelList);
                 else if (File.Exists(filePathUpper))
-                    gChart.notes = JsonChartModel.JsonToJsonChart(filePathUpper).ToGameChartNoteList();
+                    JsonChartModel.JsonToJsonChart(filePathLower).ToGameChartNoteList(gameNoteModelList);
                 else
-                    throw new System.Exception("Level Easy in Song " + songName + ", Level" + levelNormal.ToString() + "has defined a difficulty but doesn't provide a chart.");
+                    throw new Exception("Level Easy in Song " + songName + ", Level" + levelNormal + "has defined a difficulty but doesn't provide a chart.");
 
                 packInfo.charts.Add(gChart);
             }
             if (levelHard != 0)
             {
-                GameChartModel gChart = new GameChartModel();
-                gChart.level = levelHard.ToString();
-                gChart.chartDesigner = chartDesigner;
+                GameChartModel gChart = new() {level = levelHard.ToString(), chartDesigner = chartDesigner};
 
+                var gameNoteModelList = new List<GameNoteModel>();
                 var filePathUpper = iniDocumentPath + "/Hard.json";
                 var filePathLower = iniDocumentPath + "/hard.json";
                 if (File.Exists(filePathLower))
-                    gChart.notes = JsonChartModel.JsonToJsonChart(filePathLower).ToGameChartNoteList();
+                    JsonChartModel.JsonToJsonChart(filePathLower).ToGameChartNoteList(gameNoteModelList);
                 else if (File.Exists(filePathUpper))
-                    gChart.notes = JsonChartModel.JsonToJsonChart(filePathUpper).ToGameChartNoteList();
+                    JsonChartModel.JsonToJsonChart(filePathLower).ToGameChartNoteList(gameNoteModelList);
                 else
-                    throw new System.Exception("Level Hard in Song " + songName + ", Level" + levelHard.ToString() + "has defined a difficulty but doesn't provide a chart.");
+                    throw new Exception("Level Hard in Song " + songName + ", Level" + levelHard + "has defined a difficulty but doesn't provide a chart.");
 
                 packInfo.charts.Add(gChart);
             }
             if (levelExtra != "")
             {
-                GameChartModel gChart = new GameChartModel();
-                gChart.level = levelExtra.ToString();
-                gChart.chartDesigner = chartDesigner;
+                GameChartModel gChart = new() {level = levelExtra, chartDesigner = chartDesigner};
 
+                var gameNoteModelList = new List<GameNoteModel>();
                 var filePathUpper = iniDocumentPath + "/Extra.json";
                 var filePathLower = iniDocumentPath + "/extra.json";
                 if (File.Exists(filePathLower))
-                    gChart.notes = JsonChartModel.JsonToJsonChart(filePathLower).ToGameChartNoteList();
+                    JsonChartModel.JsonToJsonChart(filePathLower).ToGameChartNoteList(gameNoteModelList);
                 else if (File.Exists(filePathUpper))
-                    gChart.notes = JsonChartModel.JsonToJsonChart(filePathUpper).ToGameChartNoteList();
+                    JsonChartModel.JsonToJsonChart(filePathLower).ToGameChartNoteList(gameNoteModelList);
                 else
-                    throw new System.Exception("Level Extra in Song " + songName + ", Level" + levelExtra.ToString() + "has defined a difficulty but doesn't provide a chart.");
+                    throw new Exception("Level Extra in Song " + songName + ", Level" + levelExtra + "has defined a difficulty but doesn't provide a chart.");
 
                 packInfo.charts.Add(gChart);
             }
             if (levelUltra != 0)
             {
-                GameChartModel gChart = new GameChartModel();
-                gChart.level = levelExtra.ToString();
-                gChart.chartDesigner = chartDesigner;
+                GameChartModel gChart = new() {level = levelExtra, chartDesigner = chartDesigner};
 
+                var gameNoteModelList = new List<GameNoteModel>();
                 var filePathUpper = iniDocumentPath + "/Ultra.json";
                 var filePathLower = iniDocumentPath + "/ultra.json";
                 if (File.Exists(filePathLower))
-                    gChart.notes = JsonChartModel.JsonToJsonChart(filePathLower).ToGameChartNoteList();
+                    JsonChartModel.JsonToJsonChart(filePathLower).ToGameChartNoteList(gameNoteModelList);
                 else if (File.Exists(filePathUpper))
-                    gChart.notes = JsonChartModel.JsonToJsonChart(filePathUpper).ToGameChartNoteList();
+                    JsonChartModel.JsonToJsonChart(filePathLower).ToGameChartNoteList(gameNoteModelList);
                 else
-                    throw new System.Exception("Level Ultra in Song " + songName + ", Level" + levelUltra.ToString() + "has defined a difficulty but doesn't provide a chart.");
+                    throw new Exception("Level Ultra in Song " + songName + ", Level" + levelUltra + "has defined a difficulty but doesn't provide a chart.");
 
                 packInfo.charts.Add(gChart);
             }
 
             if (File.Exists(iniDocumentPath + "/cover.png"))
             {
-                var PixelsPerUnit = 100.0f;
-                SpriteMeshType spriteType = SpriteMeshType.Tight;
-                Texture2D SpriteTexture = LoadTexture(iniDocumentPath + "/cover.png");
-                packInfo.cover = Sprite.Create(SpriteTexture, new Rect(0, 0, SpriteTexture.width, SpriteTexture.height), new Vector2(0, 0), PixelsPerUnit, 0, spriteType);
+                var pixelsPerUnit = 100.0f;
+                var spriteType = SpriteMeshType.Tight;
+                var spriteTexture = LoadTexture(iniDocumentPath + "/cover.png");
+                packInfo.cover = Sprite.Create(spriteTexture, new Rect(0, 0, spriteTexture.width, spriteTexture.height), new Vector2(0, 0), pixelsPerUnit, 0, spriteType);
             }
             Log.LogStr(packInfo.songName);
             return packInfo;

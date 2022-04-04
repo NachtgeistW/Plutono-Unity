@@ -23,6 +23,8 @@ using Newtonsoft.Json;
 
 namespace Assets.Scripts.Model.Plutono
 {
+    using Views;
+
     [System.Serializable]
     public class GameNoteModel
     {
@@ -33,7 +35,6 @@ namespace Assets.Scripts.Model.Plutono
         public NoteType type;
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         [CanBeNull] public List<GamePianoSound> sounds;
-
         public bool IsShown => pos <= 2.0f && pos >= -2.0f;
 
         public enum NoteType
@@ -53,5 +54,32 @@ namespace Assets.Scripts.Model.Plutono
                 => new GamePianoSound() { delay = sound.w, duration = sound.d, pitch = sound.p, volume = sound.v };
         }
 
+        public BlankNote ToBlankNote()
+        {
+            var blankNote = new BlankNote()
+            {
+                Model = this,
+                BlankNoteView = new BlankNoteView()
+            };
+            return blankNote;
+        }
+        public PianoNote ToPianoNote()
+        {
+            var pianoNote = new PianoNote
+            {
+                Model = this,
+                PianoNoteView = new PianoNoteView()
+            };
+            return pianoNote;
+        }
+        public SlideNote ToSlideNote()
+        {
+            var slideNote = new SlideNote
+            {
+                Model = this,
+                SlideNoteView = new SlideNoteView()
+            };
+            return slideNote;
+        }
     }
 }

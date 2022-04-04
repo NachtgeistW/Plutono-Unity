@@ -49,10 +49,6 @@ namespace Assets.Scripts.Controller.Game
 
         public int ClearCount { get; private set; }
         public Dictionary<uint, NoteJudgment> Judgments { get; private set; } = new Dictionary<uint, NoteJudgment>();
-        public GameStatus()
-        {
-
-        }
 
         public GameStatus(GamePlayController controller, GameMode mode)
         {

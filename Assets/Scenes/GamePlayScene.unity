@@ -250,13 +250,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UiController: {fileID: 1229907393}
   noteParentTransform: {fileID: 0}
+  NoteSpawner: {fileID: 1467591502}
   chartPlaySpeed: 10
   buttonMenu: {fileID: 1819708587}
-  collectionChecks: 1
-  maxPoolSize: 20
-  prefabNoteView: {fileID: 0}
   musicSource: {fileID: 2084485536}
-  musicLength: 0
 --- !u!4 &159948352
 Transform:
   m_ObjectHideFlags: 0
@@ -270,7 +267,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &159948353
 MonoBehaviour:
@@ -296,7 +293,9 @@ MonoBehaviour:
     beats: []
     chartDesigner: 
     level: 
-    notes: []
+    BlankNotes: []
+    PianoNotes: []
+    SlideNotes: []
   playingController: {fileID: 159948351}
   pCount: 0
   gCount: 0
@@ -802,53 +801,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 906699268}
   m_CullTransparentMesh: 0
---- !u!1 &1114326309
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1114326311}
-  - component: {fileID: 1114326310}
-  m_Layer: 0
-  m_Name: _xcharts_
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1114326310
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1114326309}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 953f0e846565c4086a4bcdc6bc14cf85, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_NowVersion: 2.0.1-20210226
-  m_NewVersion: 
-  m_ChartList: []
---- !u!4 &1114326311
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1114326309}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1229907392
 GameObject:
   m_ObjectHideFlags: 0
@@ -901,7 +853,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1257630646
 GameObject:
@@ -1223,7 +1175,7 @@ Transform:
   - {fileID: 1608874917}
   - {fileID: 2036033095}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1393985020
 GameObject:
@@ -1301,6 +1253,59 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1393985020}
   m_CullTransparentMesh: 1
+--- !u!1 &1467591501
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1467591503}
+  - component: {fileID: 1467591502}
+  m_Layer: 0
+  m_Name: Note Spawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1467591502
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1467591501}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb1256224a3f6614bb11f95d4d4409e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PrefabBlankNoteView: {fileID: 5353529615951979551, guid: bdd7458a0ed124e40a5f38b0b38a43b6,
+    type: 3}
+  PrefabPianoNoteView: {fileID: 224788305055427323, guid: d61d41545c5b1284391b6877e055bce6,
+    type: 3}
+  PrefabSlideNoteView: {fileID: 6365094314190728578, guid: 6358da8d622f04746b199123dfe54b74,
+    type: 3}
+  noteParentTransform: {fileID: 0}
+  collectionChecks: 1
+  maxPoolSize: 20
+--- !u!4 &1467591503
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1467591501}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 454.97168, y: 1537.4199, z: 910.3269}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1506997735
 GameObject:
   m_ObjectHideFlags: 0
@@ -1428,7 +1433,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1723595526
 GameObject:
@@ -1530,7 +1535,7 @@ RectTransform:
   - {fileID: 1900538296}
   - {fileID: 1366525031}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}

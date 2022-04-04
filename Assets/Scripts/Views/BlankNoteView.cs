@@ -13,20 +13,18 @@
 
 namespace Assets.Scripts.Views
 {
-    using Model.Plutono;
-
     using UnityEngine;
 
     using Util;
 
     public class BlankNoteView : NoteView
     {
-        [SerializeField] private Sprite blankNoteSprite;
+        //[SerializeField] private Sprite blankNoteSprite;
         private const float BlankNoteScale = 4.5f;
 
         public override void SetNoteAppearance(float noteSize, float notePos)
         {
-            noteSpriteRenderer.sprite = blankNoteSprite;
+            //noteSpriteRenderer.sprite = blankNoteSprite;
             noteSpriteRenderer.transform.localScale = BlankNoteScale * new Vector3(noteSize, 1.0f, 1.0f);
             waveColor = Color.black;
 
