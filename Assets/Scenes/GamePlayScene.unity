@@ -249,7 +249,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UiController: {fileID: 1229907393}
-  noteParentTransform: {fileID: 0}
+  noteParentTransform: {fileID: 1608874917}
   NoteSpawner: {fileID: 1467591502}
   chartPlaySpeed: 10
   buttonMenu: {fileID: 1819708587}
@@ -293,9 +293,7 @@ MonoBehaviour:
     beats: []
     chartDesigner: 
     level: 
-    BlankNotes: []
-    PianoNotes: []
-    SlideNotes: []
+    notes: []
   playingController: {fileID: 159948351}
   pCount: 0
   gCount: 0
@@ -1288,7 +1286,7 @@ MonoBehaviour:
     type: 3}
   PrefabSlideNoteView: {fileID: 6365094314190728578, guid: 6358da8d622f04746b199123dfe54b74,
     type: 3}
-  noteParentTransform: {fileID: 0}
+  noteParentTransform: {fileID: 1608874917}
   collectionChecks: 1
   maxPoolSize: 20
 --- !u!4 &1467591503

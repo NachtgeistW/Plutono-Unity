@@ -32,9 +32,9 @@ namespace Assets.Scripts.Controller.Game
         private PianoNote PrefabPianoNote;
         private SlideNote PrefabSlideNote;
 
-        private ObjectPool<BlankNote> BlankNotePool;
-        private ObjectPool<PianoNote> PianoNotePool;
-        private ObjectPool<SlideNote> SlideNotePool;
+        public ObjectPool<BlankNote> BlankNotePool;
+        public ObjectPool<PianoNote> PianoNotePool;
+        public ObjectPool<SlideNote> SlideNotePool;
 
         NoteSpawner()
         {
