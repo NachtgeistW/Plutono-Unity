@@ -5,10 +5,13 @@
  */
 
 using Assets.Scripts.Views;
+
 using Model.Plutono;
+
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+
 using Views;
 
 namespace Controller
@@ -19,14 +22,14 @@ namespace Controller
     public class ChartSelectController : MonoBehaviour
     {
         [Header("(放prefab不是script！)旁边列表用的选谱面用的prefab。")]
-        [SerializeField]private PrefabButtonChartSelectView _prefab;
-        [SerializeField]private ChartSelectView _view;
-        [SerializeField]private Image cover;
+        [SerializeField] private PrefabButtonChartSelectView _prefab;
+        [SerializeField] private ChartSelectView _view;
+        [SerializeField] private Image cover;
 
         private void Start()
         {
-            var pack = GameManager.Instance.packInfo;
-            cover.sprite = pack.cover;
+            var pack = GameManager.Instance.SongInfo;
+            cover.sprite = pack.Cover;
             SetSongInfo(pack);
             PopulateChart(pack);
         }
@@ -35,19 +38,19 @@ namespace Controller
         /// Set the name and composer of this song.
         /// </summary>
         /// <param name="packInfo"></param>
-        public void SetSongInfo(PackInfo packInfo)
+        public void SetSongInfo(SongInfo packInfo)
         {
-            _view.SetSongName(packInfo.songName);
-            _view.SetComposer(packInfo.composer);
+            _view.SetSongName(packInfo.SongName);
+            _view.SetComposer(packInfo.Composer);
         }
 
         /// <summary>
         /// Instantiate the level and chart designer of charts in chart list using selected prefab.
         /// </summary>
         /// <param name="packInfo"></param>
-        public void PopulateChart(PackInfo packInfo)
+        public void PopulateChart(SongInfo packInfo)
         {
-            foreach (var chart in packInfo.charts)
+            foreach (var chart in packInfo.Charts)
             {
                 var newButton = Instantiate(_prefab, transform);
                 newButton.SetChartInfo(chart);

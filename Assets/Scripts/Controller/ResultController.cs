@@ -1,4 +1,5 @@
 ﻿using System;
+
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -17,14 +18,14 @@ namespace Assets.Scripts.Controller
 
         private void Start()
         {
-            textSongName.text = GameManager.Instance.packInfo.songName;
+            textSongName.text = GameManager.Instance.SongInfo.SongName;
             textScore.text = Convert.ToString(GameManager.Instance.score) + " + "
                 + Convert.ToString(GameManager.Instance.bonus * 100000 / 1024);
             textPerfect.text = "P " + Convert.ToString(GameManager.Instance.pCount);
             textGood.text = "G " + Convert.ToString(GameManager.Instance.gCount);
             textBad.text = "B " + Convert.ToString(GameManager.Instance.bCount);
             textMiss.text = "M " + Convert.ToString(GameManager.Instance.mCount);
-            cover.sprite = GameManager.Instance.packInfo.cover;
+            cover.sprite = GameManager.Instance.SongInfo.Cover;
         }
 
         public void OnRetry()

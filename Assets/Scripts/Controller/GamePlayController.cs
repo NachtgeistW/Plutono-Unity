@@ -11,17 +11,24 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using Assets.Scripts.Controller.Game;
 using Assets.Scripts.Model.Plutono;
 using Assets.Scripts.Util;
+
 using Controller.Game;
+
 using Lean.Touch;
+
 using Model.Plutono;
+
 using Models.IO;
+
 using UnityEngine;
 using UnityEngine.Pool;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+
 using Views;
 
 namespace Assets.Scripts.Controller
@@ -35,7 +42,7 @@ namespace Assets.Scripts.Controller
         //UI
         public UIController UiController;
 
-        public PackInfo PackInfo { get; set; }
+        public SongInfo PackInfo { get; set; }
         public GameChartModel ChartInfo { get; set; }
 
         [Header("-Note controlling-")]
@@ -79,7 +86,7 @@ namespace Assets.Scripts.Controller
         {
             GameManager.Instance.playingController = this;
 
-            PackInfo = GameManager.Instance.packInfo;
+            PackInfo = GameManager.Instance.SongInfo;
             ChartInfo = GameManager.Instance.gameChart;
 
             Application.targetFrameRate = 120;
@@ -109,7 +116,7 @@ namespace Assets.Scripts.Controller
             musicSource.PlayScheduled(nowDspTime + 1);
 
             //UI
-            UiController.InitializeUi(PackInfo.songName, ChartInfo.level, musicLength);
+            UiController.InitializeUi(PackInfo.SongName, ChartInfo.level, musicLength);
         }
 
         private void Update()
@@ -119,9 +126,9 @@ namespace Assets.Scripts.Controller
             if (Time > musicLength) EndGame();
             UiController.OnGameUpdate(Time, Status);
 
-/*            if (notes.Count == 0)
-                isCompleted = true;
-*/            //ClearMissNote();
+            /*            if (notes.Count == 0)
+                            isCompleted = true;
+            */            //ClearMissNote();
 
             SynchronizeMusic();
         }
@@ -165,151 +172,151 @@ namespace Assets.Scripts.Controller
                 Time += UnityEngine.Time.unscaledDeltaTime;
             }
         }
-/*
-        //Judge System
-        private static int SortByTime(NoteView noteView1, NoteView noteView2)
-        {
-            if (noteView1.note.time > noteView2.note.time)
-                return 1;
-            if (noteView1.note.time < noteView2.note.time)
-                return -1;
-            return 0;
-        }
-
-        
-        private void ClearMissNote()
-        {
-            if (notes.Count == 0) return;
-            var note = notes.First();
-            if (!note.IsNoteShouldBeClear) return;
-            note.gameObject.SetActive(false);
-            notes.Remove(note);
-            comboCount = 0;
-            CalculateComboScore(Judgment.Miss);
-            mCount++;
-            uiController.ShowLate();
-        }
-
-        public void OnFingerTap(LeanFinger finger)
-        {
-            if (isCompleted || isFailed) return;
-            var point = cam.ScreenPointToRay(finger.ScreenPosition);
-
-            //judge line range
-            if (point.direction.y > YRayStart || point.direction.y < YRayEnd)
-            {
-                Debug.Log("You click at " + point.direction.y + ". Out of judge line.");
-                return;
-            }
-
-            var note = SearchForBestNote(Time);
-            if (note == null)
-                if (isCompleted)
-                    return;
-
-            //too early
-            if (note.note.time > time + Parameters.BadDeltaTime)
-            {
-                Debug.Log("You click at " + time + ", which should be " + note.note.time + ". You are too early.");
-                return;
-            }
-
-            //miss, remove, it shouldn't be there now
-            if (note._note.time < time - Parameters.BadDeltaTime)
-            {
-                Debug.Log("You click at " + time + ", which should be " + note._note.time + ". You miss it.");
-                note.gameObject.SetActive(false);
-                notes.Remove(note);
-                _comboCount = 0;
-                mCount++;
-                return;
-            }
-            var deltaTouchTime = Mathf.Abs(note.note.time - time);
-            if (deltaTouchTime < Parameters.PerfectDeltaTime)
-            {
-                note.gameObject.SetActive(false);
-                notes.Remove(note);
-                comboCount++;
-                pCount++;
-                CalculateComboScore(Judgment.Perfect);
-                Debug.Log("You click at " + time + ", which should be " + note.note.time + ". Perfect.");
-                return;
-            }
-
-            if (deltaTouchTime < Parameters.GoodDeltaTime)
-            {
-                note.gameObject.SetActive(false);
-                notes.Remove(note);
-                comboCount++;
-                gCount++;
-                CalculateComboScore(Judgment.Good);
-                if (note.note.time - time < 0)
-                    uiController.ShowEarly();
-                else
-                    uiController.ShowLate();
-                Debug.Log("You click at " + time + ", which should be " + note.note.time + ". Good.");
-                return;
-            }
-
-            if (deltaTouchTime < Parameters.BadDeltaTime)
-            {
-                note.gameObject.SetActive(false);
-                notes.Remove(note);
-                comboCount = 0;
-                bCount++;
-                CalculateComboScore(Judgment.Bad);
-                if (note.note.time - time < 0)
-                    uiController.ShowEarly();
-                else
-                    uiController.ShowLate();
-                Debug.Log("You click at " + time + ", which should be " + note.note.time + ". Bad.");
-            }
-        }
-
-        private static float GetClosedBestNoteRange(float timeRange)
-        {
-            if (timeRange < Parameters.PerfectDeltaTime) return Parameters.PerfectDeltaTime;
-            return timeRange < Parameters.GoodDeltaTime ? Parameters.GoodDeltaTime : Parameters.BadDeltaTime;
-        }
-
-        private NoteView SearchForBestNote(float touchTime)
-        {
-            if (notes.Count == 0)
-                return null;
-
-            NoteView bestNote = null;
-            foreach (var curNote in notes)
-            {
-                if (bestNote == null)
-                    bestNote = notes.First();
-                //note range
-                                var x = point.direction.x * 50;
-                                if (x > note.touchableRightRange || x < note.touchableLeftRange)
-                                {
-                                    Debug.Log("You click at " + point.direction.x * 50 + ". Its left range is "+ note.touchableLeftRange + " and its right range is " + note.touchableRightRange + ". Out of note.");
-                                    return;
-                                }
-                
-                var curDeltaTime = Mathf.Abs(curNote.note.time - touchTime);
-                var bestDeltaTime = Mathf.Abs(bestNote.note.time - touchTime);
-                if (curDeltaTime < bestDeltaTime)
+        /*
+                //Judge System
+                private static int SortByTime(NoteView noteView1, NoteView noteView2)
                 {
-                    bestNote = curNote;
-                    continue;
+                    if (noteView1.note.time > noteView2.note.time)
+                        return 1;
+                    if (noteView1.note.time < noteView2.note.time)
+                        return -1;
+                    return 0;
                 }
 
-                if (curDeltaTime > GetClosedBestNoteRange(bestDeltaTime))
-                    return bestNote;
-            }
 
-            //没找到，应该为miss
-            return null;
-        }
-*/
+                private void ClearMissNote()
+                {
+                    if (notes.Count == 0) return;
+                    var note = notes.First();
+                    if (!note.IsNoteShouldBeClear) return;
+                    note.gameObject.SetActive(false);
+                    notes.Remove(note);
+                    comboCount = 0;
+                    CalculateComboScore(Judgment.Miss);
+                    mCount++;
+                    uiController.ShowLate();
+                }
+
+                public void OnFingerTap(LeanFinger finger)
+                {
+                    if (isCompleted || isFailed) return;
+                    var point = cam.ScreenPointToRay(finger.ScreenPosition);
+
+                    //judge line range
+                    if (point.direction.y > YRayStart || point.direction.y < YRayEnd)
+                    {
+                        Debug.Log("You click at " + point.direction.y + ". Out of judge line.");
+                        return;
+                    }
+
+                    var note = SearchForBestNote(Time);
+                    if (note == null)
+                        if (isCompleted)
+                            return;
+
+                    //too early
+                    if (note.note.time > time + Parameters.BadDeltaTime)
+                    {
+                        Debug.Log("You click at " + time + ", which should be " + note.note.time + ". You are too early.");
+                        return;
+                    }
+
+                    //miss, remove, it shouldn't be there now
+                    if (note._note.time < time - Parameters.BadDeltaTime)
+                    {
+                        Debug.Log("You click at " + time + ", which should be " + note._note.time + ". You miss it.");
+                        note.gameObject.SetActive(false);
+                        notes.Remove(note);
+                        _comboCount = 0;
+                        mCount++;
+                        return;
+                    }
+                    var deltaTouchTime = Mathf.Abs(note.note.time - time);
+                    if (deltaTouchTime < Parameters.PerfectDeltaTime)
+                    {
+                        note.gameObject.SetActive(false);
+                        notes.Remove(note);
+                        comboCount++;
+                        pCount++;
+                        CalculateComboScore(Judgment.Perfect);
+                        Debug.Log("You click at " + time + ", which should be " + note.note.time + ". Perfect.");
+                        return;
+                    }
+
+                    if (deltaTouchTime < Parameters.GoodDeltaTime)
+                    {
+                        note.gameObject.SetActive(false);
+                        notes.Remove(note);
+                        comboCount++;
+                        gCount++;
+                        CalculateComboScore(Judgment.Good);
+                        if (note.note.time - time < 0)
+                            uiController.ShowEarly();
+                        else
+                            uiController.ShowLate();
+                        Debug.Log("You click at " + time + ", which should be " + note.note.time + ". Good.");
+                        return;
+                    }
+
+                    if (deltaTouchTime < Parameters.BadDeltaTime)
+                    {
+                        note.gameObject.SetActive(false);
+                        notes.Remove(note);
+                        comboCount = 0;
+                        bCount++;
+                        CalculateComboScore(Judgment.Bad);
+                        if (note.note.time - time < 0)
+                            uiController.ShowEarly();
+                        else
+                            uiController.ShowLate();
+                        Debug.Log("You click at " + time + ", which should be " + note.note.time + ". Bad.");
+                    }
+                }
+
+                private static float GetClosedBestNoteRange(float timeRange)
+                {
+                    if (timeRange < Parameters.PerfectDeltaTime) return Parameters.PerfectDeltaTime;
+                    return timeRange < Parameters.GoodDeltaTime ? Parameters.GoodDeltaTime : Parameters.BadDeltaTime;
+                }
+
+                private NoteView SearchForBestNote(float touchTime)
+                {
+                    if (notes.Count == 0)
+                        return null;
+
+                    NoteView bestNote = null;
+                    foreach (var curNote in notes)
+                    {
+                        if (bestNote == null)
+                            bestNote = notes.First();
+                        //note range
+                                        var x = point.direction.x * 50;
+                                        if (x > note.touchableRightRange || x < note.touchableLeftRange)
+                                        {
+                                            Debug.Log("You click at " + point.direction.x * 50 + ". Its left range is "+ note.touchableLeftRange + " and its right range is " + note.touchableRightRange + ". Out of note.");
+                                            return;
+                                        }
+
+                        var curDeltaTime = Mathf.Abs(curNote.note.time - touchTime);
+                        var bestDeltaTime = Mathf.Abs(bestNote.note.time - touchTime);
+                        if (curDeltaTime < bestDeltaTime)
+                        {
+                            bestNote = curNote;
+                            continue;
+                        }
+
+                        if (curDeltaTime > GetClosedBestNoteRange(bestDeltaTime))
+                            return bestNote;
+                    }
+
+                    //没找到，应该为miss
+                    return null;
+                }
+        */
         //Music
         private void InitializeMusicSource()
         {
-            var filePath = "file://" + GameManager.Instance.songPath + "/music.mp3";
+            var filePath = "file://" + GameManager.Instance.SongInfo.MusicPath;
 
             musicSource.clip = AudioClipFileManager.Read(filePath);
             musicLength = musicSource.clip.length;

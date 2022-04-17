@@ -1,4 +1,4 @@
-﻿/*
+/*
  * class PrefabCoverView -- Store the object and function that change UI on the Prefab ButtonSongCover.
  *      _songName: private Text, the song name attached to this button.
  *      PackInfoOnButton: public PackInfo, property, the song pack info attached to this button.
@@ -9,6 +9,7 @@
  */
 
 using Model.Plutono;
+
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -21,21 +22,18 @@ namespace Views
 
         [SerializeField] private Image cover;
 
-        public PackInfo PackInfoOnButton { get; set; }
-        public string MusicSourcePath { get; set; }
+        public SongInfo PackInfoOnButton { get; set; }
 
         /// <summary>
         /// Set the cover and song name to a prefab.
         /// </summary>
-        /// <param name="packInfo"></param>
-        /// <param name="musicPath"></param>
-        public void SetSongInfo(PackInfo packInfo, string musicPath)
+        /// <param name="songInfo"></param>
+        public void SetSongInfo(SongInfo songInfo)
         {
-            songName.text = packInfo.songName;
-            PackInfoOnButton = packInfo;
-            MusicSourcePath = musicPath;
-            cover.sprite = packInfo.cover;
-            Debug.Log(packInfo.songName);
+            songName.text = songInfo.SongName;
+            PackInfoOnButton = songInfo;
+            cover.sprite = songInfo.Cover;
+            Debug.Log(songInfo.SongName);
         }
 
         /// <summary>
@@ -43,8 +41,7 @@ namespace Views
         /// </summary>
         public void JumpToChartSelectScene()
         {
-            GameManager.Instance.packInfo = PackInfoOnButton;
-            GameManager.Instance.songPath = MusicSourcePath;
+            GameManager.Instance.SongInfo = PackInfoOnButton;
             SceneManager.LoadScene("ChartSelectScene");
         }
     }

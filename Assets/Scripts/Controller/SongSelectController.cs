@@ -13,8 +13,11 @@
 
 
 using System.Collections.Generic;
+
 using Model.Plutono;
+
 using UnityEngine;
+
 using Views;
 
 namespace Controller
@@ -22,25 +25,16 @@ namespace Controller
     public class SongSelectController : MonoBehaviour
     {
         [Header("(放prefab不是script！)包含曲绘和曲名的button prefab。")]
-        [SerializeField] private PrefabCoverView prefabCoverView;
+        [SerializeField] PrefabCoverView prefabCoverView;
 
-        private void Start()
-        {
-            PopulateSong(GameManager.Instance.songPackList, GameManager.Instance.songPathList);
-        }
+        private void Start() => PopulateSong(GameManager.Instance.songInfos);
 
-        public void PopulateSong(List<PackInfo> songPackList, List<string> musicPathList)
+        public void PopulateSong(List<SongInfo> songPackList)
         {
-/*            foreach (var packInfo in songPackList)
-            {
-                var newButton = Instantiate(prefabCoverView, transform);
-                newButton.SetSongInfo(packInfo);
-            }
-*/
             for (int i = 0; i < songPackList.Count; i++)
             {
                 var newButton = Instantiate(prefabCoverView, transform);
-                newButton.SetSongInfo(songPackList[i], musicPathList[i]);
+                newButton.SetSongInfo(songPackList[i]);
             }
         }
     }
