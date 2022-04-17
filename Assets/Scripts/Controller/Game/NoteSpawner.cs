@@ -8,7 +8,9 @@
  */
 
 using System.Collections.Generic;
+
 using Assets.Scripts.Model.Plutono;
+
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -16,7 +18,7 @@ namespace Assets.Scripts.Controller.Game
 {
     public class NoteSpawner : MonoBehaviour
     {
-        [Tooltip("(∑≈prefab≤ª «script£°)note prefab°£")]
+        [Tooltip("(Êîæprefab‰∏çÊòØscriptÔºÅ)note prefab„ÄÇ")]
         [SerializeField] private GameNote prefabNoteView;
         [SerializeField] private Transform noteParentTransform;
         [SerializeField] private bool collectionChecks = true;
@@ -25,7 +27,7 @@ namespace Assets.Scripts.Controller.Game
 
         private ObjectPool<GameNote> notePool;
 
-        NoteSpawner() =>
+        void Awake() =>
             notePool = new ObjectPool<GameNote>(OnCreatePooledItem, OnTakeFromPool, OnReturnToPool,
                 OnDestroyPoolObject, collectionChecks, 10, maxPoolSize);
 
