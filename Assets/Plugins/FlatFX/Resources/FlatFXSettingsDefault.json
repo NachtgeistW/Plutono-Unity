@@ -1,0 +1,262 @@
+{
+    "selectedEffect": 0,
+    "settings": [
+        {
+            "type": 0,
+            "sectorCount": 30,
+            "lifetime": 0.699999988079071,
+            "easing": 11,
+            "randomizePosition": 1.0,
+            "start": {
+                "position": {
+                    "x": 0.0,
+                    "y": 0.0
+                },
+                "size": 2.0,
+                "thickness": 3.0,
+                "rotation": 74.06111145019531,
+                "innerColor": {
+                    "r": 1.0,
+                    "g": 0.43448272347450259,
+                    "b": 0.0,
+                    "a": 1.0
+                },
+                "outerColor": {
+                    "r": 1.0,
+                    "g": 0.18620696663856507,
+                    "b": 0.0,
+                    "a": 1.0
+                },
+                "seed": 0.0
+            },
+            "end": {
+                "position": {
+                    "x": 0.0,
+                    "y": 0.0
+                },
+                "size": 3.0,
+                "thickness": 0.0,
+                "rotation": 74.06111145019531,
+                "innerColor": {
+                    "r": 0.4852941036224365,
+                    "g": 0.37824392318725588,
+                    "b": 0.37824392318725588,
+                    "a": 1.0
+                },
+                "outerColor": {
+                    "r": 0.4485294222831726,
+                    "g": 0.4485294222831726,
+                    "b": 0.4485294222831726,
+                    "a": 1.0
+                },
+                "seed": 0.0
+            }
+        },
+        {
+            "type": 1,
+            "sectorCount": 30,
+            "lifetime": 2.0,
+            "easing": 11,
+            "randomizePosition": 0.5,
+            "start": {
+                "position": {
+                    "x": 0.0,
+                    "y": 0.0
+                },
+                "size": 0.0,
+                "thickness": 1.0,
+                "rotation": 14.334840774536133,
+                "innerColor": {
+                    "r": 0.0,
+                    "g": 0.7103447914123535,
+                    "b": 1.0,
+                    "a": 1.0
+                },
+                "outerColor": {
+                    "r": 0.0,
+                    "g": 0.7098039388656616,
+                    "b": 1.0,
+                    "a": 1.0
+                },
+                "seed": 0.0
+            },
+            "end": {
+                "position": {
+                    "x": 0.0,
+                    "y": 0.0
+                },
+                "size": 6.0,
+                "thickness": 0.0,
+                "rotation": 14.334840774536133,
+                "innerColor": {
+                    "r": 0.0,
+                    "g": 0.7098039388656616,
+                    "b": 1.0,
+                    "a": 0.0
+                },
+                "outerColor": {
+                    "r": 0.0,
+                    "g": 0.7098039388656616,
+                    "b": 1.0,
+                    "a": 0.0
+                },
+                "seed": 0.0
+            }
+        },
+        {
+            "type": 2,
+            "sectorCount": 10,
+            "lifetime": 0.5,
+            "easing": 14,
+            "randomizePosition": 0.0,
+            "start": {
+                "position": {
+                    "x": 0.0,
+                    "y": 0.0
+                },
+                "size": 2.0,
+                "thickness": 0.800000011920929,
+                "rotation": 271.4398498535156,
+                "innerColor": {
+                    "r": 1.0,
+                    "g": 1.0,
+                    "b": 0.4779411554336548,
+                    "a": 1.0
+                },
+                "outerColor": {
+                    "r": 1.0,
+                    "g": 1.0,
+                    "b": 0.4784314036369324,
+                    "a": 1.0
+                },
+                "seed": 0.0
+            },
+            "end": {
+                "position": {
+                    "x": 0.0,
+                    "y": 0.0
+                },
+                "size": 6.0,
+                "thickness": 0.0,
+                "rotation": 271.4398498535156,
+                "innerColor": {
+                    "r": 1.0,
+                    "g": 1.0,
+                    "b": 0.4784314036369324,
+                    "a": 1.0
+                },
+                "outerColor": {
+                    "r": 1.0,
+                    "g": 1.0,
+                    "b": 0.4784314036369324,
+                    "a": 1.0
+                },
+                "seed": 0.0
+            }
+        },
+        {
+            "type": 3,
+            "sectorCount": 4,
+            "lifetime": 0.30000001192092898,
+            "easing": 0,
+            "randomizePosition": 0.0,
+            "start": {
+                "position": {
+                    "x": 0.0,
+                    "y": 0.0
+                },
+                "size": 20.0,
+                "thickness": 20.0,
+                "rotation": 257.0411071777344,
+                "innerColor": {
+                    "r": 1.0,
+                    "g": 1.0,
+                    "b": 1.0,
+                    "a": 1.0
+                },
+                "outerColor": {
+                    "r": 1.0,
+                    "g": 1.0,
+                    "b": 1.0,
+                    "a": 1.0
+                },
+                "seed": 0.0
+            },
+            "end": {
+                "position": {
+                    "x": 0.0,
+                    "y": 0.0
+                },
+                "size": 20.0,
+                "thickness": 20.0,
+                "rotation": 257.0411071777344,
+                "innerColor": {
+                    "r": 1.0,
+                    "g": 1.0,
+                    "b": 1.0,
+                    "a": 1.0
+                },
+                "outerColor": {
+                    "r": 1.0,
+                    "g": 1.0,
+                    "b": 1.0,
+                    "a": 1.0
+                },
+                "seed": 0.0
+            }
+        },
+        {
+            "type": 4,
+            "sectorCount": 16,
+            "lifetime": 2.0,
+            "easing": 0,
+            "randomizePosition": 0.0,
+            "start": {
+                "position": {
+                    "x": 0.0,
+                    "y": 0.0
+                },
+                "size": 10.0,
+                "thickness": 9.0,
+                "rotation": 162.87083435058595,
+                "innerColor": {
+                    "r": 1.0,
+                    "g": 0.9215686917304993,
+                    "b": 0.01568627543747425,
+                    "a": 1.0
+                },
+                "outerColor": {
+                    "r": 1.0,
+                    "g": 0.9215686321258545,
+                    "b": 0.01568627543747425,
+                    "a": 0.0
+                },
+                "seed": 0.0
+            },
+            "end": {
+                "position": {
+                    "x": 0.0,
+                    "y": 0.0
+                },
+                "size": 10.0,
+                "thickness": 9.0,
+                "rotation": 42.87083435058594,
+                "innerColor": {
+                    "r": 1.0,
+                    "g": 0.9215686917304993,
+                    "b": 0.01568627543747425,
+                    "a": 1.0
+                },
+                "outerColor": {
+                    "r": 1.0,
+                    "g": 0.9215686917304993,
+                    "b": 0.01568627543747425,
+                    "a": 0.0
+                },
+                "seed": 0.0
+            }
+        }
+    ],
+    "sortingLayer": 0,
+    "orderInLayer": 0
+}

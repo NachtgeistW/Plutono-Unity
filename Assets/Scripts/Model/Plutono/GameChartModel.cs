@@ -7,9 +7,6 @@
  *      level: string, the level of a song.
  *      notes: List<GameNoteModel>, stores the information of the notes in a chart
  *
- * Function
- *
- *
  * History
  *      2020.07.29  COPY from Deenote
  *      2020.09.03  COPY from Deenote(Refactor) and EDIT
@@ -24,9 +21,9 @@ namespace Assets.Scripts.Model.Plutono
     [System.Serializable]
     public sealed class GameChartModel
     {
-        public List<float> beats = new List<float>();
+        public List<float> beats = new();
         public string chartDesigner = "";
         public string level = "";
-        public List<GameNoteModel> notes = new List<GameNoteModel>();
+        public List<GameNoteModel> notes = new();
     }
 }

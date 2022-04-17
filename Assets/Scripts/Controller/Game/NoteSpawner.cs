@@ -1,4 +1,4 @@
-/*
+﻿/*
  * class NoteSpawner -- Generate note.
  *
  *      This class is used to generate notes.
@@ -16,41 +16,119 @@ using UnityEngine.Pool;
 
 namespace Assets.Scripts.Controller.Game
 {
+    using System;
+
+    using Views;
+
     public class NoteSpawner : MonoBehaviour
     {
         [Tooltip("(放prefab不是script！)note prefab。")]
-        [SerializeField] private GameNote prefabNoteView;
+        [SerializeField] private BlankNoteView PrefabBlankNoteView;
+        [SerializeField] private PianoNoteView PrefabPianoNoteView;
+        [SerializeField] private SlideNoteView PrefabSlideNoteView;
         [SerializeField] private Transform noteParentTransform;
         [SerializeField] private bool collectionChecks = true;
         [SerializeField] private int maxPoolSize = 20;
 
+        private BlankNote PrefabBlankNote;
+        private PianoNote PrefabPianoNote;
+        private SlideNote PrefabSlideNote;
 
-        private ObjectPool<GameNote> notePool;
+        public ObjectPool<BlankNote> BlankNotePool;
+        public ObjectPool<PianoNote> PianoNotePool;
+        public ObjectPool<SlideNote> SlideNotePool;
 
-        void Awake() =>
-            notePool = new ObjectPool<GameNote>(OnCreatePooledItem, OnTakeFromPool, OnReturnToPool,
-                OnDestroyPoolObject, collectionChecks, 10, maxPoolSize);
-
-        //Note pool
-        public void PlaceNewNote(ref ObjectPool<GameNote> notePool, ref List<GameNote> notesList, GameChartModel chartModel)
+        void Awake()
         {
-            foreach (var note in chartModel.notes)
-                InitNoteObject(ref notesList, note);
+            BlankNotePool = new ObjectPool<BlankNote>(OnCreatePooledBlankNote, OnTakeFromPool, OnReturnToPool,
+                OnDestroyPoolObject, collectionChecks, 10, maxPoolSize);
+            PianoNotePool = new ObjectPool<PianoNote>(OnCreatePooledPianoNote, OnTakeFromPool, OnReturnToPool,
+                OnDestroyPoolObject, collectionChecks, 10, maxPoolSize);
+            SlideNotePool = new ObjectPool<SlideNote>(OnCreatePooledSlideNote, OnTakeFromPool, OnReturnToPool,
+                OnDestroyPoolObject, collectionChecks, 10, maxPoolSize);
         }
 
-        private void InitNoteObject(ref List<GameNote> notesList, GameNoteModel note)
+        //Note pool
+        public void PlaceNewNote(List<BlankNote> blankNotesList, List<PianoNote> pianoNotesList,
+            List<SlideNote> slideNotesList, GameChartModel chartModel)
         {
-            var newNote = notePool.Get();
-            newNote.Model = note;
-            //if (note.type == GameNoteModel.NoteType.Blank)
-            //    newNote.BlankNoteView.SetNoteAppearance(note.size, note.pos);
+            foreach (var note in chartModel.notes)
+            {
+                switch (note.type)
+                {
+                    case GameNoteModel.NoteType.Blank:
+                        InitNoteObject(blankNotesList, note);
+                        break;
+                    case GameNoteModel.NoteType.Piano:
+                        InitNoteObject(pianoNotesList, note);
+                        break;
+                    case GameNoteModel.NoteType.Slide:
+                        InitNoteObject(slideNotesList, note);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
 
+            /*            foreach (var note in chartModel.BlankNotes)
+                        {
+                            InitNoteObject(blankNotesList, note.Model);
+                        }
+                        foreach (var note in chartModel.PianoNotes)
+                        {
+                            InitNoteObject(pianoNotesList, note.Model);
+                        }
+                        foreach (var note in chartModel.SlideNotes)
+                        {
+                            InitNoteObject(slideNotesList, note.Model);
+                        }
+            */
+        }
+
+        private void InitNoteObject(ICollection<BlankNote> notesList, GameNoteModel note)
+        {
+            var newNote = BlankNotePool.Get();
+            newNote.Model = note;
+            newNote.BlankNoteView = PrefabBlankNoteView;
+            newNote.BlankNoteView.SetNoteAppearance(note.size, note.pos);
             notesList.Add(newNote);
         }
 
-        private GameNote OnCreatePooledItem()
+        private void InitNoteObject(ICollection<PianoNote> notesList, GameNoteModel note)
         {
-            var newNote = Instantiate(prefabNoteView, noteParentTransform);
+            var newNote = PianoNotePool.Get();
+            newNote.Model = note;
+            newNote.PianoNoteView = PrefabPianoNoteView;
+            newNote.PianoNoteView.SetNoteAppearance(note.size, note.pos);
+            notesList.Add(newNote);
+        }
+
+        private void InitNoteObject(ICollection<SlideNote> notesList, GameNoteModel note)
+        {
+            var newNote = SlideNotePool.Get();
+            newNote.Model = note;
+            newNote.SlideNoteView = PrefabSlideNoteView;
+            newNote.SlideNoteView.SetNoteAppearance(note.size, note.pos);
+            notesList.Add(newNote);
+        }
+
+        private BlankNote OnCreatePooledBlankNote()
+        {
+            var newNote = Instantiate(PrefabBlankNote, noteParentTransform);
+            newNote.gameObject.SetActive(false);
+            return newNote;
+        }
+
+        private PianoNote OnCreatePooledPianoNote()
+        {
+            var newNote = Instantiate(PrefabPianoNote, noteParentTransform);
+            newNote.gameObject.SetActive(false);
+            return newNote;
+        }
+
+        private SlideNote OnCreatePooledSlideNote()
+        {
+            var newNote = Instantiate(PrefabSlideNote, noteParentTransform);
             newNote.gameObject.SetActive(false);
             return newNote;
         }

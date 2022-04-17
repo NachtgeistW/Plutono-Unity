@@ -32,7 +32,6 @@ namespace Assets.Scripts.Model.Plutono
 
         protected override NoteRenderer CreateRenderer()
         {
-            int a = 0;
             return new NoteRenderer();
         }
     }

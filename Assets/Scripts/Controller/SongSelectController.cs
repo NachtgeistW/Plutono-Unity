@@ -31,7 +31,13 @@ namespace Controller
 
         public void PopulateSong(List<SongInfo> songPackList)
         {
-            for (int i = 0; i < songPackList.Count; i++)
+            /*            foreach (var packInfo in songPackList)
+                        {
+                            var newButton = Instantiate(prefabCoverView, transform);
+                            newButton.SetSongInfo(packInfo);
+                        }
+            */
+            for (var i = 0; i < songPackList.Count; i++)
             {
                 var newButton = Instantiate(prefabCoverView, transform);
                 newButton.SetSongInfo(songPackList[i]);

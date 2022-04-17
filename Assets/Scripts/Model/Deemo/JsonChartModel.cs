@@ -14,6 +14,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+
 using Assets.Scripts.Model.Plutono;
 using Model.Deemo;
 using Model.Plutono;
@@ -25,28 +27,45 @@ namespace Assets.Scripts.Model.Deemo
     public class JsonChartModel
     {
         public float speed = 0.0f;
-        public List<JsonNoteModel> notes = new List<JsonNoteModel>();
+        public List<JsonNoteModel> notes = new();
         //public List<Link> links = new();
 
         /// <summary>
-        /// transfer JsonChartModel to the note list of GameChart
+        /// transfer JsonChartModel to the note list of BlankNote, PianoNote and SlideNote
         /// </summary>
-        /// <returns>A GameChart note list</returns>
-        public List<GameNoteModel> ToGameChartNoteList()
+        /// <param name="blankNotes">A list containing Blank Note</param>
+        /// <param name="pianoNotes">A list containing Piano Note</param>
+        /// <param name="slideNotes">A list containing Slide Note</param>
+        public void ToGameChartNoteList(List<BlankNote> blankNotes, List<PianoNote> pianoNotes,
+            List<SlideNote> slideNotes)
         {
-            var gChartNoteList = new List<GameNoteModel>();
             foreach (var jNote in notes)
             {
-                gChartNoteList.Add(jNote.ToGameNote());
+                var gNote = jNote.ToGameNote();
+                switch (gNote.type)
+                {
+                    case GameNoteModel.NoteType.Blank:
+                        blankNotes.Add(gNote.ToBlankNote());
+                        break;
+                    case GameNoteModel.NoteType.Piano:
+                        pianoNotes.Add(gNote.ToPianoNote());
+                        break;
+                    case GameNoteModel.NoteType.Slide:
+                        slideNotes.Add(gNote.ToSlideNote());
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
             }
-            return gChartNoteList;
         }
+
+        public IEnumerable<GameNoteModel> ToGameChartNoteList() => from note in notes select note.ToGameNote();
 
         /// <summary>
         /// transfer Json to JsonChartModel
         /// </summary>
         /// <param name="jsonPath">the path of json file</param>
-        /// <returns>A tranferred JsonChartModel</returns>
+        /// <returns>A transferred JsonChartModel</returns>
         public static JsonChartModel JsonToJsonChart(string jsonPath)
         {
             var settings = new JsonSerializerSettings();

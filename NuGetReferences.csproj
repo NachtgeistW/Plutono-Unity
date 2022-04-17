@@ -8,18 +8,19 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="DynamicData" Version="7.1.16" />
+        <PackageReference Include="DynamicData" Version="7.6.7" />
         <PackageReference Include="morelinq" Version="3.3.2" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
         
-        <PackageReference Include="System.Collections.Immutable" Version="5.0.0" />
+        <PackageReference Include="System.Collections.Immutable" Version="6.0.0" />
 
         <PackageReference Include="System.Reactive.Compatibility" Version="5.0.0" />
 
-        <PackageReference Include="System.Text.Json" Version="5.0.2" />
+        <PackageReference Include="System.Text.Json" Version="6.0.3" />
 
         <PackageReference Include="Unity.Interception" Version="5.11.1" />
 
-        <PackageReference Include="Microsoft.Extensions.Configuration.Ini" Version="5.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Ini" Version="6.0.0" />
 
         <!--Unity ignored-->
 
