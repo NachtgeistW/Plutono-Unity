@@ -122,7 +122,7 @@ csharp_style_unused_value_assignment_preference = discard_variable:suggestion
 csharp_style_unused_value_expression_statement_preference = discard_variable
 
 # 'using' directive preferences
-csharp_using_directive_placement = inside_namespace:suggestion
+csharp_using_directive_placement = outside_namespace:suggestion
 
 # New line preferences
 csharp_style_allow_blank_line_after_colon_in_constructor_initializer_experimental = true:suggestion
@@ -209,7 +209,7 @@ dotnet_naming_symbols.local_var.applicable_accessibilities = *
 dotnet_naming_symbols.local_var.required_modifiers =
 
 dotnet_naming_symbols.non_public_field_or_property.applicable_kinds = property, field
-dotnet_naming_symbols.non_public_field_or_property.applicable_accessibilities = internal, private, protected, protected_internal, private_protected, 
+dotnet_naming_symbols.non_public_field_or_property.applicable_accessibilities = internal, private, protected, protected_internal, private_protected,
 dotnet_naming_symbols.non_public_field_or_property.required_modifiers =
 
 dotnet_naming_symbols.other.applicable_kinds = *
