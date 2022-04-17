@@ -1,0 +1,31 @@
+{
+    "name": "com.e7.native-audio",
+    "author": "Sirawat Pitaksarit / 5argon - Exceed7 Experiments",
+    "displayName": "Native Audio",
+    "version": "5.0.0",
+    "unity": "2017.4",
+    "description": "Lower audio latency via direct unmixed audio stream at native side.",
+    "keywords": [
+        "audio",
+        "native",
+        "fast",
+        "latency",
+        "HAL",
+        "MediaPlayer",
+        "OpenSL ES",
+        "OpenAL",
+        "AudioTrack"
+    ],
+    "samples": [
+        {
+            "displayName": "Native Audio Samples",
+            "description": "Three sample scenes which connects to each other.",
+            "path": "Samples~/NativeAudioSamples"
+        },
+        {
+            "displayName": "Android Studio Project",
+            "description": "Import this sample to get Android Studio project that produces the .AAR native Android plugin copied to your project.",
+            "path": "Samples~/AndroidStudioProject"
+        }
+    ]
+}

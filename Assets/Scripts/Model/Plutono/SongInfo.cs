@@ -6,9 +6,6 @@
  *      composer: string, the composer of this song.
  *      charts: List<GameChart>, charts in the project
  *
- * Function
- *
- *
  * History
  *      2021.03.31  CREATE.
  */

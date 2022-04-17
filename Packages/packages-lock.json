@@ -14,13 +14,6 @@
       "dependencies": {},
       "hash": "18f2746f0d30a1b870d9835f2f16d15b56476a33"
     },
-    "com.monitor1394.xcharts": {
-      "version": "https://github.com/monitor1394/unity-ugui-XCharts.git#2.0-upm",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "6af0e6d42779c8a42afbe23024457fa95e42c1aa"
-    },
     "com.neuecc.unirx": {
       "version": "https://github.com/neuecc/UniRx.git?path=Assets/Plugins/UniRx/Scripts",
       "depth": 0,
@@ -51,7 +44,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.collab-proxy": {
-      "version": "1.13.5",
+      "version": "1.15.9",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -68,7 +61,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.visualstudio": {
-      "version": "2.0.12",
+      "version": "2.0.14",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -115,7 +108,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.test-framework": {
-      "version": "1.1.29",
+      "version": "1.1.30",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -135,7 +128,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.timeline": {
-      "version": "1.6.2",
+      "version": "1.6.3",
       "depth": 0,
       "source": "registry",
       "dependencies": {

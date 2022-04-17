@@ -23,6 +23,18 @@ using UnityEngine;
 
 namespace Model.Deemo
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+
+    using Assets.Scripts.Model.Deemo;
+    using Assets.Scripts.Model.Plutono;
+    using Assets.Scripts.Util;
+
+    using Plutono;
+
+    using UnityEngine;
+
     /// <summary>
     /// Store the information from a ini file.
     public class SongIniInfo
@@ -30,11 +42,11 @@ namespace Model.Deemo
         public string songName = "";        //song name.
         public string artist = "";          //the composer of this song.
         public string chartDesigner = "";   //the chart designer of this song.
-        public uint levelEasy = 0;          //the level of easy.
-        public uint levelNormal = 0;        //the level of normal.
-        public uint levelHard = 0;          //the level of hard.
+        public uint levelEasy;          //the level of easy.
+        public uint levelNormal;        //the level of normal.
+        public uint levelHard;          //the level of hard.
         public string levelExtra = "";      //the level of extra. (Can be ASCII)
-        public uint levelUltra = 0;         //the level of extra. (Used in Deemo 2.2, equal to Extra)
+        public uint levelUltra;         //the level of extra. (Used in Deemo 2.2, equal to Extra)
 
         //  Note: if level = 0 / = null, the chart of this level is not exist.
         //        the rest data in ini wouldn't be convert.
@@ -76,7 +88,8 @@ namespace Model.Deemo
         {
             var packInfo = new SongInfo { SongName = songName, Composer = artist, MusicPath = Path.Combine(iniDocumentPath, "music.mp3") };
 
-            Func<string, GameChartModel> loadChart = (string difficulty) => {
+            Func<string, GameChartModel> loadChart = (string difficulty) =>
+            {
                 var path = Path.Combine(iniDocumentPath, string.Format("{0}.json", difficulty));
 
                 return new GameChartModel()
@@ -92,7 +105,7 @@ namespace Model.Deemo
                 var filePathUpper = iniDocumentPath + "/Easy.json";
                 var filePathLower = iniDocumentPath + "/easy.json";
                 gChart.notes = File.Exists(filePathLower)
-                    ? JsonChartModel.JsonToJsonChart(File.Exists(filePathLower) ? filePathLower  : (File.Exists(filePathUpper) ? filePathUpper : )).ToGameChartNoteList()
+                    ? JsonChartModel.JsonToJsonChart(File.Exists(filePathLower) ? filePathLower : (File.Exists(filePathUpper) ? filePathUpper : )).ToGameChartNoteList()
                     : File.Exists(filePathUpper)
                     ? JsonChartModel.JsonToJsonChart(filePathUpper).ToGameChartNoteList()
                     : Debug.LogWarning("Level Easy in Song " + songName + ", Level" + levelEasy.ToString() + "has defined a difficulty but doesn't provide a chart.");
@@ -108,6 +121,7 @@ namespace Model.Deemo
                     chartDesigner = chartDesigner
                 };
 
+                var gameNoteModelList = new List<GameNoteModel>();
                 var filePathUpper = iniDocumentPath + "/Normal.json";
                 var filePathLower = iniDocumentPath + "/normal.json";
                 gChart.notes = File.Exists(filePathLower)
@@ -127,6 +141,7 @@ namespace Model.Deemo
                     chartDesigner = chartDesigner
                 };
 
+                var gameNoteModelList = new List<GameNoteModel>();
                 var filePathUpper = iniDocumentPath + "/Hard.json";
                 var filePathLower = iniDocumentPath + "/hard.json";
                 gChart.notes = File.Exists(filePathLower)
@@ -146,6 +161,7 @@ namespace Model.Deemo
                     chartDesigner = chartDesigner
                 };
 
+                var gameNoteModelList = new List<GameNoteModel>();
                 var filePathUpper = iniDocumentPath + "/Extra.json";
                 var filePathLower = iniDocumentPath + "/extra.json";
                 gChart.notes = File.Exists(filePathLower)
@@ -165,6 +181,7 @@ namespace Model.Deemo
                     chartDesigner = chartDesigner
                 };
 
+                var gameNoteModelList = new List<GameNoteModel>();
                 var filePathUpper = iniDocumentPath + "/Ultra.json";
                 var filePathLower = iniDocumentPath + "/ultra.json";
                 gChart.notes = File.Exists(filePathLower)

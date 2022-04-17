@@ -40,16 +40,19 @@ namespace Assets.Scripts.Controller
         public GameStatus Status { get; set; }
 
         //UI
+        [Header("-UI-")]
         public UIController UiController;
 
         public SongInfo PackInfo { get; set; }
         public GameChartModel ChartInfo { get; set; }
 
         [Header("-Note controlling-")]
-
         //-Note controlling- --Chlorie
-        private readonly List<GameNote> notes = new List<GameNote>();
         [SerializeField] private Transform noteParentTransform;
+        [SerializeField] private NoteSpawner NoteSpawner;
+        private List<BlankNote> BlankNotes = new();
+        private List<PianoNote> PianoNotes = new();
+        private List<SlideNote> SlideNotes = new();
 
         //-Editor settings- --Chlorie
         public int chartPlaySpeed = 10; //Twice the speed of that in the game
@@ -59,14 +62,11 @@ namespace Assets.Scripts.Controller
         //Object Pool
         private ObjectPool<GameNote> notePool;
 
-        [Tooltip("(放prefab不是script！)note prefab。")]
-        [SerializeField] private GameNote prefabNoteView;
-
         //-Sounds-
         public AudioSource musicSource;
 
         //Music Playing
-        public float musicLength; // In seconds
+        public float MusicLength { get; set; } // In seconds
         private bool musicPlayState;
         private bool isMusicEnds;
 
@@ -88,7 +88,6 @@ namespace Assets.Scripts.Controller
 
             PackInfo = GameManager.Instance.SongInfo;
             ChartInfo = GameManager.Instance.gameChart;
-
             Application.targetFrameRate = 120;
         }
 
@@ -108,7 +107,7 @@ namespace Assets.Scripts.Controller
             cam = Camera.main;
             //notes.Sort(SortByTime);
             //LeanTouch.OnFingerTap += OnFingerTap;
-
+            NoteSpawner.PlaceNewNote(BlankNotes, PianoNotes, SlideNotes, ChartInfo);
 
             //Music
             InitializeMusicSource();
@@ -116,14 +115,14 @@ namespace Assets.Scripts.Controller
             musicSource.PlayScheduled(nowDspTime + 1);
 
             //UI
-            UiController.InitializeUi(PackInfo.SongName, ChartInfo.level, musicLength);
+            UiController.InitializeUi(PackInfo.songName, ChartInfo.level, MusicLength);
         }
 
         private void Update()
         {
             //TODO:latency adjust system
 
-            if (Time > musicLength) EndGame();
+            if (Time > MusicLength) EndGame();
             UiController.OnGameUpdate(Time, Status);
 
             /*            if (notes.Count == 0)
@@ -319,7 +318,7 @@ namespace Assets.Scripts.Controller
             var filePath = "file://" + GameManager.Instance.SongInfo.MusicPath;
 
             musicSource.clip = AudioClipFileManager.Read(filePath);
-            musicLength = musicSource.clip.length;
+            MusicLength = musicSource.clip.length;
             musicSource.time = 0;
         }
     }

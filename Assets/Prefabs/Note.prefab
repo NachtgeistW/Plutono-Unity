@@ -27,6 +27,7 @@ Transform:
   m_LocalRotation: {x: 0.13052616, y: 0, z: 0, w: 0.9914449}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5204384521400422390}
   m_RootOrder: 1
@@ -110,6 +111,7 @@ Transform:
   m_LocalRotation: {x: 0.5735764, y: 0, z: 0, w: 0.8191521}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5204384521400422390}
   m_RootOrder: 4
@@ -193,6 +195,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5204384521400422390}
   m_RootOrder: 2
@@ -276,6 +279,7 @@ Transform:
   m_LocalRotation: {x: 0.5735764, y: 0, z: 0, w: 0.8191521}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5204384521400422390}
   m_RootOrder: 3
@@ -359,6 +363,7 @@ Transform:
   m_LocalRotation: {x: 0.13052616, y: 0, z: 0, w: 0.9914449}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5204384521400422390}
   m_RootOrder: 0
@@ -404,15 +409,15 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 13
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 4e013709f148c0a42ae7a1ca8adb1427, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1.79, y: 0.49}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1 &5204384521400422391
@@ -442,6 +447,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5204384521091268995}
   - {fileID: 1112763818639233366}
@@ -464,21 +470,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 0
-  _note:
-    id: 0
-    pos: 0
-    size: 0
-    time: 0
-    type: 0
-    sounds: []
   noteSpriteRenderer: {fileID: 5204384521091268994}
   frameSpriteRenderer: {fileID: 1574699793733557996}
   waveSpriteRenderer: {fileID: 5204384520451942606}
   lightSpriteRenderer: {fileID: 5204384520973166644}
   circleSpriteRenderer: {fileID: 5204384520089163436}
-  pianoNoteSprite: {fileID: 21300000, guid: 284af0a3eebc2514d9f3ac0d270ad0e7, type: 3}
-  blankNoteSprite: {fileID: 21300000, guid: fa5df0dfe987c93459f47076722328a1, type: 3}
-  slideNoteSprite: {fileID: 21300000, guid: 05712f0d0d02ef64fbff631ad7214786, type: 3}
   circleSprite: {fileID: 21300000, guid: e79805534f914894590881e4f9e5dbe8, type: 3}
   waveSprite: {fileID: 21300000, guid: dc8e64ff33e79a746a3ad567c7ad9bb1, type: 3}
   lightSprite: {fileID: 21300000, guid: 46e2eb201e86ed74f9cdbbad34982b82, type: 3}
@@ -498,5 +494,5 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 1313744e964d9a74ba715ff7921486b0, type: 3}
   - {fileID: 21300000, guid: 25dce8e07672b9847951a688a744781a, type: 3}
   - {fileID: 21300000, guid: f3596df22d6a1a747a27599ddb8abdac, type: 3}
-  touchableLeftRange: 0
-  touchableRightRange: 0
+  TouchableLeftRange: 0
+  TouchableRightRange: 0
