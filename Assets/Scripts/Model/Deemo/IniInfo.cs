@@ -40,14 +40,14 @@ namespace Model.Deemo
     /// Store the information from a ini file.
     public class SongIniInfo
     {
-        public string songName = "";        //song name.
-        public string artist = "";          //the composer of this song.
-        public string chartDesigner = "";   //the chart designer of this song.
-        public uint levelEasy;          //the level of easy.
-        public uint levelNormal;        //the level of normal.
-        public uint levelHard;          //the level of hard.
-        public string levelExtra = "";      //the level of extra. (Can be ASCII)
-        public uint levelUltra;         //the level of extra. (Used in Deemo 2.2, equal to Extra)
+        public string SongName;        //song name.
+        public string Artist;          //the composer of this song.
+        public string ChartDesigner;   //the chart designer of this song.
+        public uint? LevelEasy;          //the level of easy.
+        public uint? LevelNormal;        //the level of normal.
+        public uint? LevelHard;          //the level of hard.
+        public string? LevelExtra;      //the level of extra. (Can be ASCII)
+        public uint? LevelUltra;         //the level of extra. (Used in Deemo 2.2, equal to Extra)
 
         //  Note: if level = 0 / = null, the chart of this level is not exist.
         //        the rest data in ini wouldn't be convert.
@@ -55,7 +55,7 @@ namespace Model.Deemo
         /// <summary>
         /// read ini info from a ini file.
         /// </summary>
-        /// <param name="iniFilePath"></param>
+        /// <param name="iniFilePath">string, the path of the ini file</param>
         /// <returns>a initialized IniInfo class</returns>
         public static SongIniInfo ReadIniFromPath(string iniFilePath)
         {
@@ -63,39 +63,49 @@ namespace Model.Deemo
             var data = IniFile.FromPath(iniFilePath).GetSection("Song");
             var info = new SongIniInfo
             {
-                songName = data["Name"],
-                artist = data["Artist"],
-                chartDesigner = data["Noter"]
+                SongName = data["Name"],
+                Artist = data["Artist"],
+                ChartDesigner = data["Noter"]
             };
             if (data["Easy"] != null)
-                info.levelEasy = uint.Parse(data["Easy"]);
+                info.LevelEasy = uint.Parse(data["Easy"]);
             if (data["Normal"] != null)
-                info.levelNormal = uint.Parse(data["Normal"]);
+                info.LevelNormal = uint.Parse(data["Normal"]);
             if (data["Hard"] != null)
-                info.levelHard = uint.Parse(data["Hard"]);
+                info.LevelHard = uint.Parse(data["Hard"]);
             if (data["Extra"] != null)
-                info.levelExtra = data["Extra"];
+                info.LevelExtra = data["Extra"];
             if (data["Ultra"] != null)
-                info.levelUltra = uint.Parse(data["Ultra"]);
+                info.LevelUltra = uint.Parse(data["Ultra"]);
             return info;
         }
+    }
 
-        /// <summary>
-        /// convert ini to a config file used in Plutono.
-        /// </summary>
-        /// <param name="iniDocumentPath">string, the path of the ini file</param>
-        /// <returns>A completed PackInfo, including a GameChart and their level and designer respectively</returns>
-        public SongInfo IniToSongInfo(string iniDocumentPath)
+    public class SongInfo
+    {
+        public readonly SongIniInfo IniInfo;
+        public readonly List<GameChartModel> Charts = new();
+        public Sprite? Cover;
+        public string MusicPath;
+
+        public SongInfo(string iniPath)
         {
-            var packInfo = new SongInfo { SongName = songName, Composer = artist, MusicPath = Path.Combine(iniDocumentPath, "music.mp3") };
+            var iniFolderPath = Path.GetDirectoryName(iniPath);
 
-            Func<string, GameChartModel> loadChart = difficulty =>
+            IniInfo = SongIniInfo.ReadIniFromPath(iniPath);
+            MusicPath = Path.Combine(iniFolderPath, "music.mp3");
+
+            // convert ini to a config file used in Plutono.
+
+            Func<string, string?, GameChartModel?> loadChart = (difficulty, level) =>
             {
-                var path = Path.Combine(iniDocumentPath, $"{difficulty}.json");
+                if (level is null) return null;
+
+                var path = Path.Combine(iniFolderPath, $"{difficulty}.json");
                 GameChartModel gChart = new()
                 {
-                    level = levelNormal.ToString(),
-                    chartDesigner = chartDesigner
+                    level = level,
+                    chartDesigner = IniInfo.ChartDesigner
                 };
                 IEnumerable<GameNoteModel> loadJson(string path) =>
                     JsonChartModel.JsonToJsonChart(path).ToGameChartNoteList();
@@ -110,33 +120,38 @@ namespace Model.Deemo
                     if (File.Exists(path)) gChart.notes = loadJson(path).ToList();
                     else
                     {
-                        Debug.LogWarning($"Level Easy in Song {songName}, Level {difficulty} has defined a difficulty but doesn't provide a chart.");
+                        Debug.LogWarning($"Level Easy in Song {IniInfo.SongName}, Level {difficulty} has defined a difficulty but doesn't provide a chart.");
                         return null;
                     }
                 }
 
-
                 return gChart;
             };
 
-            if (levelEasy != 0 && loadChart("easy") is { } chart)
-                packInfo.Charts.Add(chart);
+            {
+                if (loadChart("easy", IniInfo.LevelEasy?.ToString()) is { } chart)
+                    Charts.Add(chart);
+            }
+            {
+                if (loadChart("normal", IniInfo.LevelNormal?.ToString()) is { } chart)
+                    Charts.Add(chart);
+            }
+            {
+                if (loadChart("hard", IniInfo.LevelHard?.ToString()) is { } chart)
+                    Charts.Add(chart);
+            }
+            {
+                if (loadChart("extra", IniInfo.LevelUltra?.ToString()) is { } chart)
+                    Charts.Add(chart);
+            }
+            {
+                if (loadChart("ultra", IniInfo.LevelUltra?.ToString()) is { } chart)
+                    Charts.Add(chart);
+            }
 
-            if (levelNormal != 0 && (chart = loadChart("normal")) is { })
-                packInfo.Charts.Add(chart);
-
-            if (levelHard != 0 && (chart = loadChart("hard")) is { })
-                packInfo.Charts.Add(chart);
-
-            if (string.IsNullOrEmpty(levelExtra) && (chart = loadChart("hard")) is { })
-                packInfo.Charts.Add(chart);
-
-            if (levelUltra != 0 && (chart = loadChart("ultra")) is { })
-                packInfo.Charts.Add(chart);
-
-            if (File.Exists(iniDocumentPath + "/cover.png") &&
-                LoadTexture(iniDocumentPath + "/cover.png") is { } spriteTexture)
-                packInfo.Cover = Sprite.Create(
+            var coverPath = Path.Combine(iniFolderPath, "cover.png");
+            if (File.Exists(coverPath) && LoadTexture(coverPath) is { } spriteTexture)
+                Cover = Sprite.Create(
                     spriteTexture,
                     new Rect(0, 0, spriteTexture.width, spriteTexture.height),
                     new Vector2(0, 0),
@@ -145,8 +160,7 @@ namespace Model.Deemo
                     SpriteMeshType.Tight
                 );
 
-            Log.LogStr(packInfo.SongName);
-            return packInfo;
+            Log.LogStr(IniInfo.SongName);
         }
 
         /// <summary>
@@ -154,7 +168,7 @@ namespace Model.Deemo
         /// </summary>
         /// <param name="filePath"></param>
         /// <returns>The Texture2D. Returns null if load fails</returns>
-        public static Texture2D? LoadTexture(string filePath)
+        static Texture2D? LoadTexture(string filePath)
         {
             if (File.Exists(filePath))
             {

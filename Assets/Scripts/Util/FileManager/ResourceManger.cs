@@ -17,11 +17,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-using Assets.Scripts.Model.Plutono;
-
-using Model.Deemo;
-using Model.Plutono;
-
 using UnityEngine;
 using UnityEngine.Android;
 
@@ -46,7 +41,7 @@ namespace Util.FileManager
             Permission.RequestUserPermission("android.permission.INTERNET");
         }
 
-        public List<SongInfo> Initialize()
+        public List<Model.Plutono.SongInfo> Initialize()
         {
             Log.LogPlatform();
 
@@ -63,8 +58,9 @@ namespace Util.FileManager
                 return Directory.GetDirectories(StoragePath) // get song packs
                     .SelectMany(
                         packPath => Directory.GetDirectories(packPath)
-                        .Select(songPath => Directory.GetFiles(songPath, "*.ini"))
-                        .SelectMany(iniPaths => iniPaths.Select(ini => SongIniInfo.ReadIniFromPath(ini).IniToSongInfo(packPath)))
+                            .Select(
+                                songPath => Directory.GetFiles(songPath, "*.ini"))
+                            .SelectMany(iniPaths => iniPaths.Select(ini => new Model.Plutono.SongInfo(new Model.Deemo.SongInfo(ini))))
                     ) // get song info
                     .ToList();
             }

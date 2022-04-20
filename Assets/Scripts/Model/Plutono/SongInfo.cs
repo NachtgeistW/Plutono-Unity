@@ -30,5 +30,14 @@ namespace Model.Plutono
         public List<GameChartModel> Charts = new();
         public Sprite? Cover;
         public string MusicPath = "";
+
+        public SongInfo(Deemo.SongInfo deemoInfo)
+        {
+            SongName = deemoInfo.IniInfo.SongName;
+            Composer = deemoInfo.IniInfo.Artist;
+            Charts = deemoInfo.Charts;
+            Cover = deemoInfo.Cover;
+            MusicPath = deemoInfo.MusicPath;
+        }
     }
 }
