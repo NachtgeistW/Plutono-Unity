@@ -1,0 +1,326 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Controller.ChartSelectController" Collapsed="true">
+    <Position X="11.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAAAAAAAAAAAAAAgAIKAAEABAAAA=</HashCode>
+      <FileName>Assets\Scripts\Controller\ChartSelectController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Controller.SongSelectController" Collapsed="true">
+    <Position X="10" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAEAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Controller\SongSelectController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Controller.WelcomeController" Collapsed="true">
+    <Position X="13.5" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAAACAAACAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Controller\WelcomeController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Controller.Game.ComboEffectController" Collapsed="true">
+    <Position X="17" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Controller\Game\ComboEffectController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Controller.Game.NoteGradeJudgment" Collapsed="true">
+    <Position X="13.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Controller\Game\NoteGrade.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Controller.Game.UIController" Collapsed="true">
+    <Position X="11.75" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAIAAogAkFAoAAAAAgAIAAQQKAAAAAAAEKFABCABA=</HashCode>
+      <FileName>Assets\Scripts\Controller\Game\UIController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Assets.Scripts.Controller.Game.GameStatus" Collapsed="true">
+    <Position X="13.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAIAcBAAAAICAACAAgAAAROBFIBABAAAACACAA=</HashCode>
+      <FileName>Assets\Scripts\Controller\Game\GameStatus.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Assets.Scripts.Controller.Game.NoteJudgment" Collapsed="true">
+    <Position X="15.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQAAAAAAAAAAAAAAAEAAAAAAAAEAAAA=</HashCode>
+      <FileName>Assets\Scripts\Controller\Game\GameStatus.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Assets.Scripts.Controller.Game.NoteSpawner" Collapsed="true">
+    <Position X="8.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gABAACAgABAAABAgAgAAQAACEBIBAJAAQAAAQAAIAEI=</HashCode>
+      <FileName>Assets\Scripts\Controller\Game\NoteSpawner.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Assets.Scripts.Controller.GamePlayController" Collapsed="true">
+    <Position X="11.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>wEQBBAAEACQASBQAACAAABAAAkCgCgAgwAQQAggwAUA=</HashCode>
+      <FileName>Assets\Scripts\Controller\GamePlayController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Assets.Scripts.Controller.ResultController" Collapsed="true">
+    <Position X="8.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAASAACABAAAAAAAgAoAAEAAAAAAAIAACAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Controller\ResultController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GameManager" Collapsed="true">
+    <Position X="1" Y="11" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIARAAAABAAAAIAAAKAAAAAAACAAAAAAAAFACgCAA=</HashCode>
+      <FileName>Assets\Scripts\GameManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Log" Collapsed="true">
+    <Position X="11.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAQA=</HashCode>
+      <FileName>Assets\Scripts\Util\Debug\Log.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AlphaMask" Collapsed="true">
+    <Position X="8.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Views\AlphaMask.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Model.Deemo.SongIniInfo" Collapsed="true">
+    <Position X="17" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAEAAAAgAAAARAAAIAIAAAAAAAIgAAAAAE=</HashCode>
+      <FileName>Assets\Scripts\Model\Deemo\IniInfo.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Model.Deemo.SongInfo" Collapsed="true">
+    <Position X="13.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAgAAAAAAAAAAAACAAAAAAAAAAACgAAAA=</HashCode>
+      <FileName>Assets\Scripts\Model\Deemo\IniInfo.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Model.Deemo.JsonNoteModel" Collapsed="true">
+    <Position X="8.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAADAAAACAAgAAAAAIAAAIAAACAFAAAAIAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Model\Deemo\JsonNoteModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Model.Deemo.JsonPianoSound" Collapsed="true">
+    <Position X="10" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEIFgAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Model\Deemo\JsonNoteModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Assets.Scripts.Model.Deemo.JsonChartModel" Collapsed="true">
+    <Position X="17" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAEAAAAQAAAAAAEAAAIAA=</HashCode>
+      <FileName>Assets\Scripts\Model\Deemo\JsonChartModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Assets.Scripts.Model.Plutono.BlankNote" Collapsed="true">
+    <Position X="1.25" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAkAAAAAAQAAAAAAAAAAAAAAAAAACAAA=</HashCode>
+      <FileName>Assets\Scripts\Model\Plutono\BlankNote.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Assets.Scripts.Model.Plutono.GameChartModel" Collapsed="true">
+    <Position X="8.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAABAAAEAAAAAAEAAAAAAAAAAAAAIAA=</HashCode>
+      <FileName>Assets\Scripts\Model\Plutono\GameChartModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Assets.Scripts.Model.Plutono.GameNote" Collapsed="true">
+    <Position X="3.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAABAQgAAgAAAAAAgAAABAAIAAAAASiCBAACAAA=</HashCode>
+      <FileName>Assets\Scripts\Model\Plutono\GameNote.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Assets.Scripts.Model.Plutono.GameNoteModel" Collapsed="true">
+    <Position X="10" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAIAAACAAAAAAAIAAQIAQAAAFAAAAAAAAAAAAAgA=</HashCode>
+      <FileName>Assets\Scripts\Model\Plutono\GameNoteModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Assets.Scripts.Model.Plutono.PianoNote" Collapsed="true">
+    <Position X="3.5" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAACkAAAAAAAAAAAAAQAAAAAAAAAAACAAA=</HashCode>
+      <FileName>Assets\Scripts\Model\Plutono\PianoNote.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Assets.Scripts.Model.Plutono.SlideNote" Collapsed="true">
+    <Position X="5.75" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAkAAAIAAAAAAAAAQAAAAAAAAAAACAAA=</HashCode>
+      <FileName>Assets\Scripts\Model\Plutono\SlideNote.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Assets.Scripts.Model.Plutono.Song" Collapsed="true">
+    <Position X="11.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAgAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Model\Plutono\Song.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Model.Plutono.NoteRenderer" Collapsed="true">
+    <Position X="17" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Model\Plutono\NoteRenderer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Model.Plutono.SongInfo" Collapsed="true">
+    <Position X="15.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAgAAAAAAAAAAAACAAAAAAAAAAgGAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Model\Plutono\SongInfo.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Model.Plutono.SongModel" Collapsed="true">
+    <Position X="8.25" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAABAAAAAAAAAAAAAAAABAAAIAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Model\Plutono\SongModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UnityTools.NuGetPkgManager" Collapsed="true">
+    <Position X="10" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAQAACAYAAAAAAAAAAAgAAAQAIAAA=</HashCode>
+      <FileName>Assets\Scripts\UnityTools\NuGetPkgManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Util.ClickTwiceToExit" Collapsed="true">
+    <Position X="15.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAABAAAAAAAgAAAAAAgAAAAAAAAAAAAAAQA=</HashCode>
+      <FileName>Assets\Scripts\Util\ClickTwiceToExit.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Util.MonoSingleton&lt;T&gt;" Collapsed="true">
+    <Position X="1" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Util\MonoSingleton.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Models.IO.AudioClipFileManager" Collapsed="true">
+    <Position X="10" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACgAAAAEAAAAAAAAAAAACAgAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Util\FileManager\AudioClipFileManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Util.FileManager.ResourceManger" Collapsed="true">
+    <Position X="17" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQAgAAAAIAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Util\FileManager\ResourceManger.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Assets.Scripts.Util.IniFile" Collapsed="true">
+    <Position X="15.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Util\IniFile.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Assets.Scripts.Util.Parameters" Collapsed="true">
+    <Position X="11.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAADSBEEAIDKASEJQAQAAIAhIQIIIgBLRAACgAAAEg=</HashCode>
+      <FileName>Assets\Scripts\Util\Parameters.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Assets.Scripts.Util.Singleton" Collapsed="true">
+    <Position X="10" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Util\Singleton.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Assets.Scripts.Views.BlankNoteView">
+    <Position X="5.75" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAI=</HashCode>
+      <FileName>Assets\Scripts\Views\BlankNoteView.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Assets.Scripts.Views.ChartSelectView" Collapsed="true">
+    <Position X="13.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAgCACAAAAEgAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Views\ChartSelectView.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Assets.Scripts.Views.NoteView" Collapsed="true">
+    <Position X="3.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQBAAICCAAAACCCCAAAAAAIAAQABDACAAABAFgCCgI=</HashCode>
+      <FileName>Assets\Scripts\Views\NoteView.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Assets.Scripts.Views.PianoNoteView">
+    <Position X="1.25" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAgAAAAAAAAAAAABAAAAAAAAAAAAAAI=</HashCode>
+      <FileName>Assets\Scripts\Views\PianoNoteView.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Assets.Scripts.Views.SlideNoteView" Collapsed="true">
+    <Position X="3.5" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAACAI=</HashCode>
+      <FileName>Assets\Scripts\Views\SlideNoteView.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Views.PrefabButtonChartSelectView" Collapsed="true">
+    <Position X="13.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAACAAAAABAYAIAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Views\PrefabButtonChartSelectView.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Views.PrefabCoverView" Collapsed="true">
+    <Position X="15.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAIIAAAAAAAIA=</HashCode>
+      <FileName>Assets\Scripts\Views\PrefabCoverView.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="Controller.Game.NoteGrade" Collapsed="true">
+    <Position X="10" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAgBAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAE=</HashCode>
+      <FileName>Assets\Scripts\Controller\Game\NoteGrade.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Assets.Scripts.Controller.Game.GameMode" Collapsed="true">
+    <Position X="8.25" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAQAABAAAAAAAAAAAAAAAAAAAAAAEQAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Controller\Game\GameStatus.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Microsoft YaHei UI" Size="9" />
+</ClassDiagram>

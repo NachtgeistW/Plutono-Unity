@@ -121,6 +121,7 @@ namespace Assets.Scripts.Controller.Game
 
         private PianoNote OnCreatePooledPianoNote()
         {
+            //该放的应该是PrefabPianoNoteView才对……需要研究
             var newNote = Instantiate(PrefabPianoNote, noteParentTransform);
             newNote.gameObject.SetActive(false);
             return newNote;

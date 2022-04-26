@@ -10,19 +10,21 @@
  *      2021.04.04  MOVE JsonToJChart to class JsonChartModel
  *      2021.10.10  RENAME from JsonChart to JsonChartModel
 */
-
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-
-using Assets.Scripts.Model.Plutono;
-using Model.Deemo;
 using Model.Plutono;
-using Newtonsoft.Json;
+using Model.Deemo;
 
 namespace Assets.Scripts.Model.Deemo
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+
+    using Assets.Scripts.Model.Plutono;
+
+
+    using Newtonsoft.Json;
+
     [Serializable]
     public class JsonChartModel
     {
@@ -58,8 +60,6 @@ namespace Assets.Scripts.Model.Deemo
                 }
             }
         }
-
-        public IEnumerable<GameNoteModel> ToGameChartNoteList() => from note in notes select note.ToGameNote();
 
         /// <summary>
         /// transfer Json to JsonChartModel

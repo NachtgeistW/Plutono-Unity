@@ -10,17 +10,6 @@
  2020.03.31  CREATE.
  */
 
-using System;
-using System.IO;
-
-using Assets.Scripts.Model.Deemo;
-using Assets.Scripts.Model.Plutono;
-using Assets.Scripts.Util;
-
-using Model.Plutono;
-
-using UnityEngine;
-
 namespace Model.Deemo
 {
     using System;
@@ -31,8 +20,6 @@ namespace Model.Deemo
     using Assets.Scripts.Model.Deemo;
     using Assets.Scripts.Model.Plutono;
     using Assets.Scripts.Util;
-
-    using Plutono;
 
     using UnityEngine;
 
@@ -108,8 +95,8 @@ namespace Model.Deemo
                     chartDesigner = IniInfo.ChartDesigner
                 };
                 IEnumerable<GameNoteModel> loadJson(string path) =>
-                    JsonChartModel.JsonToJsonChart(path).ToGameChartNoteList();
-
+                    JsonChartModel.JsonToJsonChart(path).notes.Select(n => n.ToGameNote());
+                    
                 if (File.Exists(path)) gChart.notes = loadJson(path).ToList();
                 else
                 {
