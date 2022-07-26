@@ -430,6 +430,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5204384521400422390}
   - component: {fileID: 1968958405543738396}
+  - component: {fileID: 732067141291648068}
   - component: {fileID: 6319030305420357399}
   - component: {fileID: 5518147771295660017}
   m_Layer: 0
@@ -448,8 +449,8 @@ Transform:
   m_GameObject: {fileID: 5204384521400422391}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 5, y: 5, z: 5}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 5084222609015178671}
   - {fileID: 2494200086956567889}
@@ -477,11 +478,24 @@ MonoBehaviour:
     pos: 0
     size: 0
     time: 0
-    type: 0
+    type: 2
     sounds: []
   _blankSpriteRenderer: {fileID: 8423021217620591980}
   _pianoSpriteRenderer: {fileID: 6228860794142185626}
   _slideSpriteRenderer: {fileID: 3579559003840951118}
+--- !u!114 &732067141291648068
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5204384521400422391}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82e6d11c90aaeb24f89f250f60f8e151, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _transform: {fileID: 5204384521400422390}
 --- !u!114 &6319030305420357399
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -494,10 +508,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c983fe61f8338e47bfaa50d9157a15d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  note: {fileID: 8423021217620591980}
-  noteWave: {fileID: 5204384520451942606}
-  noteLight: {fileID: 5204384520973166644}
-  noteCircle: {fileID: 5204384520089163436}
   explosionAnim: {fileID: 5518147771295660017}
 --- !u!95 &5518147771295660017
 Animator:

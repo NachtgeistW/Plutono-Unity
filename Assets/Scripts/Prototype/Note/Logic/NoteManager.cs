@@ -2,17 +2,37 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NoteManager : MonoBehaviour
+namespace Plutono.Song
 {
-    // Start is called before the first frame update
-    void Start()
+    public class NoteManager : MonoBehaviour
     {
+        public Note notePrefab;
+        public Transform noteParent;
         
-    }
+        private void OnEnable()
+        {
+            EventHandler.InstantiateLevel += OnInstantiateLevel;
+            EventHandler.HitNoteEvent += OnHitNoteEvent;
+        }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        private void OnDisable()
+        {
+            EventHandler.InstantiateLevel -= OnInstantiateLevel;
+            EventHandler.HitNoteEvent -= OnHitNoteEvent;
+        }
+
+        private void OnInstantiateLevel(ChartDetails chartDetails)
+        {
+            foreach (var note in chartDetails.notes)
+            {
+                notePrefab._details = note;
+                Instantiate(notePrefab,new Vector3(note.pos * 10, 0, note.time * Settings.maximumNoteRange), Quaternion.identity, noteParent);
+            }
+        }
+        private void OnHitNoteEvent(Note note)
+        {
+            Destroy(note);
+        }
+
     }
 }

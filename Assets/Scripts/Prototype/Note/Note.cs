@@ -1,8 +1,12 @@
+/*
+ * History:
+ *      2022.07.25  CREATED
+ */
 using UnityEngine;
 
 namespace Plutono.Song
 {
-    //GameObject on the scene
+    //class Note -- GameObject on the scene.
     public class Note : MonoBehaviour
     {
         public NoteDetails _details;

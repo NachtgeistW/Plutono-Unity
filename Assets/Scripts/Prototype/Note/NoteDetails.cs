@@ -1,12 +1,10 @@
 /*
- * class NoteDetails
- *
  * History:
  *      2021.03.07  CREATED
  *      2021.03.19  ADD function ToJsonNote() and variable IsShown
  *      2021.04.04  ADD enum NoteType; DELETE function ToJsonNote()
  *      2021.10.10  RENAME from GameNote to GameNoteModel
- *      2021.10.10  RENAME from GameNoteModel to NoteDetails
+ *      2022.07.25  RENAME from GameNoteModel to NoteDetails
  */
 
 using System.Collections.Generic;
@@ -15,9 +13,9 @@ using Newtonsoft.Json;
 
 namespace Plutono.Song
 {
+    //class NoteDetails -- Store the data of a note in game.
     [System.Serializable]
-    //Store the data of a note in game.
-    public class NoteDetails
+    public sealed class NoteDetails
     {
         public uint id;         //the id of this note (start from 1)
         public float pos;       //the position of this note (from -2 to 2, or it won't be shown)

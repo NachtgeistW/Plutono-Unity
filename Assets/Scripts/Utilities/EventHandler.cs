@@ -15,9 +15,9 @@ public static class EventHandler
         HitNoteEvent?.Invoke(note);
     }
 
-    public static event Action InstantiateLevel;
-    public static void CallInstantiateLevel()
+    public static event Action<Plutono.Song.ChartDetails> InstantiateLevel;
+    public static void CallInstantiateLevel(Plutono.Song.ChartDetails chartDetails)
     {
-        InstantiateLevel?.Invoke();
+        InstantiateLevel?.Invoke(chartDetails);
     }
 }

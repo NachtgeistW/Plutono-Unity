@@ -1,17 +1,14 @@
 /* 
- * class PianoNoteView -- Store the appearance of a piano note in game.
- *
- *      This class includes the id, type, position, size, time, piano sounds property.
- *
  * History:
- *      2021.12.20  CREATED
+ *      2022.07.22  CREATED
  */
 
 using UnityEngine;
 
 namespace Plutono.Song
 {
-    public class ExplosionRenderer : MonoBehaviour
+    //class Explosion -- Control the note explosion effect on hitting.
+    public class Explosion : MonoBehaviour
     {
         [SerializeField] Animator explosionAnim;
 
