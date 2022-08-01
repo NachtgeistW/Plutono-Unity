@@ -18,6 +18,6 @@ namespace Plutono.Song
         public List<float> beats = new();       //beats: List<float>, used to quantize the note.
         public string chartDesigner = "";       //chartDesigner: string, the name of the chart maker
         public string level = "";               //level: string, the level of a song.
-        public List<NoteDetails> notes = new(); //notes: List<NoteDetails>, stores the information of the notes in a chart
+        public List<NoteDetail> noteDetails = new(); //notes: List<NoteDetails>, stores the information of the notes in a chart
     }
 }

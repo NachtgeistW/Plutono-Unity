@@ -359,7 +359,7 @@ static NativeAudioBufferIdPair* nabips;
     else
     {
         //throw?
-        [NSException raise:@"Native Audio Error" format:@"Your audio is not either 1 or 2 channels!"];
+        [NSException raise:@"Native Audio Error" format:@"Your audio is neither 1 nor 2 channels!"];
     }
     
     ALuint bufferIdL;
@@ -765,6 +765,6 @@ extern "C" {
 
     int _GetNativeSource(int index)
     {
-        [NativeAudio GetNativeSource:index];
+        return [NativeAudio GetNativeSource:index];
     }
 }

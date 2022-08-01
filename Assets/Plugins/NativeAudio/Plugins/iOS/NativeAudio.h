@@ -38,8 +38,7 @@ typedef struct
 + (int)Initialize;
 + (int)LoadAudio:(char *)soundUrl resamplingQuality:(int)resamplingQuality;
 + (int)SendByteArray:(char *)audioData audioSize:(int)audioSize channels:(int)channel samplingRate:(int)samplingRate resamplingQuality:(int)resamplingQuality;
-+ (int)PrepareAudio:(int)alBufferIndex IntoNativeSourceIndex:(int)nativeSourceIndex;
-+ (int)PlayAudio:(int)alBufferIndex NativeSourceIndex:(int)nativeSourceIndex Adjustment:(NativeAudioPlayAdjustment)playAdjustment;
++ (void)PrepareAudio:(int)alBufferIndex IntoNativeSourceIndex:(int)nativeSourceIndex;
 + (void)PlayAudioWithNativeSourceIndex:(int)nativeSourceIndex Adjustment:(NativeAudioPlayAdjustment)playAdjustment;
 + (void)UnloadAudio:(int)index;
 + (float)LengthByAudioBuffer:(int)index;

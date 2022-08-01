@@ -37,8 +37,11 @@ namespace Plutono.Transition
     /// <returns></returns>
     private IEnumerator Transition(string sceneName)
     {
+        EventHandler.CallBeforeSceneLoadedEvent();
         yield return SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene());
+        
         yield return LoadSceneAndSetActivate(sceneName);
+        EventHandler.CallAfterSceneLoadedEvent();
     }
 
     /// <summary>

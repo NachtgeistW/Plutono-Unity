@@ -1,20 +1,30 @@
 # Native Audio
 
-Thank you for purchasing a license of Native Audio!
-http://www.exceed7.com/native-audio
+**Thank you for purchasing a license of Native Audio!**
 
-**Questions/Problems/Suggestions** : 5argon@exceed7.com
-**Unity Forum** : http://forum.unity3d.com/threads/526837/
-**Discord** : https://discord.gg/8gthuWA
+Lower audio latency via direct unmixed audio stream at native side.
 
-## How to use Native Audio
+So your Unity game outputs WAY slower audio than other apps even on the same device? Turns out, Unity adds as much as 79% of the total latency you hear. Your devices can do better.
 
-With internet connection you should visit : http://www.exceed7.com/native-audio
+Unity won't let you use only a subset of its hard-wired audio pipeline. But with Native Audio we can go native and make as much compromises as we want. Simplify, take dirty shortcuts, and aim for the lowest latency. Sacrificing functions and convenience that Unity was designed for as a friendly game engine.
 
-Without internet connection, the website mentioned was generated from files in [a hidden folder](./Documentation~/index.md). Currently you may see it in a zipped form `Documentation~.zip`, because Asset Store do not support publishing unimported folders yet so I have to zip them to make them go together.
+## Links and contacts
 
-Please unzip it to access the documentation. Also you can unzip `Samples~.zip` to access unimported samples, which you can copy them to your project to make them actually import.
+- Website : https://exceed7.com/native-audio
+- E-mail : 5argon@exceed7.com
+- Discord : https://discord.gg/8gthuWA
 
-After you get a `Documentation~` folder, you can read them in their Markdown form from your code editor. Markdowns are human readable by design. They won't be imported to Unity too, as the folder [has a trailing `~`](https://docs.unity3d.com/Manual/SpecialFolders.html). It is great because Unity will not create `.meta` files for them and not import tutorial texts and images, they are not a part of your game. The same goes to unzipped `Sample~` folder, they are not supposed to import until you want to see them. This format is currently the best practice.
+## Requirements
 
-With an IDE like Visual Studio Code, you can use "Markdown: Open Preview to the Side" to even display a nicely rendered Markdown with images working properly. Navigate by clicking on different files on the folder tree.
+Requires Unity 2019.4 LTS or newer. Only iOS and Android build target. (It compiles in other build targets as well, but the methods will logs error if called.)
+
+Only works at runtime. You have to provide your own wrapper such as #if switches if you want to hear things non-natively. In Unity editor it counts as either Windows or macOS platform, and Native Audio has no Windows or macOS support. All methods throw [`NotSupportedException`](https://docs.microsoft.com/en-us/dotnet/api/system.notsupportedexception) if executed in non-supported platforms.
+
+## Documentation 
+
+Online documentation is available at : https://exceed7.com/native-audio.
+
+Without internet access, there are also **offline documentation and samples** included in this package.
+
+1. Unzip **Documentation~.zip** and **Samples~.zip** to get **unimporting folders** named `Documentation~` and `Samples~`.
+2. Inside `Documentation~`, you can read an entire documentation website completely offline with any Markdown reader by starting at `index.md`. All links and images works like on the website.

@@ -3,6 +3,59 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+# [7.0.0] - 2022-01-15
+
+Despite the front SemVer number moving up, this update is minor (but technically breaking for some users). Asset Store is now [moving along with editor's LTS cycle](https://forum.unity.com/threads/asset-store-following-unity-editor-lts-cycle-final-call-for-2018-x-please-update-your-assets.1014994), only accepting new submission on the lowest LTS and accepting updates from the most recent fallen off LTS.
+
+2018 LTS is already going away, and next in queue is 2019 LTS. I had also evaluated that 2019 LTS [is the best version](https://gametorrahod.com/asset-store-upm-package-lts/) for publishing packages right now. Therefore, Native Audio is moving to minimum 2019 LTS in this version.
+
+## Changed
+
+- Refactored all XML code documentation. Notably the correct usage of `<para></para>` to give you paragraphs instead of wall of texts, bullet points using `<list><item></item></list>` to render correctly, and inline code wrapped with `<c></c>`
+- [Android] `NativeAudio.aar` rebuilt with `compileSdkVersion 29`, `targetSdkVersion 29`. (Up from 26, right now Google Play requires 29 or higher for app submission, though this is not an app.)
+- [iOS] `libsamplerate` folder that is inside `Plugins/iOS` folder is modified from the original, now all executables included originally are removed. This is becase the new Asset Store detects executables and automatically rejects the submission.
+
+## Fixed
+
+- [Android] Setting volume to exactly 0 was not working because it was thrown into `log10(volume)` function. Now volume 0 is really 0.
+- [iOS] Remove unused function in `NativeAudio.h`
+- [iOS] Fixed wrong return type of `PrepareAudio` in `NativeAudio.mm`.
+- [iOS] Fixed wrong returning value of `GetNativeSource` in `NativeAudio.mm`.
+
+# [6.0.0] - 2020-05-01
+
+Major SemVer version bump means breaking, incompatible change.
+
+## `InitializationOptions.androidMinimumBufferSize` changed to `androidBufferSize`
+
+**This is not just a rename!**
+
+The meaning of "minimum" is that you may not get exactly the number you want. That is what it was.
+
+Previously there exist a filter that clamp the buffer size to device's native buffer size if it was too low. It cause problem when some phone indicate its own buffer size for too high and now developer has no way to push the buffer size to smaller value that could result in better latency.
+
+The filter also optimize the number that is higher that native buffer size to become the next multiple of native buffer size to reduce jitter. (e.g. native buffer size is 256 but you want 258 for some reason, the filter change it to 512.)
+
+Now, it honors any positive number you give it and initialize with exactly that buffer size. Note that a buffer size too low now potentially crash the application. The change is to address some phone which could actually push to lower number, because it overestimate its own safe buffer size.
+
+One magic remains, which is if you give it negative value it will turn that into device's native buffer size as negative size does not make sense. This make the previous -1 value still behave the same way. What changed is that if you give it absurdly low number like 1 now it really use 1 as a buffer size. (The audio will be completely destroyed or crash in that case.) Also odd number get +1 into the next nearest even number due to technical reasons.
+
+The code error after upgrading to this version should guide you to everywhere in the game that you use custom buffer size.
+
+## Added `InitializationOptions.OptimizeBufferSize(bufferSize)`
+
+That filter is now moved to a static helper method : `InitializationOptions.OptimizeBufferSize(bufferSize)` for you to **manually use**, then pass the returned number to initialize to get the old behaviour.
+
+## Added `NativeAudio.GetNativeSourceCount()`
+
+This is useful in a case like you want to completely stop all audio played with Native Audio before unloading audio to prevent crash where the play head now play unloaded memory. Therefore you need to get **all** native sources and stop each one. With this count you could do so in a `for` loop.
+
+On Android, it returns as many as you actually got from initialization. (e.g. if you requested 999 and actually get 15, then this returns 15) For iOS it is currently fixed to 15 as that is how OpenAL works. It gives you a set amount of sources.
+
+## Fixed
+
+- Few samples of the beginning of audio were missing in each play equal to how large your buffer size is. This is fixed now. (off-by-one error, whoops..)
+
 # [5.0.0] - 2019-12-01
 
 Major SemVer version bump means breaking, incompatible change.

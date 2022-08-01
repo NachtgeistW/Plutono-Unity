@@ -22,7 +22,7 @@ namespace Plutono.Song
             EventHandler.HitNoteEvent -= OnHitNoteEvent;
         }
 
-        private void OnHitNoteEvent(Note note)
+        private void OnHitNoteEvent(Note note, float curGameTime, GameStatus status)
         {
             explosionAnim.SetBool("IsHit", true);
         }

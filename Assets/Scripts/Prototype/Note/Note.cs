@@ -9,7 +9,7 @@ namespace Plutono.Song
     //class Note -- GameObject on the scene.
     public class Note : MonoBehaviour
     {
-        public NoteDetails _details;
+        public NoteDetail _details;
 
         [SerializeField] private SpriteRenderer _blankSpriteRenderer;
         [SerializeField] private SpriteRenderer _pianoSpriteRenderer;

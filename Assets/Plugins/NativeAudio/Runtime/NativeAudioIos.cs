@@ -1,21 +1,19 @@
-// Native Audio
-// 5argon - Exceed7 Experiments
-// Problems/suggestions : 5argon@exceed7.com
-
+#if UNITY_IOS
 using System;
 using System.Runtime.InteropServices;
+#endif
 
 namespace E7.Native
 {
     public static partial class NativeAudio
     {
 #if UNITY_IOS
-
         [DllImport("__Internal")]
         internal static extern int _Initialize();
 
         [DllImport("__Internal")]
-        internal static extern int _SendByteArray(IntPtr byteArrayInput, int byteSize, int channels, int samplingRate, LoadOptions.ResamplingQuality resamplingQuality);
+        internal static extern int _SendByteArray(IntPtr byteArrayInput, int byteSize, int channels, int samplingRate,
+            LoadOptions.ResamplingQuality resamplingQuality);
 
         [DllImport("__Internal")]
         internal static extern int _LoadAudio(string soundUrl, int resamplingQuality);
@@ -24,7 +22,8 @@ namespace E7.Native
         internal static extern void _PrepareAudio(int audioBufferIndex, int nativeSourceIndex);
 
         [DllImport("__Internal")]
-        internal static extern void _PlayAudioWithNativeSourceIndex(int nativeSourceIndex, NativeSource.PlayOptions playOptions);
+        internal static extern void _PlayAudioWithNativeSourceIndex(int nativeSourceIndex,
+            NativeSource.PlayOptions playOptions);
 
         [DllImport("__Internal")]
         internal static extern void _UnloadAudio(int audioBufferIndex);
