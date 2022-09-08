@@ -167,8 +167,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ffadff7439aa50459e1498e70c98216, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  time: 0
-  note: {fileID: 0}
+  curTime: 0
+  notesOnScreen: []
 --- !u!1 &354828473
 GameObject:
   m_ObjectHideFlags: 0
@@ -544,7 +544,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u7121\u8272\u3067\u900F\u660E\u306A\u79C1\u305F\u3061\u306F\u4E92\u3044\u306B\u878D\u5408\u3057\u306A\u304C\u3089\u3082\u3001\u4ED6\u65B9\u3067\u6D88\u3048\u306A\u3044\u8840\u6DB2\u3068\u5DF1\u306E\u534A\u8EAB\u3092\u5E0C\u6C42\u3059\u308B\u3002\n\u3060\u304B\u3089\u3053\u305D\u3001\u79C1\u306F\u4E92\u3044\u3092\u89E3\u4F53\u3055\u305B\u3089\u308C\u308B\u307B\u3069\u306E\u3001\u8840\u6DB2\u305F\u3061\u306E\u63A5\u89E6\u3068\u6D88\u5931\u3092\u671B\u3093\u3067\u3044\u308B"
+  m_text: "\u5354\u594F\u66F2\u7B2C4\u756A\u30D8\u77ED\u8ABF RV 297\u300C\u51AC\u300D\u3088\u308A\u7B2C\u4E00\u697D\u7AE0"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1b23d99fa2767534685be59f2b7f578e, type: 2}
   m_sharedMaterial: {fileID: 5322532407355848675, guid: 1b23d99fa2767534685be59f2b7f578e, type: 2}
@@ -571,7 +571,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 43.2
+  m_fontSize: 60
   m_fontSizeBase: 72
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -581,7 +581,7 @@ MonoBehaviour:
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
   m_textAlignment: 65535
-  m_characterSpacing: -3
+  m_characterSpacing: 0
   m_wordSpacing: -10
   m_lineSpacing: -20
   m_lineSpacingMax: 0

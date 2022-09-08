@@ -44,6 +44,20 @@ public sealed class GameStatus
         ComboScore = 0;
     }
 
+    public void Reset()
+    {
+        IsStarted = false;
+        IsPlaying = false;
+        IsCompleted = false;
+        IsFailed = false;
+        BasicScore = 0;
+        ComboScore = 0;
+        Combo = 0;
+        MaxCombo = 0;
+        ClearCount = 0;
+        Judgments.Clear();
+    }
+
     /// <summary>
     /// 当note判定完毕后调用，存储这个note的判定并计算分数
     /// </summary>
@@ -54,16 +68,21 @@ public sealed class GameStatus
     {
         // Status check
         if (IsFailed || IsCompleted) return;
-        if (Judgments[noteDetail.id].IsJudged)
+        Judgments.TryGetValue(noteDetail.id, out NoteJudgment noteJudgmentCheck);
+
+        if (noteJudgmentCheck != null && noteJudgmentCheck.IsJudged)
         {
             Debug.LogWarning($"Trying to judge note {noteDetail.id} which is already judged.");
             return;
         }
 
         ClearCount++;
-        Judgments[noteDetail.id].IsJudged = true;
-        Judgments[noteDetail.id].Grade = grade;
-        Judgments[noteDetail.id].Error = error;
+        Judgments.Add(noteDetail.id, new NoteJudgment
+        {
+            Grade = grade,
+            Error = error,
+            IsJudged = true
+        });
 
         // Combo
         var miss = grade == NoteGrade.Bad || grade == NoteGrade.Miss;
@@ -129,4 +148,5 @@ public class NoteJudgment
     public bool IsJudged;
     public NoteGrade Grade;
     public double Error;
+    private bool v;
 }

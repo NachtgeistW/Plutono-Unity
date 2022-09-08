@@ -20,19 +20,19 @@ namespace Plutono.Song
             {
                 GameMode.Stelo => time switch
                 {
-                    <= 0.35f => NoteGrade.Perfect,
-                    <= 0.5f => NoteGrade.Good,
-                    <= 0.7f => NoteGrade.Bad,
+                    <= Settings.SteloMode.perfectDeltaTime => NoteGrade.Perfect,
+                    <= Settings.SteloMode.goodDeltaTime => NoteGrade.Good,
+                    <= Settings.SteloMode.badDeltaTime => NoteGrade.Bad,
                     _ => NoteGrade.Miss
                 },
-                GameMode.Arbo or GameMode.Floro => time switch
+                GameMode.Arbo or GameMode.Pluvo => time switch
                 {
-                    <= 0.5f => NoteGrade.Perfect,
-                    <= 0.7f => NoteGrade.Good,
-                    <= 1.0f => NoteGrade.Bad,
+                    <= Settings.ArboMode.perfectDeltaTime => NoteGrade.Perfect,
+                    <= Settings.ArboMode.goodDeltaTime => NoteGrade.Good,
+                    <= Settings.ArboMode.badDeltaTime => NoteGrade.Bad,
                     _ => NoteGrade.Miss
                 },
-                //TODO: Finish
+                //TODO: Finish other mode.
                 GameMode.Persona => throw new NotImplementedException(),
                 GameMode.Ekzerco => throw new NotImplementedException(),
                 _ => throw new NotImplementedException(),
@@ -49,5 +49,6 @@ namespace Plutono.Song
                 _ => 0,
             };
         }
+        
     }
 }

@@ -3,6 +3,7 @@
  *      2022.07.25  CREATED
  */
 using UnityEngine;
+using DG.Tweening;
 
 namespace Plutono.Song
 {
@@ -29,6 +30,14 @@ namespace Plutono.Song
                     _slideSpriteRenderer.gameObject.SetActive(true);
                     break;
             }
+
+            FallingDown();
+        }
+
+        public void FallingDown()
+        {
+            gameObject.transform.position = new Vector3(_details.pos * 10, 0, Settings.maximumNoteRange);
+            gameObject.transform.DOMoveZ(32, Settings.NoteFallTime(10)).SetEase(Ease.Linear);
         }
     }
 }

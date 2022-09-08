@@ -28,7 +28,7 @@ public class UpperStatic : MonoBehaviour
                 modeText.text = "Arbo";
                 modeText.color = Color.white;
                 break;
-            case GameMode.Floro:
+            case GameMode.Pluvo:
                 modeText.text = "Floro";
                 modeText.color = new Color(171, 149, 174);
                 break;

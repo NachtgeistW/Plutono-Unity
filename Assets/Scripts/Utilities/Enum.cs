@@ -2,7 +2,7 @@
 {
     Stelo,      //"Star", Plutono
     Arbo,       //"Tree", De1
-    Floro,      //"Flower", De2
+    Pluvo,      //"Rain", De2
     Persona,    //"Personal", custom judgment
     Ekzerco     //"Exercise", practice mode
 }

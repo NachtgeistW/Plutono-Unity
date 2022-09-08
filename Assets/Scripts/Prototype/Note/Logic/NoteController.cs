@@ -1,4 +1,5 @@
-//¿ØÖÆnoteµÄÉú³É£¬ÅÐ¶¨
+//ï¿½ï¿½ï¿½ï¿½noteï¿½ï¿½ï¿½ï¿½ï¿½É£ï¿½ï¿½Ð¶ï¿½
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -30,18 +31,21 @@ namespace Plutono.Song
                 OnCreatePooledItem, OnTakeFromPool, OnReturnedToPool, OnDestroyPooledItem, collectionChecks, maxPoolSize);
         }
 
-        private void InstantiateNote(ChartDetail chartDetails)
+        private void InstantiateNote(List<NoteDetail> noteDetails, List<Note> notesOnScreen)
         {
-            foreach (var noteDetail in chartDetails.noteDetails)
+            foreach (var noteDetail in noteDetails)
             {
                 notePrefab._details = noteDetail;
-                notePool.Get();
+                notesOnScreen.Add(notePool.Get());
             }
         }
-        private void OnHitNoteEvent(Note note, float curGameTime, GameStatus status)
+        private void OnHitNoteEvent(List<Note> notesOnScreen, Note note, float curGameTime, GameStatus status)
         {
+            //TODO: Prevent judgment if there aren't any note on the screen
             var grade = NoteGradeJudgment.JudgeNoteGrade(note._details, curGameTime, status.Mode);
             status.Judge(note._details, grade, 0);
+            notesOnScreen.Remove(note);
+            //TODO: Wait for the hitting animation to finish before releasing the note.
             notePool.Release(note);
         }
 
@@ -64,6 +68,7 @@ namespace Plutono.Song
         void OnTakeFromPool(Note note)
         {
             note.gameObject.SetActive(true);
+            note.FallingDown();
         }
 
         void OnDestroyPooledItem(Note note)
