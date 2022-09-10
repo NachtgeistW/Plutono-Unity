@@ -35,4 +35,10 @@ public static class EventHandler
     
     public static event Action<Plutono.Song.Note, float, GameStatus> MissNoteEvent;
     public static void CallMissNoteEvent(Plutono.Song.Note note, float curGameTime, GameStatus status) => MissNoteEvent?.Invoke(note, curGameTime, status);
+
+    /// <summary>
+    /// Called when the note animation is finished.
+    /// </summary>
+    public static event Action<Plutono.Song.Note> ExecuteActionAfterNoteAnimate;
+    public static void CallExecuteActionAfterNoteAnimate(Plutono.Song.Note note) => ExecuteActionAfterNoteAnimate?.Invoke(note);
 }

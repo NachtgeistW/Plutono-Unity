@@ -17,12 +17,14 @@ namespace Plutono.Song
         {
             EventHandler.InstantiateLevel += InstantiateNote;
             EventHandler.HitNoteEvent += OnHitNoteEvent;
+            EventHandler.ExecuteActionAfterNoteAnimate += OnExecuteActionAfterNoteAnimate;
         }
 
         private void OnDisable()
         {
             EventHandler.InstantiateLevel -= InstantiateNote;
             EventHandler.HitNoteEvent -= OnHitNoteEvent;
+            EventHandler.ExecuteActionAfterNoteAnimate -= OnExecuteActionAfterNoteAnimate;
         }
 
         private void Start()
@@ -41,16 +43,18 @@ namespace Plutono.Song
         }
         private void OnHitNoteEvent(List<Note> notesOnScreen, Note note, float curGameTime, GameStatus status)
         {
-            //TODO: Prevent judgment if there aren't any note on the screen
+            //FIXME: Prevent judgment if there aren't any note on the screen
             var grade = NoteGradeJudgment.JudgeNoteGrade(note._details, curGameTime, status.Mode);
             status.Judge(note._details, grade, 0);
             notesOnScreen.Remove(note);
+        }
+
+        private void OnExecuteActionAfterNoteAnimate(Note note)
+        {
             //TODO: Wait for the hitting animation to finish before releasing the note.
             notePool.Release(note);
         }
-
-        // ObjectPool
-
+#region ObjectPool
         Note OnCreatePooledItem()
         {
             Note note = Instantiate(
@@ -75,5 +79,7 @@ namespace Plutono.Song
         {
             Destroy(note.gameObject);
         }
+#endregion
+
     }
 }

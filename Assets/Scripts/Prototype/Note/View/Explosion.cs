@@ -6,11 +6,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 namespace Plutono.Song
 {
     //class Explosion -- Control the note explosion effect on hitting.
     public class Explosion : MonoBehaviour
     {
+        Animator explosionAnim;
         private void OnEnable()
         {
             EventHandler.HitNoteEvent += OnHitNoteEvent;
@@ -23,8 +25,29 @@ namespace Plutono.Song
 
         private void OnHitNoteEvent(List<Note> notesOnScreen, Note note, float curGameTime, GameStatus status)
         {
-            var explosionAnim = note.GetComponent<Animator>();
+            //The Animation Event that be fired after playing explosion animation 
+            var explosionAnimEvent = new AnimationEvent
+            {
+                functionName = nameof(ExecuteAfterNoteAnimate),
+                objectReferenceParameter = note,
+                //The time waiting for the animation to finish
+                time = 0.25f
+            };
+
+            explosionAnim = note.GetComponent<Animator>();
+            var clip = explosionAnim.runtimeAnimatorController.animationClips[0];
+            clip.AddEvent(explosionAnimEvent);
+            //explosionAnim.Play("Base Layer.Hit Explosion", 0, 0f);
             explosionAnim.SetBool("IsHit", true);
+        }
+
+        // the function to be called as an event
+        private void ExecuteAfterNoteAnimate(Note note)
+        {
+            explosionAnim.Rebind();
+            //explosionAnim.Update(0f);
+            explosionAnim.SetBool("IsHit", false);
+            EventHandler.CallExecuteActionAfterNoteAnimate(note);
         }
     }
 }
