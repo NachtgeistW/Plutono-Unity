@@ -54,6 +54,7 @@ namespace Plutono.Song
             //TODO: Wait for the hitting animation to finish before releasing the note.
             notePool.Release(note);
         }
+
 #region ObjectPool
         Note OnCreatePooledItem()
         {
@@ -80,6 +81,5 @@ namespace Plutono.Song
             Destroy(note.gameObject);
         }
 #endregion
-
     }
 }

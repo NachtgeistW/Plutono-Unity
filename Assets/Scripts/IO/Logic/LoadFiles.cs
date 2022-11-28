@@ -1,16 +1,14 @@
-// /*
-//  * class ResourceManager -- Save and load resources (include charts, audios).
-//  *
-//  * Function
-//  *      void::RequestReadPermission -- request read permission in order to read files.
-//  *      List<string>::GetAllLocalSongList -- scan specific file paths and detect the chart.
-//  *      List<string>::InitializeApplication -- call the GetAllLocalSongList with different path by different platform.
-//  *
-//  * History
-//  *      2020.08.12  CREATE.
-//  *      2021.04.03  ADD InitializeApplication function
-//  *      2021.04.07  CHANGE the platformPath
-//  */
+// // /*
+// //  * Function
+// //  *      void::RequestReadPermission -- request read permission in order to read files.
+// //  *      List<string>::GetAllLocalSongList -- scan specific file paths and detect the chart.
+// //  *      List<string>::InitializeApplication -- call the GetAllLocalSongList with different path by different platform.
+// //  *
+// //  * History
+// //  *      2020.08.12  CREATE.
+// //  *      2021.04.03  ADD InitializeApplication function
+// //  *      2021.04.07  CHANGE the platformPath
+// //  */
 
 // using System;
 // using System.Collections.Generic;
@@ -25,6 +23,7 @@
 // namespace Plutono.IO
 // {
 //     [Serializable]
+//     //class LoadFiles -- Save and load resources (include charts, audios).
 //     public class LoadFiles
 //     {
 //         [Tooltip("//Resource directory of DeemoDIY 2.2 and 3.2")]

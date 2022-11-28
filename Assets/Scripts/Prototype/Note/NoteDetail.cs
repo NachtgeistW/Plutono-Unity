@@ -24,6 +24,9 @@ namespace Plutono.Song
         public NoteType type;   //is this note piano(0), slide(1) or blank(2)
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         [CanBeNull] public List<GamePianoSound> sounds;
+
+        public static object NoteType { get; internal set; }
+
         public bool IsShown => pos <= 2.0f && pos >= -2.0f;     //TRUE if this note should be shown
 
     }

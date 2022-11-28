@@ -31,13 +31,12 @@ namespace Plutono.Song
                 functionName = nameof(ExecuteAfterNoteAnimate),
                 objectReferenceParameter = note,
                 //The time waiting for the animation to finish
-                time = 0.25f
+                time = Settings.noteAnimationPlayingTime
             };
 
             explosionAnim = note.GetComponent<Animator>();
             var clip = explosionAnim.runtimeAnimatorController.animationClips[0];
             clip.AddEvent(explosionAnimEvent);
-            //explosionAnim.Play("Base Layer.Hit Explosion", 0, 0f);
             explosionAnim.SetBool("IsHit", true);
         }
 

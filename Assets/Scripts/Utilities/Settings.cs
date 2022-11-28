@@ -3,6 +3,7 @@ using UnityEngine;
 public static class Settings
 {
     //Note displaying
+    public const float noteAnimationPlayingTime = 0.25f;
     public const float noteReturnTime = 5.0f;
     public const float frameSpeed = 0.025f;
     public const float circleSize = 1.0f;
