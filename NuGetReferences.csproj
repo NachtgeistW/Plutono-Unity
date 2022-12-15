@@ -13,7 +13,6 @@
         <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="6.0.0" />
         <PackageReference Include="morelinq" Version="3.3.2" />
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
         
         <PackageReference Include="System.Collections.Immutable" Version="6.0.0" />
 
@@ -21,18 +20,12 @@
 
         <PackageReference Include="System.Text.Json" Version="6.0.3" />
 
-        <PackageReference Include="Unity.Interception" Version="5.11.1" />
-
         <PackageReference Include="Microsoft.Extensions.Configuration.Ini" Version="6.0.0" />
 
         <!--Unity ignored-->
-
         <PackageReference Include="System.Reflection.Emit" IncludeAssets="None" Version="4.7.0" />
-
         <PackageReference Include="System.Reflection.Emit.ILGeneration" IncludeAssets="None" Version="4.7.0" />
-
         <PackageReference Include="System.Runtime.InteropServices.WindowsRuntime" IncludeAssets="None" Version="4.3.0" />
-
         <!--Unity ignored-->
     </ItemGroup>
 

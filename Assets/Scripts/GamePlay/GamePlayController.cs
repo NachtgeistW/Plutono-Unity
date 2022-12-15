@@ -18,35 +18,35 @@ public class GamePlayController : MonoBehaviour
 
     private void Awake()
     {
-        rnd = new System.Random();
-        ChartDetail = new ChartDetail
-        {
-            level = "10 结月缘"
-        };
-        ChartDetail.noteDetails.Add(new NoteDetail
-        {
-            id = 1,
-            pos = rnd.Next(-2, 2),
-            size = 1.2f,
-            time = 1,
-            type = NoteType.Blank,
-        });
-        ChartDetail.noteDetails.Add(new NoteDetail
-        {
-            id = 2,
-            pos = rnd.Next(-2, 2),
-            size = 1.2f,
-            time = 2,
-            type = NoteType.Slide,
-        });
-        ChartDetail.noteDetails.Add(new NoteDetail
-        {
-            id = 3,
-            pos = rnd.Next(-2, 2),
-            size = 1.2f,
-            time = 3,
-            type = NoteType.Piano,
-        });
+        // rnd = new System.Random();
+        // ChartDetail = new ChartDetail
+        // {
+        //     level = "10 结月缘"
+        // };
+        // ChartDetail.noteDetails.Add(new NoteDetail
+        // {
+        //     id = 1,
+        //     pos = rnd.Next(-2, 2),
+        //     size = 1.2f,
+        //     time = 1,
+        //     type = NoteType.Blank,
+        // });
+        // ChartDetail.noteDetails.Add(new NoteDetail
+        // {
+        //     id = 2,
+        //     pos = rnd.Next(-2, 2),
+        //     size = 1.2f,
+        //     time = 2,
+        //     type = NoteType.Slide,
+        // });
+        // ChartDetail.noteDetails.Add(new NoteDetail
+        // {
+        //     id = 3,
+        //     pos = rnd.Next(-2, 2),
+        //     size = 1.2f,
+        //     time = 3,
+        //     type = NoteType.Piano,
+        // });
 
         Status = new GameStatus(this, GameMode.Pluvo);
     }
