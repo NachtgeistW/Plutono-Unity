@@ -1,7 +1,5 @@
 // /*
 //  * Function
-//  *      void::RequestReadPermission -- request read permission in order to read files.
-//  *      List<string>::GetAllLocalSongList -- scan specific file paths and detect the chart.
 //  *      List<string>::InitializeApplication -- call the GetAllLocalSongList with different path by different platform.
 //  *
 //  * History
@@ -24,6 +22,7 @@ namespace Plutono.IO
     //class LoadFiles -- Save and load resources (include charts, audios).
     public class LoadFiles
     {
+        //void::RequestReadPermission -- request read permission in order to read files.
         [Tooltip("//Resource directory of DeemoDIY 2.2 and 3.2")]
         public void RequestReadPermission()
         {
@@ -36,7 +35,8 @@ namespace Plutono.IO
             Permission.RequestUserPermission("android.permission.INTERNET");
         }
 
-        public List<Legacy.SongInfo> Initialize(string StoragePath)
+        //List<Legacy.LegacySongDetail> Initialize -- scan specific file paths and detect the chart.
+        public List<Legacy.LegacySongDetail> Initialize(string StoragePath)
         {
             if (string.IsNullOrEmpty(StoragePath))
                 StoragePath = Application.platform switch
@@ -53,8 +53,8 @@ namespace Plutono.IO
                         packPath => Directory.GetDirectories(packPath)
                             .Select(
                                 songPath => Directory.GetFiles(songPath, "*.ini"))
-                            .SelectMany(iniPaths => iniPaths.Select(ini => new Legacy.SongInfo(ini)))
-                    ) // get song info
+                            .SelectMany(iniPaths => iniPaths.Select(ini => new Legacy.LegacySongDetail(ini)))
+                    ) // get song detail
                     .ToList();
             }
             else

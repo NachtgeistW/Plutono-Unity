@@ -10,7 +10,6 @@ using System;
 public sealed class GameStatus
 {
     public GameMode Mode { get; set; }
-    public string Level { get; set; }
     public int NoteCount { get; set; }
     public bool IsStarted { get; set; }
     public bool IsPlaying { get; set; }
@@ -22,8 +21,8 @@ public sealed class GameStatus
     public int bCount; //bad
     public int mCount; //miss
 
-    public int ChartPlaySpeed { get; set; }
-    public int Combo { get; private set; }
+    public float ChartPlaySpeed { get; set; }
+    public int Combo { get; set; }
     public int MaxCombo { get; private set; }
     public int BasicScore { get; private set; }
     public int ComboScore { get; private set; }
@@ -34,7 +33,6 @@ public sealed class GameStatus
     public GameStatus(GamePlayController controller, GameMode mode)
     {
         Mode = mode;
-        Level = controller.ChartDetail.level;
         NoteCount = controller.ChartDetail.noteDetails.Count;
         IsStarted = false;
         IsPlaying = false;

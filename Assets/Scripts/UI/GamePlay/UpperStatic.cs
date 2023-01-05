@@ -16,8 +16,8 @@ public class UpperStatic : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
-        levelText.text = "Lv." + gamePlayController.Status.Level;
+        titleText.text = gamePlayController.SongSource.SongName;
+        levelText.text = "Lv." + gamePlayController.ChartDetail.level;
         //mode
         switch (gamePlayController.Status.Mode)
         {

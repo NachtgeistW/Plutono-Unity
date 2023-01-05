@@ -36,8 +36,8 @@ namespace Plutono.IO
             if (request == null)
                 return null;
 
-            Debug.Log(request.uri.Scheme);
-            Debug.Log(request.uri.OriginalString);
+//            Debug.Log(request.uri.Scheme);
+//            Debug.Log(request.uri.OriginalString);
 
             request.SendWebRequest();
             SpinWait.SpinUntil(() => request.isDone);

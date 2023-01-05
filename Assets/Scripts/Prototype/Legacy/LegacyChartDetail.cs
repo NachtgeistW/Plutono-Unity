@@ -45,7 +45,7 @@ namespace Plutono.Legacy
         /// </summary>
         /// <param name="jsonPath">the path of json file</param>
         /// <returns>A transferred LegacyChartDetail</returns>
-        public static LegacyChartDetail ToLegacyChartDetail(string jsonPath)
+        public static LegacyChartDetail JsonToLegacyChartDetail(string jsonPath)
         {
             var settings = new JsonSerializerSettings();
             settings.MetadataPropertyHandling = MetadataPropertyHandling.Ignore;

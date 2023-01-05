@@ -30,14 +30,13 @@ namespace Plutono.Song
                     _slideSpriteRenderer.gameObject.SetActive(true);
                     break;
             }
-
-            FallingDown();
         }
 
         public void FallingDown()
         {
+            //Force the note to back to the original position where it begins to fall down
             gameObject.transform.position = new Vector3(_details.pos * 10, 0, Settings.maximumNoteRange);
-            gameObject.transform.DOMoveZ(32, Settings.NoteFallTime(10)).SetEase(Ease.Linear);
+            gameObject.transform.DOMoveZ(0, Settings.NoteFallTime(10)).SetEase(Ease.Linear);
         }
     }
 }

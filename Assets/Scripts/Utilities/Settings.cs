@@ -45,7 +45,8 @@ public static class Settings
             9.5f => 0.15f,
             _ => 1.7f,
         };
-        return speed / 180.0f * maximumNoteRange;
+        //return speed / 180.0f * maximumNoteRange;
+        return speed * maximumNoteRange / 180.0f;
     }
     public static float perspectiveHorizontalScale = 7.5f;
 

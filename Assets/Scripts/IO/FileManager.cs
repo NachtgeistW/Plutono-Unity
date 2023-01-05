@@ -1,19 +1,17 @@
 namespace Plutono.IO
 {
     using System.Collections.Generic;
-    using UnityEngine;
     
-    public class FileManager : MonoBehaviour
+    public class FileManager : Singleton<FileManager>
     {
-        public List<Legacy.SongInfo> list;
         public string StoragePath;
-
+        public List<Plutono.Song.SongDetail> songSourceList;
         private LoadFiles loadFiles;
         private void Start()
         {
             loadFiles = new LoadFiles();
             loadFiles.RequestReadPermission();
-            list = loadFiles.Initialize(StoragePath);
+            loadFiles.Initialize(StoragePath).ForEach(song => songSourceList.Add(new Plutono.Song.SongDetail(song)));
         }
     }
 }

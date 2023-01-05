@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 namespace Plutono.Transition
 {
-    public class TransitionManager : MonoBehaviour
+    public class TransitionManager : Singleton<TransitionManager>
 {
     [SceneName]
     public string startSceneName = string.Empty;
