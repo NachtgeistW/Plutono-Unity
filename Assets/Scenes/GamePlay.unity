@@ -169,20 +169,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   StoragePath: C:\Users\night\OneDrive\code\CSharp-Project\Plutono\Assets\TestChart
+  songIndex: 6
+  chartIndex: 0
+  chartLatency: 0
+  songLatency: 300
   songSourceList: []
   curTime: 0
   passedFrameBeforeSynchronization: 0
   notesOnScreen: []
-  tempSongSource:
-    SongName: 
-    Composer: 
-    ChartDetails: []
-    MusicPath: 
-    Cover: {fileID: 0}
+  tempChartDetail:
+    beats: []
+    chartDesigner: 
+    level: 
+    noteDetails: []
   lastApperanceNoteIndex: 0
   passedTimeBeforeGeneration: 0
   audioSource: {fileID: 90558267}
-  playLatency: 5
   playStartTime: 0
 --- !u!82 &90558267
 AudioSource:

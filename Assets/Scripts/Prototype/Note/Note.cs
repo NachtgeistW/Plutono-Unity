@@ -16,20 +16,9 @@ namespace Plutono.Song
         [SerializeField] private SpriteRenderer _pianoSpriteRenderer;
         [SerializeField] private SpriteRenderer _slideSpriteRenderer;
 
-        private void Awake()
+        private void Start()
         {
-            switch (_details.type)
-            {
-                case NoteType.Blank:
-                    _blankSpriteRenderer.gameObject.SetActive(true);
-                    break;
-                case NoteType.Piano:
-                    _pianoSpriteRenderer.gameObject.SetActive(true);
-                    break;
-                case NoteType.Slide:
-                    _slideSpriteRenderer.gameObject.SetActive(true);
-                    break;
-            }
+            SetSpriteRenderer();
         }
 
         public void FallingDown()
@@ -37,6 +26,28 @@ namespace Plutono.Song
             //Force the note to back to the original position where it begins to fall down
             gameObject.transform.position = new Vector3(_details.pos * 10, 0, Settings.maximumNoteRange);
             gameObject.transform.DOMoveZ(0, Settings.NoteFallTime(10)).SetEase(Ease.Linear);
+        }
+
+        public void SetSpriteRenderer()
+        {
+            _blankSpriteRenderer.gameObject.SetActive(false);
+            _pianoSpriteRenderer.gameObject.SetActive(false);
+            _slideSpriteRenderer.gameObject.SetActive(false);
+            if (_details.IsShown)
+            {
+                switch (_details.type)
+                {
+                    case NoteType.Blank:
+                        _blankSpriteRenderer.gameObject.SetActive(true);
+                        break;
+                    case NoteType.Piano:
+                        _pianoSpriteRenderer.gameObject.SetActive(true);
+                        break;
+                    case NoteType.Slide:
+                        _slideSpriteRenderer.gameObject.SetActive(true);
+                        break;
+                }
+            }
         }
     }
 }

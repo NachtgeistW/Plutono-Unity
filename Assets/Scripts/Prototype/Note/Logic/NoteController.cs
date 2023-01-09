@@ -45,7 +45,7 @@ namespace Plutono.Song
                 notesOnScreen.Add(notePool.Get());
             }
         }
-        
+
         private void OnHitNoteEvent(List<Note> notesOnScreen, Note note, float curGameTime, GameStatus status)
         {
             //FIXME: Prevent judgment if there aren't any note on the screen
@@ -54,23 +54,21 @@ namespace Plutono.Song
 
         private void OnMissNoteEvent(List<Note> notesOnScreen, Note note, float curGameTime, GameStatus status)
         {
-            //FIXME: 全部被release后就再也没法出现在屏幕上
             notePool.Release(note);
             notesOnScreen.Remove(note);
         }
 
         private void OnExecuteActionAfterNoteAnimate(Note note)
         {
-            //TODO: Wait for the hitting animation to finish before releasing the note.
             notePool.Release(note);
         }
 
-#region ObjectPool
-            Note OnCreatePooledItem()
+        #region ObjectPool
+        Note OnCreatePooledItem()
         {
             Note note = Instantiate(
                 //notePrefab, new Vector3(notePrefab._details.pos * 10, 0, Settings.maximumNoteRange / notePrefab._details.time * Settings.NoteFallTime(gamePlayController.Status.ChartPlaySpeed)),Quaternion.identity, noteParent);  
-                notePrefab, new Vector3(notePrefab._details.pos * 10, 0, Settings.maximumNoteRange),Quaternion.identity, noteParent);  
+                notePrefab, new Vector3(notePrefab._details.pos * 10, 0, Settings.maximumNoteRange), Quaternion.identity, noteParent);
             return note;
         }
 
@@ -83,6 +81,10 @@ namespace Plutono.Song
         // Called when an item is taken from the pool using Get
         void OnTakeFromPool(Note note)
         {
+            //Set the new data of the note
+            note._details = notePrefab._details;
+            note.SetSpriteRenderer();
+            //Activate the note and make it fall down
             note.gameObject.SetActive(true);
             note.FallingDown();
         }
@@ -91,6 +93,6 @@ namespace Plutono.Song
         {
             Destroy(note.gameObject);
         }
-#endregion
+        #endregion
     }
 }

@@ -8,15 +8,21 @@ using System.Linq;
 
 public class GamePlayController : Singleton<GamePlayController>
 {
-    //Load File, delete them after testing
+    [Header("-Specify in Inspector-")]
     public string StoragePath;
-    public List<Plutono.Song.SongDetail> songSourceList;
+    public int songIndex;
+    public int chartIndex;
+    public float chartLatency;
+    public float songLatency;
+
+    //Load File, delete them after testing
+    public List<SongDetail> songSourceList;
     private LoadFiles loadFiles;
 
     //[HideInInspector]
     [Header("-Time-")]
     public float curTime = 0f;
-    public float StarOrResumeTime { get; set; }
+    public float StarOrResumeTime { get; internal set; }
 
     // Synchronize
     private double lastDspTime = -1;
@@ -25,20 +31,19 @@ public class GamePlayController : Singleton<GamePlayController>
     
     [Header("-Status-")]
     public List<Note> notesOnScreen;
-    public GameStatus Status{ get; private set; }
+    public GameStatus Status{ get; internal set; }
     
-    public ChartDetail ChartDetail { get; set; }
-    public SongDetail SongSource { get; set; }
+    public ChartDetail ChartDetail { get; internal set; }
+    public SongDetail SongSource { get; internal set; }
     
     public ChartDetail tempChartDetail;
-    
+
     public int lastApperanceNoteIndex = 0;
     private const float GenerationWaitingTime = 1.0f;
     public float passedTimeBeforeGeneration = 0;
 
     [Header("-Audio-")]
     public AudioSource audioSource;
-    public float playLatency;
     public float playStartTime;
 
 
@@ -50,8 +55,9 @@ public class GamePlayController : Singleton<GamePlayController>
         loadFiles.Initialize(StoragePath).ForEach(song => songSourceList.Add(new SongDetail(song)));
 
         //Song source
-        SongSource = songSourceList[2];
-        ChartDetail = SongSource.ChartDetails[0];
+        SongSource = songSourceList[songIndex]; //Aya
+        //SongSource = songSourceList[2]; //overtune
+        ChartDetail = SongSource.ChartDetails[chartIndex];
 
         tempChartDetail = ChartDetail;
 
@@ -64,15 +70,15 @@ public class GamePlayController : Singleton<GamePlayController>
         //Audio
         audioSource.clip = AudioClipFileManager.Read(SongSource.MusicPath);
 
-        //Time
-        StarOrResumeTime = Time.realtimeSinceStartup;
-        playStartTime = StarOrResumeTime + playLatency;
     }
 
     private void Start()
     {
+        //Time
+        StarOrResumeTime = Time.realtimeSinceStartup;
+        //playStartTime = StarOrResumeTime + songLatency;
         //Audio
-        audioSource.PlayScheduled(playStartTime);
+        audioSource.PlayScheduled(songLatency);
         
         //EventHandler.CallInstantiateNote(ChartDetail.noteDetails, noteObjectsOnScreen);
     }
@@ -89,7 +95,7 @@ public class GamePlayController : Singleton<GamePlayController>
         List<NoteDetail> notesToGenerate = new();
         while (lastApperanceNoteIndex < tempChartDetail.noteDetails.Count)
         {
-            if (tempChartDetail.noteDetails[lastApperanceNoteIndex].time < curTime - playStartTime)
+            if (tempChartDetail.noteDetails[lastApperanceNoteIndex].time < curTime - StarOrResumeTime - chartLatency)
             {
                 notesToGenerate.Add(tempChartDetail.noteDetails[lastApperanceNoteIndex]);
                 lastApperanceNoteIndex++;

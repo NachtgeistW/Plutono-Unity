@@ -17,25 +17,46 @@ using System.IO;
 namespace Plutono.Legacy
 {
     using Newtonsoft.Json;
+    using System.Linq;
 
     [System.Serializable]
     public class LegacyChartDetail
     {
         public float speed = 0.0f;
         public List<LegacyNoteDetail> notes = new();
-        //public List<Link> links = new();
+        public List<Link> links = new();
 
+        [System.Serializable]
+        public class Link
+        {
+            [JsonProperty(PropertyName = "notes")]
+            public List<Notes> notes;
+
+            [System.Serializable]
+            public class Notes
+            {
+                [JsonProperty(PropertyName = "$ref")]
+                public uint reference;
+            }
+        }
+        
         /// <summary>
         /// transfer LegacyChartDetail to the NoteDetail list
         /// </summary>
         /// <returns>A list containing transferred NoteDetail</returns>
         public List<Song.NoteDetail> ToNoteDetailList()
         {
-            var result = new List<Song.NoteDetail>();
-            foreach (var LegacyNote in notes)
+            var result = notes.Select(n => n.ToNoteDetail()).ToList();
+            result = result.OrderBy(n => n.time).ToList();
+            //判断黄条
+            foreach (var link in links)
             {
-                var gNote = LegacyNote.ToNoteDetail();
-                result.Add(gNote);
+                foreach (var note in link.notes)
+                {
+                    var targetNote = result.Find(x => x.id == note.reference);
+                    targetNote.type = Song.NoteType.Slide;
+                    targetNote.isLink = true;
+                }
             }
             return result;
         }
@@ -51,7 +72,8 @@ namespace Plutono.Legacy
             settings.MetadataPropertyHandling = MetadataPropertyHandling.Ignore;
             var r = new StreamReader(jsonPath);
             var json = r.ReadToEnd();
-            return JsonConvert.DeserializeObject<LegacyChartDetail>(json, settings);
+            var res = JsonConvert.DeserializeObject<LegacyChartDetail>(json, settings);
+            return res;
         }
     }
 

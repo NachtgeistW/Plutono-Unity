@@ -41,8 +41,8 @@ namespace Plutono.Legacy
                     chartDesigner = IniInfo.ChartDesigner
                 };
                 IEnumerable<NoteDetail> loadJson(string path) =>
-                    LegacyChartDetail.JsonToLegacyChartDetail(path).notes.Select(n => n.ToNoteDetail());
-                    
+                    LegacyChartDetail.JsonToLegacyChartDetail(path).ToNoteDetailList();
+                
                 if (File.Exists(path)) chartDetail.noteDetails = loadJson(path).ToList();
                 else
                 {

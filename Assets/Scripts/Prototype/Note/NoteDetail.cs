@@ -10,6 +10,7 @@
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
+using Plutono.Legacy;
 
 namespace Plutono.Song
 {
@@ -24,6 +25,10 @@ namespace Plutono.Song
         public NoteType type;   //is this note piano(0), slide(1) or blank(2)
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         [CanBeNull] public List<GamePianoSound> sounds;
+        //slide
+        public bool isLink = false;
+        public int prevLink = -1;
+        public int nextLink = -1;
 
         public static object NoteType { get; internal set; }
 
@@ -43,7 +48,7 @@ namespace Plutono.Song
         public short pitch; //p
         public short volume; //v
 
-        //public static GamePianoSound FromJsonPianoSound(JsonPianoSound sound)
-        //    => new GamePianoSound() { delay = sound.w, duration = sound.d, pitch = sound.p, volume = sound.v };
+        public static GamePianoSound FromLegacyPianoSound(LegacyPianoSound sound)
+            => new() { delay = sound.w, duration = sound.d, pitch = sound.p, volume = sound.v };
     }
 }

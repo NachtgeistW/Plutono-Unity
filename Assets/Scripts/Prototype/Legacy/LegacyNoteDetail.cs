@@ -17,6 +17,21 @@ using Plutono.Song;
 namespace Plutono.Legacy
 {
     /// <summary>
+    /// Store the information of piano sound on a note.
+    /// This class includes the delay, duration, pitch and volume property.
+    /// </summary>
+    [System.Serializable]
+    public sealed class LegacyPianoSound
+    {
+        public float w; //w
+        public float d; //d
+        public short p; //p
+        public short v; //v
+
+        //public LegacyPianoSound ToJson() => new() { w = w, d = d, p = p, v = v };
+    }
+    
+    /// <summary>
     /// Store the information of a note from json.
     /// This class includes the id, type, position, size, time, shift, piano sounds and "is a link" property.
     /// If it is in a link, it also use prevLink and nextLink.
@@ -38,7 +53,7 @@ namespace Plutono.Legacy
         [CanBeNull] public LegacyPianoSound[] sounds;
         public uint type;   //is always 0
 
-        public LegacyNoteDetail ToJson() => new LegacyNoteDetail
+/*        public LegacyNoteDetail ToJson() => new()
         {
             pos = pos,
             size = size,
@@ -46,20 +61,21 @@ namespace Plutono.Legacy
             type = type,
             _time = time,
             time = time,
-            //sounds = sounds.Select(sound => sound.ToJson()).ToArray()
+            sounds = sounds.Select(sound => sound.ToJson()).ToArray()
         };
-
+*/
         /// <summary>
         /// transfer LegacyNoteDetail to NoteDetail
         /// </summary>
         /// <returns>new NoteDetail data</returns>
-        public NoteDetail ToNoteDetail() => new NoteDetail
+        public NoteDetail ToNoteDetail() => new()
         {
             id = Id,
             pos = pos,
             size = size,
-            time = time,
-            //TODO:判断黄条
+            time = _time,
+            //初步判断note类型。因为黄条需要依靠LegacyChartDetail里的Link做判断，
+            //所以黄条的检测放在LegacyChartDetail.ToNoteDetailList()中
             type = sounds != null ? NoteType.Piano : NoteType.Blank,
         };
     }
@@ -69,19 +85,4 @@ namespace Plutono.Legacy
             [CanBeNull] public List<JsonNoteModel> notes;
         }
     */
-
-    /// <summary>
-    /// Store the information of piano sound on a note.
-    /// This class includes the delay, duration, pitch and volume property.
-    /// </summary>
-    [System.Serializable]
-    public sealed class LegacyPianoSound
-    {
-        public float w; //w
-        public float d; //d
-        public short p; //p
-        public short v; //v
-
-        public LegacyPianoSound ToJson() => new LegacyPianoSound() { w = w, d = d, p = p, v = v };
-    }
 }
