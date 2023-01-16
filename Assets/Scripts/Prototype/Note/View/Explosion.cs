@@ -23,7 +23,7 @@ namespace Plutono.Song
             EventHandler.HitNoteEvent -= OnHitNoteEvent;
         }
 
-        private void OnHitNoteEvent(List<Note> notesOnScreen, Note note, float curGameTime, GameStatus status)
+        private void OnHitNoteEvent(List<Note> notesOnScreen, Note note, double curGameTime, GameStatus status)
         {
             //The Animation Event that be fired after playing explosion animation 
             var explosionAnimEvent = new AnimationEvent

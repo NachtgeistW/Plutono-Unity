@@ -12,7 +12,7 @@ public sealed class GameStatus
     public GameMode Mode { get; set; }
     public int NoteCount { get; set; }
     public bool IsStarted { get; set; }
-    public bool IsPlaying { get; set; }
+    public bool IsPaused { get; set; }
     public bool IsCompleted { get; set; }
     public bool IsFailed { get; set; }
 
@@ -35,7 +35,7 @@ public sealed class GameStatus
         Mode = mode;
         NoteCount = controller.ChartDetail.noteDetails.Count;
         IsStarted = false;
-        IsPlaying = false;
+        IsPaused = false;
         IsCompleted = false;
         IsFailed = false;
         BasicScore = 0;
@@ -45,7 +45,7 @@ public sealed class GameStatus
     public void Reset()
     {
         IsStarted = false;
-        IsPlaying = false;
+        IsPaused = false;
         IsCompleted = false;
         IsFailed = false;
         BasicScore = 0;

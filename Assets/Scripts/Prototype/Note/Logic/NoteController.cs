@@ -46,13 +46,13 @@ namespace Plutono.Song
             }
         }
 
-        private void OnHitNoteEvent(List<Note> notesOnScreen, Note note, float curGameTime, GameStatus status)
+        private void OnHitNoteEvent(List<Note> notesOnScreen, Note note, double curGameTime, GameStatus status)
         {
             //FIXME: Prevent judgment if there aren't any note on the screen
             notesOnScreen.Remove(note);
         }
 
-        private void OnMissNoteEvent(List<Note> notesOnScreen, Note note, float curGameTime, GameStatus status)
+        private void OnMissNoteEvent(List<Note> notesOnScreen, Note note, double curGameTime, GameStatus status)
         {
             notePool.Release(note);
             notesOnScreen.Remove(note);
@@ -68,7 +68,7 @@ namespace Plutono.Song
         {
             Note note = Instantiate(
                 //notePrefab, new Vector3(notePrefab._details.pos * 10, 0, Settings.maximumNoteRange / notePrefab._details.time * Settings.NoteFallTime(gamePlayController.Status.ChartPlaySpeed)),Quaternion.identity, noteParent);  
-                notePrefab, new Vector3(notePrefab._details.pos * 10, 0, Settings.maximumNoteRange), Quaternion.identity, noteParent);
+                notePrefab, new Vector3((float)(notePrefab._details.pos * 10), 0, Settings.maximumNoteRange), Quaternion.identity, noteParent);
             return note;
         }
 

@@ -12,22 +12,23 @@ public class GamePlayController : Singleton<GamePlayController>
     public string StoragePath;
     public int songIndex;
     public int chartIndex;
-    public float chartLatency;
-    public float songLatency;
+    public double chartLatency;
+    public double songLatency;
 
     //Load File, delete them after testing
-    public List<SongDetail> songSourceList;
+    [HideInInspector] public List<SongDetail> songSourceList;
     private LoadFiles loadFiles;
 
     //[HideInInspector]
     [Header("-Time-")]
-    public float curTime = 0f;
-    public float StarOrResumeTime { get; internal set; }
+    [SerializeField]
+    private double curTime = 0f;
+    public double StarOrResumeTime { get; internal set; }
 
     // Synchronize
     private double lastDspTime = -1;
     private const int SynchronizationWaitingFrames = 1200;
-    public int passedFrameBeforeSynchronization = 0;
+    private int passedFrameBeforeSynchronization = 0;
     
     [Header("-Status-")]
     public List<Note> notesOnScreen;
@@ -35,17 +36,30 @@ public class GamePlayController : Singleton<GamePlayController>
     
     public ChartDetail ChartDetail { get; internal set; }
     public SongDetail SongSource { get; internal set; }
-    
-    public ChartDetail tempChartDetail;
 
     public int lastApperanceNoteIndex = 0;
-    private const float GenerationWaitingTime = 1.0f;
-    public float passedTimeBeforeGeneration = 0;
+    private const double GenerationWaitingTime = 1.0;
+    public double passedTimeBeforeGeneration = 0;
 
     [Header("-Audio-")]
     public AudioSource audioSource;
-    public float playStartTime;
+    public double playStartTime;
 
+    private void OnEnable()
+    {
+        EventHandler.GamePauseEvent += OnGamePauseEvent;
+        EventHandler.GameResumeEvent += OnGameResumeEvent;
+        EventHandler.GameRestartEvent += OnGameRestartEvent;
+        EventHandler.BeforeSceneLoadedEvent += OnBeforeSceneLoadedEvent;
+    }
+
+    private void OnDisable()
+    {
+        EventHandler.GamePauseEvent -= OnGamePauseEvent;
+        EventHandler.GameResumeEvent -= OnGameResumeEvent;
+        EventHandler.GameRestartEvent -= OnGameRestartEvent;
+        EventHandler.BeforeSceneLoadedEvent -= OnBeforeSceneLoadedEvent;
+    }
 
     private void Awake()
     {
@@ -55,11 +69,9 @@ public class GamePlayController : Singleton<GamePlayController>
         loadFiles.Initialize(StoragePath).ForEach(song => songSourceList.Add(new SongDetail(song)));
 
         //Song source
-        SongSource = songSourceList[songIndex]; //Aya
+        SongSource = songSourceList[songIndex];
         //SongSource = songSourceList[2]; //overtune
         ChartDetail = SongSource.ChartDetails[chartIndex];
-
-        tempChartDetail = ChartDetail;
 
         //Status
         Status = new GameStatus(this, GameMode.Pluvo)
@@ -69,35 +81,38 @@ public class GamePlayController : Singleton<GamePlayController>
 
         //Audio
         audioSource.clip = AudioClipFileManager.Read(SongSource.MusicPath);
-
     }
 
     private void Start()
     {
         //Time
         StarOrResumeTime = Time.realtimeSinceStartup;
-        //playStartTime = StarOrResumeTime + songLatency;
+        playStartTime = StarOrResumeTime + songLatency;
+
         //Audio
-        audioSource.PlayScheduled(songLatency);
-        
-        //EventHandler.CallInstantiateNote(ChartDetail.noteDetails, noteObjectsOnScreen);
+        audioSource.PlayScheduled(AudioSettings.dspTime + playStartTime);
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         //Time
-        curTime += Time.unscaledDeltaTime;
-        passedTimeBeforeGeneration -= Time.unscaledDeltaTime;
+        if (!Status.IsPaused)
+        {
+            curTime += Time.unscaledDeltaTime;
+            passedTimeBeforeGeneration -= Time.unscaledDeltaTime;
+        }
+
+        //Synchronize
 
         //Note
-        //Generate notes according to the time
+        ///Generate notes according to the time
         List<NoteDetail> notesToGenerate = new();
-        while (lastApperanceNoteIndex < tempChartDetail.noteDetails.Count)
+        while (lastApperanceNoteIndex < ChartDetail.noteDetails.Count)
         {
-            if (tempChartDetail.noteDetails[lastApperanceNoteIndex].time < curTime - StarOrResumeTime - chartLatency)
+            if (ChartDetail.noteDetails[lastApperanceNoteIndex].time < curTime - StarOrResumeTime - chartLatency)
             {
-                notesToGenerate.Add(tempChartDetail.noteDetails[lastApperanceNoteIndex]);
+                notesToGenerate.Add(ChartDetail.noteDetails[lastApperanceNoteIndex]);
                 lastApperanceNoteIndex++;
             }
             else
@@ -106,15 +121,17 @@ public class GamePlayController : Singleton<GamePlayController>
         EventHandler.CallInstantiateNote(notesToGenerate, notesOnScreen);
         passedTimeBeforeGeneration = GenerationWaitingTime;
 
-        //Recycle Miss Note
+        ///Recycle Miss Note
         foreach (var note in notesOnScreen.ToList())
         {
             if (note.transform.position.z == 0)
             {
                 EventHandler.CallMissNoteEvent(notesOnScreen, note, curTime, Status);
+                Status.Judge(note._details, NoteGrade.Miss, 0);
             }
         }
         
+        ///Judge Note
         if (Input.GetKeyDown(KeyCode.Space))
         {
             var note = SearchForBestNote(curTime);
@@ -123,13 +140,22 @@ public class GamePlayController : Singleton<GamePlayController>
             var grade = NoteGradeJudgment.JudgeNoteGrade(note._details, curTime, Status.Mode);
             Status.Judge(note._details, grade, 0);
         }
+
+        //End Game
+        if (Status.ClearCount == ChartDetail.noteDetails.Count)
+        {
+            Status.IsCompleted = true;
+            //EventHandler.CallGameClearEvent();
+            EventHandler.CallTransitionEvent("Result");
+        }
+        
     }
 
     /// <summary>
     /// Search for the best note when player hit the screen
     /// </summary>
     /// <param name="touchTime">the time when player touches the screen</param>
-    Note SearchForBestNote(float touchTime)
+    Note SearchForBestNote(double touchTime)
     {
         if (notesOnScreen.Count == 0)
         {
@@ -140,8 +166,8 @@ public class GamePlayController : Singleton<GamePlayController>
         {
             if (bestNote == null)
                 bestNote = curDetectingNote;
-            var curDeltaTime = Mathf.Abs(touchTime - curDetectingNote._details.time);
-            var bestDeltaTime = Mathf.Abs(touchTime - bestNote._details.time);
+            var curDeltaTime = Math.Abs(touchTime - curDetectingNote._details.time);
+            var bestDeltaTime = Math.Abs(touchTime - bestNote._details.time);
             if (bestDeltaTime > curDeltaTime)
             {
                 bestNote = curDetectingNote;
@@ -154,7 +180,7 @@ public class GamePlayController : Singleton<GamePlayController>
         return null;
     }
 
-    private float GetClosedBestNoteRange(float timeRange)
+    private double GetClosedBestNoteRange(double timeRange)
     {
         return Status.Mode switch
         {
@@ -175,5 +201,47 @@ public class GamePlayController : Singleton<GamePlayController>
             GameMode.Ekzerco => throw new NotImplementedException(),
             _ => throw new NotImplementedException(),
         };
+    }
+
+    private void OnGamePauseEvent()
+    {
+        //If game is clear or failed, do nothing
+        if (Status.IsCompleted || Status.IsFailed)
+            return;
+
+        //Status
+        Status.IsPaused = true;
+
+        //Time
+        Time.timeScale = 0;
+
+        //Audio
+        audioSource.Pause();
+    }
+
+    private void OnGameResumeEvent()
+    {
+        //TODO: Wait for a few minutes
+        //If game is clear or failed, do nothing
+        if (Status.IsCompleted || Status.IsFailed)
+            return;
+        //Status
+        Status.IsPaused = false;
+
+        //Time
+        Time.timeScale = 1;
+
+        //Audio
+        audioSource.Play();
+    }
+
+    private void OnGameRestartEvent()
+    {
+        throw new NotImplementedException();
+    }
+
+    private void OnBeforeSceneLoadedEvent()
+    {
+        //throw new NotImplementedException();
     }
 }

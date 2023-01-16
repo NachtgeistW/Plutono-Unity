@@ -5,7 +5,7 @@ namespace Plutono.IO
     public class FileManager : Singleton<FileManager>
     {
         public string StoragePath;
-        public List<Plutono.Song.SongDetail> songSourceList;
+        public List<Song.SongDetail> songSourceList;
         private LoadFiles loadFiles;
         private void Start()
         {

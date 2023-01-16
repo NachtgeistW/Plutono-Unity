@@ -479,6 +479,9 @@ MonoBehaviour:
     time: 0
     type: 2
     sounds: []
+    isLink: 0
+    prevLink: -1
+    nextLink: -1
   _blankSpriteRenderer: {fileID: 8423021217620591980}
   _pianoSpriteRenderer: {fileID: 6228860794142185626}
   _slideSpriteRenderer: {fileID: 3579559003840951118}
@@ -506,7 +509,7 @@ Animator:
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 8934759a4e300a84a9e8560a6d6a506b, type: 2}
   m_CullingMode: 0
-  m_UpdateMode: 0
+  m_UpdateMode: 2
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0

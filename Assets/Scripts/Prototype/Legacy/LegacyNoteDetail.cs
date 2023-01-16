@@ -23,8 +23,8 @@ namespace Plutono.Legacy
     [System.Serializable]
     public sealed class LegacyPianoSound
     {
-        public float w; //w
-        public float d; //d
+        public double w; //w
+        public double d; //d
         public short p; //p
         public short v; //v
 
@@ -43,12 +43,12 @@ namespace Plutono.Legacy
         [JsonProperty(PropertyName = "$id")]
         public uint Id { get; set; }
         public float pos;   //the position of this note (from -2 to 2, or it won't be touched)
-        public float shift; //is always 0
-        public float size;  //the size of this note (from 0 to 4)
-        public float time;  //is always equal to _time
+        public double shift; //is always 0
+        public double size;  //the size of this note (from 0 to 4)
+        public double time;  //is always equal to _time
         // There is only a _time before Deemo 3.0
         // ReSharper disable once InconsistentNaming
-        public float _time; //the time when this note should be touched (start from 0)
+        public double _time; //the time when this note should be touched (start from 0)
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         [CanBeNull] public LegacyPianoSound[] sounds;
         public uint type;   //is always 0

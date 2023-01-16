@@ -13,9 +13,9 @@ namespace Plutono.Song
     }
     public static class NoteGradeJudgment
     {
-        public static NoteGrade JudgeNoteGrade(NoteDetail noteDetail, float curTime, GameMode mode)
+        public static NoteGrade JudgeNoteGrade(NoteDetail noteDetail, double curTime, GameMode mode)
         {
-            var time = Mathf.Abs(noteDetail.time - curTime);
+            var time = Math.Abs(noteDetail.time - curTime);
             return mode switch
             {
                 GameMode.Stelo => time switch

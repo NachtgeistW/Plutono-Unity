@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace Plutono.UI
 {
-    public class Combo : MonoBehaviour
+    public class TextCombo : MonoBehaviour
     {
         public Text comboText;
         public GamePlayController gamePlayController;

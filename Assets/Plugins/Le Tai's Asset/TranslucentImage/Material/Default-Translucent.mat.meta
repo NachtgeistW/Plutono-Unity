@@ -1,5 +1,7 @@
 fileFormatVersion: 2
-guid: 979fa337b9a60a54a85f87dc79faf700
+guid: 96c5704d0681e35408630c488fc0c234
+labels:
+- TranslucentImageResource
 NativeFormatImporter:
   externalObjects: {}
   mainObjectFileID: 0

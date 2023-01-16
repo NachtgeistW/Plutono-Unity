@@ -1,5 +1,27 @@
 Changelog:
 
+v3.15.0:
+ - Fix color space mixed up. Your UIs appearance may change after this update.
+
+v3.14.6:
+ - Fix compatibility with 2021.3.13 URP
+
+v3.14.5:
+ - Fix editor script being included in build
+ - Reorder create asset menu
+
+v3.14.4:
+ - Fix phantom windows again
+
+v3.14.3:
+ - Fix phantom windows in some Unity versions
+
+v3.14.2:
+ - Warn if Renderer Feature is missing in URP project
+
+v3.14.1:
+ - Fix some gizmo icons not showing in newer Unity versions
+
 v3.14.0:
  - Improve compatibility with URP 13
  
