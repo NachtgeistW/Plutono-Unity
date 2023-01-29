@@ -46,6 +46,9 @@ namespace Plutono.Song
                     case NoteType.Slide:
                         _slideSpriteRenderer.gameObject.SetActive(true);
                         break;
+                    case NoteType.Swipe:
+                        _slideSpriteRenderer.gameObject.SetActive(true);
+                        break;
                 }
             }
         }

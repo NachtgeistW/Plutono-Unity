@@ -1,5 +1,4 @@
 using System;
-using UnityEngine;
 
 namespace Plutono.Song
 {
@@ -25,7 +24,7 @@ namespace Plutono.Song
                     <= Settings.SteloMode.badDeltaTime => NoteGrade.Bad,
                     _ => NoteGrade.Miss
                 },
-                GameMode.Arbo or GameMode.Pluvo => time switch
+                GameMode.Arbo or GameMode.Floro => time switch
                 {
                     <= Settings.ArboMode.perfectDeltaTime => NoteGrade.Perfect,
                     <= Settings.ArboMode.goodDeltaTime => NoteGrade.Good,

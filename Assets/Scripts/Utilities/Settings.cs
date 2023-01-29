@@ -15,6 +15,9 @@ public static class Settings
     public const float lightIncTime = 8.0f / 60;
     public const float lightDecTime = 40.0f / 60;
     public static UnityEngine.Color linkLineColor = new(1.0f, 0.913f, 0.529f);
+    public static UnityEngine.Color perfectLightColor = new(1.0f, 0.568f, 0f);
+    public static UnityEngine.Color goodLightColor = new(1.0f, 0.913f, 0.529f);
+    public static UnityEngine.Color badLightColor = new(1.0f, 0.913f, 0.529f);
     public const float minAlphaDif = 0.05f;
 
     public const float maximumNoteRange = 240.0f;

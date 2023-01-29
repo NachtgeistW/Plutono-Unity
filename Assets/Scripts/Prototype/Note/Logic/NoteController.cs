@@ -15,12 +15,17 @@ namespace Plutono.Song
 
         public GamePlayController gamePlayController;
 
+        private void Awake()
+        {
+            notePool = new ObjectPool<Note>(
+                OnCreatePooledItem, OnTakeFromPool, OnReturnedToPool, OnDestroyPooledItem, collectionChecks, maxPoolSize);
+        }
+
         private void OnEnable()
         {
             EventHandler.InstantiateNote += InstantiateNote;
             EventHandler.HitNoteEvent += OnHitNoteEvent;
             EventHandler.MissNoteEvent += OnMissNoteEvent;
-            EventHandler.ExecuteActionAfterNoteAnimate += OnExecuteActionAfterNoteAnimate;
         }
 
         private void OnDisable()
@@ -28,13 +33,6 @@ namespace Plutono.Song
             EventHandler.InstantiateNote -= InstantiateNote;
             EventHandler.HitNoteEvent -= OnHitNoteEvent;
             EventHandler.MissNoteEvent -= OnMissNoteEvent;
-            EventHandler.ExecuteActionAfterNoteAnimate -= OnExecuteActionAfterNoteAnimate;
-        }
-
-        private void Awake()
-        {
-            notePool = new ObjectPool<Note>(
-                OnCreatePooledItem, OnTakeFromPool, OnReturnedToPool, OnDestroyPooledItem, collectionChecks, maxPoolSize);
         }
 
         private void InstantiateNote(List<NoteDetail> noteDetails, List<Note> notesOnScreen)
@@ -46,21 +44,17 @@ namespace Plutono.Song
             }
         }
 
-        private void OnHitNoteEvent(List<Note> notesOnScreen, Note note, double curGameTime, GameStatus status)
+        private void OnHitNoteEvent(List<Note> notesOnScreen, Note note, double curGameTime, NoteGrade noteGrade)
         {
             //FIXME: Prevent judgment if there aren't any note on the screen
             notesOnScreen.Remove(note);
+            notePool.Release(note);
         }
 
-        private void OnMissNoteEvent(List<Note> notesOnScreen, Note note, double curGameTime, GameStatus status)
+        private void OnMissNoteEvent(List<Note> notesOnScreen, Note note, double curGameTime, NoteGrade noteGrade)
         {
             notePool.Release(note);
             notesOnScreen.Remove(note);
-        }
-
-        private void OnExecuteActionAfterNoteAnimate(Note note)
-        {
-            notePool.Release(note);
         }
 
         #region ObjectPool

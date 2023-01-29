@@ -13,40 +13,50 @@ namespace Plutono.Song
     public class Explosion : MonoBehaviour
     {
         Animator explosionAnim;
-        private void OnEnable()
-        {
-            EventHandler.HitNoteEvent += OnHitNoteEvent;
-        }
+        [SerializeField]Material material;
 
-        private void OnDisable()
+        public void PlayAnimation(NoteGrade noteGrade)
         {
-            EventHandler.HitNoteEvent -= OnHitNoteEvent;
-        }
+            switch (noteGrade)
+            {
+                case NoteGrade.Perfect:
+                    material.color = Settings.perfectLightColor;
+                    break;
+                case NoteGrade.Good:
+                    material.color = Color.green;
+                    break;
+                case NoteGrade.Bad:
+                    material.color = Color.blue;
+                    break;
+                case NoteGrade.Miss:
+                    material.color = Color.red;
+                    break;
+                case NoteGrade.None:
+                default:
+                    break;
+            }
 
-        private void OnHitNoteEvent(List<Note> notesOnScreen, Note note, double curGameTime, GameStatus status)
-        {
             //The Animation Event that be fired after playing explosion animation 
             var explosionAnimEvent = new AnimationEvent
             {
-                functionName = nameof(ExecuteAfterNoteAnimate),
-                objectReferenceParameter = note,
+                functionName = nameof(ExecuteAfterAnimate),
+                //objectReferenceParameter = note,
                 //The time waiting for the animation to finish
                 time = Settings.noteAnimationPlayingTime
             };
 
-            explosionAnim = note.GetComponent<Animator>();
+            explosionAnim = gameObject.GetComponent<Animator>();
             var clip = explosionAnim.runtimeAnimatorController.animationClips[0];
             clip.AddEvent(explosionAnimEvent);
             explosionAnim.SetBool("IsHit", true);
         }
 
         // the function to be called as an event
-        private void ExecuteAfterNoteAnimate(Note note)
+        private void ExecuteAfterAnimate()
         {
             explosionAnim.Rebind();
             //explosionAnim.Update(0f);
             explosionAnim.SetBool("IsHit", false);
-            EventHandler.CallExecuteActionAfterNoteAnimate(note);
         }
     }
 }

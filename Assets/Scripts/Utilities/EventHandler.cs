@@ -32,15 +32,10 @@ public static class EventHandler
     public static event Action GameFailEvent;
     public static void  CallGameFailEvent() => GameFailEvent?.Invoke();
 
-    public static event Action<List<Plutono.Song.Note>, Plutono.Song.Note, double, GameStatus> HitNoteEvent;
-    public static void CallHitNoteEvent(List<Plutono.Song.Note> notesOnScreen, Plutono.Song.Note note, double curGameTime, GameStatus status) 
-        => HitNoteEvent?.Invoke(notesOnScreen, note, curGameTime, status);
-    /// <summary>
-    /// Called when the note animation is finished.
-    /// </summary>
-    public static event Action<Plutono.Song.Note> ExecuteActionAfterNoteAnimate;
-    public static void CallExecuteActionAfterNoteAnimate(Plutono.Song.Note note) => ExecuteActionAfterNoteAnimate?.Invoke(note);
-    public static event Action<List<Plutono.Song.Note>, Plutono.Song.Note, double, GameStatus> MissNoteEvent;
-    public static void CallMissNoteEvent(List<Plutono.Song.Note> notesOnScreen, Plutono.Song.Note note, double curGameTime, GameStatus status) 
-        => MissNoteEvent?.Invoke(notesOnScreen, note, curGameTime, status);
+    public static event Action<List<Plutono.Song.Note>, Plutono.Song.Note, double, Plutono.Song.NoteGrade> HitNoteEvent;
+    public static void CallHitNoteEvent(List<Plutono.Song.Note> notesOnScreen, Plutono.Song.Note note, double curGameTime, Plutono.Song.NoteGrade noteGrade) 
+        => HitNoteEvent?.Invoke(notesOnScreen, note, curGameTime, noteGrade);
+    public static event Action<List<Plutono.Song.Note>, Plutono.Song.Note, double, Plutono.Song.NoteGrade> MissNoteEvent;
+    public static void CallMissNoteEvent(List<Plutono.Song.Note> notesOnScreen, Plutono.Song.Note note, double curGameTime, Plutono.Song.NoteGrade noteGrade) 
+        => MissNoteEvent?.Invoke(notesOnScreen, note, curGameTime, noteGrade);
 }

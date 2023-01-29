@@ -19,10 +19,11 @@ namespace Plutono.Song
     public sealed class NoteDetail
     {
         public uint id;         //the id of this note (start from 1)
-        public float pos;       //the position of this note (from -2 to 2, or it won't be shown). float, due to Vector3 accept float.
+        public float pos;       //the position of this note (from -2 to 2, or it won't be shown). float, due to Vector3 accept float only.
         public double size;      //the size of this note (from 0 to 4)
         public double time;      //the time when this note should be touched (start from 0)
         public NoteType type;   //is this note piano(0), slide(1) or blank(2)
+        public double duration; //the duration of the hold
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         [CanBeNull] public List<GamePianoSound> sounds;
         //slide
@@ -37,7 +38,7 @@ namespace Plutono.Song
     }
     public enum NoteType
     {
-        Piano, Slide, Blank
+        Piano, Slide, Blank, Vibrate, Swipe
     }
 
     [System.Serializable]

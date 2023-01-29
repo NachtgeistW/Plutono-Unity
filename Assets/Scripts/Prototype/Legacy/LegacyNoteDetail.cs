@@ -43,24 +43,36 @@ namespace Plutono.Legacy
         [JsonProperty(PropertyName = "$id")]
         public uint Id { get; set; }
         public float pos;   //the position of this note (from -2 to 2, or it won't be touched)
-        public double shift; //is always 0
         public double size;  //the size of this note (from 0 to 4)
-        public double time;  //is always equal to _time
         // There is only a _time before Deemo 3.0
         // ReSharper disable once InconsistentNaming
         public double _time; //the time when this note should be touched (start from 0)
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         [CanBeNull] public LegacyPianoSound[] sounds;
-        public uint type;   //is always 0
+        public double speed; //Added from D2, the speed of this note
+        public double duration; //Added from D2, the duration of the hold
+        public bool vibrate; //Added from D2, unknown
+        public bool swipe; //Added from D2, true if it's a flick
 
-/*        public LegacyNoteDetail ToJson() => new()
+/*        public LegacyNoteDetail ToJsonD1() => new()
         {
             pos = pos,
             size = size,
-            shift = shift,
-            type = type,
-            _time = time,
-            time = time,
+            shift = 0,
+            type = 0,
+            _time = _time,
+            time = _time,
+            sounds = sounds.Select(sound => sound.ToJson()).ToArray()
+        };
+*/
+
+/*        public LegacyNoteDetail ToJsonD2() => new()
+        {
+            pos = pos,
+            size = size,
+            shift = 0,
+            _time = _time,
+            time = _time,
             sounds = sounds.Select(sound => sound.ToJson()).ToArray()
         };
 */
@@ -76,7 +88,8 @@ namespace Plutono.Legacy
             time = _time,
             //初步判断note类型。因为黄条需要依靠LegacyChartDetail里的Link做判断，
             //所以黄条的检测放在LegacyChartDetail.ToNoteDetailList()中
-            type = sounds != null ? NoteType.Piano : NoteType.Blank,
+            type = swipe ? NoteType.Swipe : 
+                   sounds != null ? NoteType.Piano : NoteType.Blank,
         };
     }
 
