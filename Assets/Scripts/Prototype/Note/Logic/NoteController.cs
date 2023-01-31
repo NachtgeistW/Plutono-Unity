@@ -1,4 +1,5 @@
 //����note�����ɣ��ж�
+using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
@@ -21,7 +22,7 @@ namespace Plutono.Song
                 OnCreatePooledItem, OnTakeFromPool, OnReturnedToPool, OnDestroyPooledItem, collectionChecks, maxPoolSize);
         }
 
-        private void OnEnable()
+/*        private void OnEnable()
         {
             EventHandler.InstantiateNote += InstantiateNote;
             EventHandler.HitNoteEvent += OnHitNoteEvent;
@@ -34,8 +35,8 @@ namespace Plutono.Song
             EventHandler.HitNoteEvent -= OnHitNoteEvent;
             EventHandler.MissNoteEvent -= OnMissNoteEvent;
         }
-
-        private void InstantiateNote(List<NoteDetail> noteDetails, List<Note> notesOnScreen)
+*/
+        public void InstantiateNote(List<NoteDetail> noteDetails, List<Note> notesOnScreen)
         {
             foreach (var noteDetail in noteDetails)
             {
@@ -44,14 +45,15 @@ namespace Plutono.Song
             }
         }
 
-        private void OnHitNoteEvent(List<Note> notesOnScreen, Note note, double curGameTime, NoteGrade noteGrade)
+        public void OnHitNote(List<Note> notesOnScreen, Note note)
         {
             //FIXME: Prevent judgment if there aren't any note on the screen
-            notesOnScreen.Remove(note);
+            note.ForceStopAnimation();
             notePool.Release(note);
+            notesOnScreen.Remove(note);
         }
 
-        private void OnMissNoteEvent(List<Note> notesOnScreen, Note note, double curGameTime, NoteGrade noteGrade)
+        public void OnMissNote(List<Note> notesOnScreen, Note note)
         {
             notePool.Release(note);
             notesOnScreen.Remove(note);
@@ -80,7 +82,7 @@ namespace Plutono.Song
             note.SetSpriteRenderer();
             //Activate the note and make it fall down
             note.gameObject.SetActive(true);
-            note.FallingDown();
+            note.FallingDownAnimation();
         }
 
         void OnDestroyPooledItem(Note note)

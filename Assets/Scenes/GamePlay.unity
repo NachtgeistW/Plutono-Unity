@@ -168,13 +168,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   StoragePath: C:\Users\night\OneDrive\code\CSharp-Project\Plutono\Assets\TestChart
-  songIndex: 7
+  songIndex: 5
   chartIndex: 0
   chartLatency: 0
   songLatency: 0
   songSourceList: []
   curTime: 0
   notesOnScreen: []
+  noteController: {fileID: 1600262291}
+  explosionController: {fileID: 765917183}
   lastApperanceNoteIndex: 0
   passedTimeBeforeGeneration: 0
   audioSource: {fileID: 2084485536}
@@ -2143,6 +2145,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1366525031}
   - component: {fileID: 1366525030}
+  - component: {fileID: 1366525032}
   m_Layer: 5
   m_Name: Slider Time
   m_TagString: Untagged
@@ -2224,6 +2227,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 20}
   m_Pivot: {x: 0.5, y: 0}
+--- !u!114 &1366525032
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1366525029}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d15b907b2c7f8b4783e5343cd482eff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controller: {fileID: 90558266}
+  slider: {fileID: 1366525030}
 --- !u!1 &1373804149
 GameObject:
   m_ObjectHideFlags: 0

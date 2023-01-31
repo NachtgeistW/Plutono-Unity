@@ -16,13 +16,12 @@ public class GamePlayController : Singleton<GamePlayController>
     public double songLatency;
 
     //Load File, delete them after testing
-    [HideInInspector] public List<SongDetail> songSourceList;
+    [HideInInspector]public List<SongDetail> songSourceList;
     private LoadFiles loadFiles;
 
     //[HideInInspector]
     [Header("-Time-")]
-    [SerializeField]
-    private double curTime = 0f;
+    [SerializeField]private double curTime = 0f;
     public double StarOrResumeTime { get; internal set; }
 
     // Synchronize
@@ -34,7 +33,10 @@ public class GamePlayController : Singleton<GamePlayController>
     public List<Note> notesOnScreen;
     //public List<Explosion> noteExplsionAinmations;
     public GameStatus Status{ get; internal set; }
-    
+
+    [Header("-Note and Chart-")]
+    [SerializeField]private NoteController noteController;
+    [SerializeField]private ExplosionController explosionController;
     public ChartDetail ChartDetail { get; internal set; }
     public SongDetail SongSource { get; internal set; }
 
@@ -75,7 +77,7 @@ public class GamePlayController : Singleton<GamePlayController>
         ChartDetail = SongSource.ChartDetails[chartIndex];
 
         //Status
-        Status = new GameStatus(this, GameMode.Floro)
+        Status = new GameStatus(this, GameMode.Autoplay)
         {
             ChartPlaySpeed = 5.5f
         };
@@ -92,6 +94,7 @@ public class GamePlayController : Singleton<GamePlayController>
 
         //Audio
         audioSource.PlayScheduled(AudioSettings.dspTime + playStartTime);
+        //audioSource.PlayScheduled(AudioSettings.dspTime);
     }
 
     // Update is called once per frame
@@ -120,33 +123,50 @@ public class GamePlayController : Singleton<GamePlayController>
             else
                 break;
         }
-        EventHandler.CallInstantiateNote(notesToGenerate, notesOnScreen);
+        noteController.InstantiateNote(notesToGenerate, notesOnScreen);
         passedTimeBeforeGeneration = GenerationWaitingTime;
-
-        ///Recycle Miss Note
-        foreach (var note in notesOnScreen.ToList())
+        
+        if (Status.Mode == GameMode.Autoplay)
         {
-            if (note.transform.position.z == 0)
+            foreach (var note in notesOnScreen.ToList())
             {
-                Status.Judge(note._details, NoteGrade.Miss);
-                EventHandler.CallMissNoteEvent(notesOnScreen, note, curTime, NoteGrade.Miss);
+                if (note.transform.position.z <= 32)
+                {
+                    Status.Judge(note._details, NoteGrade.Perfect);
+                    noteController.OnHitNote(notesOnScreen, note);
+                    EventHandler.CallHitNoteEvent(notesOnScreen, note, flowTime, NoteGrade.Perfect);
+                }
+            }
+        }
+        else
+        {
+            ///Recycle Miss Note
+            foreach (var note in notesOnScreen.ToList())
+            {
+                if (note.transform.position.z == 0)
+                {
+                    Status.Judge(note._details, NoteGrade.Miss);
+                    noteController.OnMissNote(notesOnScreen, note);
+                    EventHandler.CallMissNoteEvent(notesOnScreen, note, flowTime, NoteGrade.Miss);
+                }
+            }
+
+            ///Judge Note
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                var note = SearchForBestNote(flowTime);
+                if (note == null) return;
+
+                var grade = NoteGradeJudgment.JudgeNoteGrade(note._details, flowTime, Status.Mode);
+                var result = Status.Judge(note._details, grade);
+                if (result == NoteJudgmentResult.Succeeded)
+                { 
+                    noteController.OnHitNote(notesOnScreen, note);
+                    EventHandler.CallHitNoteEvent(notesOnScreen, note, flowTime, grade);
+                }
             }
         }
         
-        ///Judge Note
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-/*            if (notesOnScreen.Count == 0)
-                return;
-*/            
-            var note = SearchForBestNote(flowTime);
-            if (note == null)   return;
-            
-            var grade = NoteGradeJudgment.JudgeNoteGrade(note._details, flowTime, Status.Mode);
-            var result = Status.Judge(note._details, grade);
-            if (result == NoteJudgmentResult.Succeeded)
-                EventHandler.CallHitNoteEvent(notesOnScreen, note, flowTime, grade);
-        }
 
         //End Game
         if (Status.ClearCount == ChartDetail.noteDetails.Count)

@@ -67,7 +67,6 @@ public sealed class GameStatus
         // Status check
         if (IsFailed || IsCompleted) return NoteJudgmentResult.GameEnded;
         Judgments.TryGetValue(noteDetail.id, out NoteJudgment noteJudgmentCheck);
-        Debug.Log("ID:" + noteDetail.id + "isNoteJudgmentCheck:" + (noteJudgmentCheck == null).ToString());
 
         if (noteJudgmentCheck != null && noteJudgmentCheck.IsJudged)
         {

@@ -13,9 +13,9 @@ public static class EventHandler
     public static void CallAfterSceneLoadedEvent() => AfterSceneLoadedEvent?.Invoke();
 
     //GamePlay Scene Event
-    public static event Action<List<Plutono.Song.NoteDetail>, List<Plutono.Song.Note>> InstantiateNote;
+    public static event Action<List<Plutono.Song.NoteDetail>, List<Plutono.Song.Note>> InstantiateNoteEvent;
     public static void CallInstantiateNote(List<Plutono.Song.NoteDetail> noteDetails, List<Plutono.Song.Note> notesOnScreen) 
-        => InstantiateNote?.Invoke(noteDetails, notesOnScreen);
+        => InstantiateNoteEvent?.Invoke(noteDetails, notesOnScreen);
 
     public static event Action GamePauseEvent;
     public static void CallGamePauseEvent() => GamePauseEvent?.Invoke();

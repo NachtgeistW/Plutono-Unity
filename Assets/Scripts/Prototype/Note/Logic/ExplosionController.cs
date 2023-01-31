@@ -18,7 +18,7 @@ namespace Plutono.Song
         public Transform explosionAnimParent;
         public ObjectPool<Explosion> explosionAnimPool;
         public bool collectionChecks = true;
-        public int maxPoolSize = 50;
+        public int maxPoolSize = 10;
 
         public GamePlayController gamePlayController;
 
@@ -48,6 +48,8 @@ namespace Plutono.Song
 
         private void OnHitNoteEvent(List<Note> notesOnScreen, Note note, double curGameTime, NoteGrade noteGrade)
         {
+            if (!note._details.IsShown)
+                return;
             var xPos = (float)(note._details.pos * 10);
             float zPos;
             switch (noteGrade)

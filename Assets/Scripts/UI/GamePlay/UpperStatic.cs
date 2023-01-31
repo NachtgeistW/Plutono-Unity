@@ -40,6 +40,9 @@ namespace Plutono.UI
                 case GameMode.Ekzerco:
                     modeText.text = "Ekzerco";
                     break;
+                case GameMode.Autoplay:
+                    modeText.text = "Auto";
+                    break;
                 default:
                     break;
             }

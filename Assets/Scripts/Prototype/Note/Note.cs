@@ -4,6 +4,7 @@
  */
 using UnityEngine;
 using DG.Tweening;
+using System.Collections.Generic;
 
 namespace Plutono.Song
 {
@@ -21,11 +22,17 @@ namespace Plutono.Song
             SetSpriteRenderer();
         }
 
-        public void FallingDown()
+        public void FallingDownAnimation()
         {
             //Force the note to back to the original position where it begins to fall down
             gameObject.transform.position = new Vector3((float)(_details.pos * 10), 0, Settings.maximumNoteRange);
             gameObject.transform.DOMoveZ(0, Settings.NoteFallTime(10)).SetEase(Ease.Linear);
+        }
+
+        public void ForceStopAnimation()
+        {
+            //Force stop DOTween animation, or it would has effect on objectpool releasing
+            gameObject.transform.DOKill();
         }
 
         public void SetSpriteRenderer()
