@@ -5,6 +5,7 @@ using Plutono.Song;
 using Plutono.IO;
 using System;
 using System.Linq;
+using DG.Tweening;
 
 public class GamePlayController : Singleton<GamePlayController>
 {
@@ -12,23 +13,26 @@ public class GamePlayController : Singleton<GamePlayController>
     public string StoragePath;
     public int songIndex;
     public int chartIndex;
-    public double chartLatency;
-    public double songLatency;
 
     //Load File, delete them after testing
     [HideInInspector]public List<SongDetail> songSourceList;
     private LoadFiles loadFiles;
 
     //[HideInInspector]
-    [Header("-Time-")]
-    [SerializeField]private double curTime = 0f;
-    public double StarOrResumeTime { get; internal set; }
-
-    // Synchronize
+    //[Header("-Time and Synchronize-")]
+    [SerializeField]public double CurTime { get; private set; }
+    public float StartOrResumeTime { get; internal set; }
+    public float ResumeElapsedTime { get; internal set; }
+    private double musicPlayingDelay;
+    private double chartMusicOffset = 0;
     private double lastDspTime = -1;
+    private double curDspTime = -1;
     private const int SynchronizationWaitingFrames = 1200;
     private int passedFrameBeforeSynchronization = 0;
-    
+    private double NoteGenerationLeadTime;
+    private int ticksBeforeSynchronization;
+    private float ConfigChartOffset;
+
     [Header("-Status-")]
     public List<Note> notesOnScreen;
     //public List<Explosion> noteExplsionAinmations;
@@ -41,12 +45,10 @@ public class GamePlayController : Singleton<GamePlayController>
     public SongDetail SongSource { get; internal set; }
 
     public int lastApperanceNoteIndex = 0;
-    private const double GenerationWaitingTime = 1.0;
-    public double passedTimeBeforeGeneration = 0;
 
     [Header("-Audio-")]
-    public AudioSource audioSource;
-    public double playStartTime;
+    public AudioSource musicSource;
+    public double musicStartTime;
 
     private void OnEnable()
     {
@@ -83,39 +85,104 @@ public class GamePlayController : Singleton<GamePlayController>
         };
 
         //Audio
-        audioSource.clip = AudioClipFileManager.Read(SongSource.MusicPath);
+        musicSource.clip = AudioClipFileManager.Read(SongSource.MusicPath);
+        musicSource.time = 0;
     }
 
     private void Start()
     {
+        var playerSetting = PlayerSettingsManager.Instance.PlayerSettings_Global_SO;
+        //Synchronize
+        musicPlayingDelay = 1.0f;
+        chartMusicOffset = playerSetting.chartMusicOffset;
+        ConfigChartOffset = playerSetting.globalChartOffset;
+        
         //Time
-        StarOrResumeTime = Time.realtimeSinceStartup;
-        playStartTime = StarOrResumeTime + songLatency;
+        StartOrResumeTime = Time.realtimeSinceStartup;
+        CurTime = 0;
+        curDspTime = AudioSettings.dspTime;
+        ticksBeforeSynchronization = 600;
+        NoteGenerationLeadTime = Settings.NoteFallTime(Status.ChartPlaySpeed) + ConfigChartOffset;
 
         //Audio
-        audioSource.PlayScheduled(AudioSettings.dspTime + playStartTime);
-        //audioSource.PlayScheduled(AudioSettings.dspTime);
+        musicStartTime = curDspTime + musicPlayingDelay;
+        musicSource.PlayScheduled(musicStartTime);
+#if DEBUG
+        Debug.Log("StarOrResumeTime: " + StartOrResumeTime + " DspTime: " + curDspTime + " musicStartTime: " + musicStartTime);
+        Debug.Log("globalLatency: " + musicPlayingDelay + " chartMusicOffset: " + chartMusicOffset + " ConfigChartOffset: " + ConfigChartOffset);
+#endif
+        DOTween.SetTweensCapacity(playerSetting.DOTweenDefaultCapacity, 50);
     }
 
     // Update is called once per frame
     private void Update()
     {
-        //Time
+        //Synchronize Time
         if (!Status.IsPaused)
         {
-            curTime += Time.unscaledDeltaTime;
-            passedTimeBeforeGeneration -= Time.unscaledDeltaTime;
+            SynchronizeTime();
         }
-        var flowTime = curTime - StarOrResumeTime - chartLatency;
-        
-        //Synchronize
 
         //Note
         ///Generate notes according to the time
+        GenerateNote();
+
+        if (Status.Mode == GameMode.Autoplay)
+        {
+            foreach (var note in notesOnScreen.ToList())
+            {
+                if (note.transform.position.z <= Settings.judgeLightPosition)
+                {
+#if DEBUG
+                    if (note._details.id <= 10)
+                    {
+                        Debug.Log("noteId: " + note._details.id + " noteTime: " + note._details.time + " CurTime: " + CurTime + " musicTime: " + musicSource.time);
+                    }
+#endif
+                    Status.Judge(note._details, NoteGrade.Perfect);
+                    noteController.OnHitNote(notesOnScreen, note);
+                    explosionController.OnHitNote(note, NoteGrade.Perfect);
+                    EventHandler.CallHitNoteEvent(notesOnScreen, note, CurTime, NoteGrade.Perfect);
+                }
+            }
+        }
+        else
+        {
+            RecycleMissNote(CurTime);
+
+            ///Judge Note
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                var note = SearchForBestNote(CurTime);
+                if (note == null) return;
+
+                var grade = NoteGradeJudgment.JudgeNoteGrade(note._details, CurTime, Status.Mode);
+                var result = Status.Judge(note._details, grade);
+                if (result == NoteJudgmentResult.Succeeded)
+                {
+                    noteController.OnHitNote(notesOnScreen, note);
+                    explosionController.OnHitNote(note, NoteGrade.Perfect);
+                    EventHandler.CallHitNoteEvent(notesOnScreen, note, CurTime, grade);
+                }
+            }
+        }
+
+        //End Game
+        if (Status.ClearCount == ChartDetail.noteDetails.Count)
+        {
+            Status.IsCompleted = true;
+            //EventHandler.CallGameClearEvent();
+            //EventHandler.CallTransitionEvent("Result");
+        }
+    }
+
+    private void GenerateNote()
+    {
         List<NoteDetail> notesToGenerate = new();
         while (lastApperanceNoteIndex < ChartDetail.noteDetails.Count)
         {
-            if (ChartDetail.noteDetails[lastApperanceNoteIndex].time < flowTime)
+            //添加生成的提前量
+            if (ChartDetail.noteDetails[lastApperanceNoteIndex].time <= CurTime + NoteGenerationLeadTime)
             {
                 notesToGenerate.Add(ChartDetail.noteDetails[lastApperanceNoteIndex]);
                 lastApperanceNoteIndex++;
@@ -124,56 +191,39 @@ public class GamePlayController : Singleton<GamePlayController>
                 break;
         }
         noteController.InstantiateNote(notesToGenerate, notesOnScreen);
-        passedTimeBeforeGeneration = GenerationWaitingTime;
-        
-        if (Status.Mode == GameMode.Autoplay)
+    }
+
+    private void SynchronizeTime()
+    {
+        ticksBeforeSynchronization--;
+        ResumeElapsedTime = Time.realtimeSinceStartup - StartOrResumeTime;
+        curDspTime = AudioSettings.dspTime;
+        // Sync: every 600 ticks (=10 seconds) and every tick within the first 0.5 seconds after start/resume
+        if ((ticksBeforeSynchronization <= 0 || ResumeElapsedTime < 0.5f)
+            && lastDspTime != curDspTime)
         {
-            foreach (var note in notesOnScreen.ToList())
-            {
-                if (note.transform.position.z <= 32)
-                {
-                    Status.Judge(note._details, NoteGrade.Perfect);
-                    noteController.OnHitNote(notesOnScreen, note);
-                    EventHandler.CallHitNoteEvent(notesOnScreen, note, flowTime, NoteGrade.Perfect);
-                }
-            }
+            Debug.Log("Sync");
+            ticksBeforeSynchronization = 600;
+            lastDspTime = curDspTime;
+            CurTime = (float)curDspTime - musicStartTime + chartMusicOffset;
         }
         else
         {
-            ///Recycle Miss Note
-            foreach (var note in notesOnScreen.ToList())
-            {
-                if (note.transform.position.z == 0)
-                {
-                    Status.Judge(note._details, NoteGrade.Miss);
-                    noteController.OnMissNote(notesOnScreen, note);
-                    EventHandler.CallMissNoteEvent(notesOnScreen, note, flowTime, NoteGrade.Miss);
-                }
-            }
-
-            ///Judge Note
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                var note = SearchForBestNote(flowTime);
-                if (note == null) return;
-
-                var grade = NoteGradeJudgment.JudgeNoteGrade(note._details, flowTime, Status.Mode);
-                var result = Status.Judge(note._details, grade);
-                if (result == NoteJudgmentResult.Succeeded)
-                { 
-                    noteController.OnHitNote(notesOnScreen, note);
-                    EventHandler.CallHitNoteEvent(notesOnScreen, note, flowTime, grade);
-                }
-            }
+            CurTime += Time.unscaledDeltaTime;
         }
-        
+    }
 
-        //End Game
-        if (Status.ClearCount == ChartDetail.noteDetails.Count)
+    ///Recycle Miss Note
+    private void RecycleMissNote(double CurTime)
+    {
+        foreach (var note in notesOnScreen.ToList())
         {
-            Status.IsCompleted = true;
-            //EventHandler.CallGameClearEvent();
-            //EventHandler.CallTransitionEvent("Result");
+            if (note.transform.position.z == 0)
+            {
+                Status.Judge(note._details, NoteGrade.Miss);
+                noteController.OnMissNote(notesOnScreen, note);
+                EventHandler.CallMissNoteEvent(notesOnScreen, note, CurTime, NoteGrade.Miss);
+            }
         }
     }
 
@@ -242,7 +292,7 @@ public class GamePlayController : Singleton<GamePlayController>
         Time.timeScale = 0;
 
         //Audio
-        audioSource.Pause();
+        musicSource.Pause();
     }
 
     private void OnGameResumeEvent()
@@ -258,7 +308,7 @@ public class GamePlayController : Singleton<GamePlayController>
         Time.timeScale = 1;
 
         //Audio
-        audioSource.Play();
+        musicSource.Play();
     }
 
     private void OnGameRestartEvent()

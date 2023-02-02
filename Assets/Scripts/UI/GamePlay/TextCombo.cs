@@ -1,11 +1,11 @@
 using UnityEngine;
-using UnityEngine.UI;
+using TMPro;
 
 namespace Plutono.UI
 {
     public class TextCombo : MonoBehaviour
     {
-        public Text comboText;
+        public TMP_Text comboText;
         public GamePlayController gamePlayController;
         // Start is called before the first frame update
         void Start()

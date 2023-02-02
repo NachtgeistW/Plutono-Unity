@@ -12,13 +12,13 @@ namespace Plutono.UI
         // Start is called before the first frame update
         void Start()
         {
-            slider.maxValue = controller.audioSource.clip.length;
+            slider.maxValue = controller.musicSource.clip.length;
         }
 
         // Update is called once per frame
         void Update()
         {
-            slider.value = controller.audioSource.time;
+            slider.value = controller.musicSource.time;
         }
     }
 }

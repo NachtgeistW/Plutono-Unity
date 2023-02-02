@@ -18,7 +18,7 @@ namespace Plutono.Song
         public Transform explosionAnimParent;
         public ObjectPool<Explosion> explosionAnimPool;
         public bool collectionChecks = true;
-        public int maxPoolSize = 10;
+        public int maxPoolSize = PlayerSettingsManager.Instance.PlayerSettings_Global_SO.ExplosionAnimateObjectpoolMaxSize;
 
         public GamePlayController gamePlayController;
 
@@ -28,25 +28,7 @@ namespace Plutono.Song
                 OnCreatePooledItem, OnTakeFromPool, OnReturnedToPool, OnDestroyPooledItem, collectionChecks, maxPoolSize);
         }
 
-/*        private void Start()
-        {
-            for (int i = 0; i < maxPoolSize; i++)
-            {
-                explosionAnims.Add(explosionAnimPool.Get().gameObject);
-            }
-        }
-*/
-        private void OnEnable()
-        {
-            EventHandler.HitNoteEvent += OnHitNoteEvent;
-        }
-
-        private void OnDisable()
-        {
-            EventHandler.HitNoteEvent -= OnHitNoteEvent;
-        }
-
-        private void OnHitNoteEvent(List<Note> notesOnScreen, Note note, double curGameTime, NoteGrade noteGrade)
+        public void OnHitNote(Note note, NoteGrade noteGrade)
         {
             if (!note._details.IsShown)
                 return;
@@ -55,7 +37,7 @@ namespace Plutono.Song
             switch (noteGrade)
             {
                 case NoteGrade.Perfect:
-                    zPos = 32f;
+                    zPos = Settings.judgeLightPosition;
                     break;
                 case NoteGrade.None:
                     //Do nothing

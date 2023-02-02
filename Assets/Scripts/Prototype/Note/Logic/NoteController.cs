@@ -12,7 +12,7 @@ namespace Plutono.Song
         public Transform noteParent;
         public ObjectPool<Note> notePool;
         public bool collectionChecks = true;
-        public int maxPoolSize = 50;
+        public int maxPoolSize = PlayerSettingsManager.Instance.PlayerSettings_Global_SO.NoteObjectpoolMaxSize;
 
         public GamePlayController gamePlayController;
 

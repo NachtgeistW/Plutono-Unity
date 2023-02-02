@@ -9,13 +9,16 @@ public class PlayerSettings_Global_SO : ScriptableObject
     public float suddenHeight;
 
     //Latency
-    [Range(-3f, 3f)]
-    public float musicOffset;
-    [Range(-0.3f, 3f)]
-    public float touchOffset;
+    [Range(-3f, 3f)] public float globalChartOffset;
+    [Range(-3f, 3f)] public float chartMusicOffset;
 
     //Language
     public Language language;
 
     //game theme
+
+    [Header("-Advance-")]
+    public int DOTweenDefaultCapacity;
+    public int NoteObjectpoolMaxSize;
+    public int ExplosionAnimateObjectpoolMaxSize;
 }

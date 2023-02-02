@@ -14,6 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isSuddenOn: 0
   suddenHeight: 0
-  musicOffset: 0
-  touchOffset: 0
+  globalChartOffset: -0.2
+  chartMusicOffset: -0.2
   language: 0
+  DOTweenDefaultCapacity: 200
+  NoteObjectpoolMaxSize: 100
+  ExplosionAnimateObjectpoolMaxSize: 20

@@ -21,7 +21,9 @@ public static class Settings
     public const float minAlphaDif = 0.05f;
 
     public const float maximumNoteRange = 240.0f;
-    public static float NoteFallTime(float chartPlaySpeed) //Maybe I'll change this into something more precise later...
+    public const float judgeLightPosition = 32f;
+
+    public static float NoteFallSpeed(float chartPlaySpeed) //Maybe I'll change this into something more precise later...
     {
         var speed = chartPlaySpeed switch
         {
@@ -46,9 +48,14 @@ public static class Settings
             9.5f => 0.15f,
             _ => 1.7f,
         };
-        //return speed / 180.0f * maximumNoteRange;
-        return speed * maximumNoteRange / 180.0f;
+        return speed;
     }
+
+    public static float NoteFallTime(float chartPlaySpeed) //Maybe I'll change this into something more precise later...
+    {
+        return NoteFallSpeed(chartPlaySpeed) / 180.0f * maximumNoteRange;
+    }
+
     public static float perspectiveHorizontalScale = 7.5f;
 
     /// <summary>

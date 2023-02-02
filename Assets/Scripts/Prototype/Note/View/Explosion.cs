@@ -20,8 +20,7 @@ namespace Plutono.Song
             switch (noteGrade)
             {
                 case NoteGrade.Perfect:
-                    material.SetColor("_TintColor", Color.white);
-                    material.SetColor("_GlowColor", Settings.perfectLightColor);
+                    material.color = Settings.perfectLightColor;
                     break;
                 case NoteGrade.Good:
                     material.color = Color.green;

@@ -26,7 +26,7 @@ namespace Plutono.Song
         {
             //Force the note to back to the original position where it begins to fall down
             gameObject.transform.position = new Vector3((float)(_details.pos * 10), 0, Settings.maximumNoteRange);
-            gameObject.transform.DOMoveZ(0, Settings.NoteFallTime(10)).SetEase(Ease.Linear);
+            gameObject.transform.DOMoveZ(0, Settings.NoteFallTime(5.5f)).SetEase(Ease.Linear);
         }
 
         public void ForceStopAnimation()
