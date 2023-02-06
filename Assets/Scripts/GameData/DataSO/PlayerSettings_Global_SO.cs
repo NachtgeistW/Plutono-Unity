@@ -5,8 +5,7 @@ public class PlayerSettings_Global_SO : ScriptableObject
 {
     //Sudden+ setting
     public bool isSuddenOn;
-    [Range(0f, 1f)]
-    public float suddenHeight;
+    [Range(0.1f, 1f)] public float suddenHeight;
 
     //Latency
     [Range(-3f, 3f)] public float globalChartOffset;
@@ -18,7 +17,7 @@ public class PlayerSettings_Global_SO : ScriptableObject
     //game theme
 
     [Header("-Advance-")]
-    public int DOTweenDefaultCapacity;
-    public int NoteObjectpoolMaxSize;
-    public int ExplosionAnimateObjectpoolMaxSize;
+    [Range(200, 3125)] public int DOTweenDefaultCapacity;
+    [Range(50, 500)] public int NoteObjectpoolMaxSize;
+    [Range(10, 100)] public int ExplosionAnimateObjectpoolMaxSize;
 }

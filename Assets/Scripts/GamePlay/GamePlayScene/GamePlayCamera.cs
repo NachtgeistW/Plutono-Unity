@@ -11,6 +11,7 @@ public class GamePlayCamera : MonoBehaviour
     [SerializeField] private Camera gamePlayCamera;
     [SerializeField] private AudioListener audioListener;
     [SerializeField] private TranslucentImageSource source;
+    public bool isTransluratePause;
     
     private void OnEnable()
     {
@@ -41,7 +42,8 @@ public class GamePlayCamera : MonoBehaviour
     
     private void OnGamePauseEvent()
     {
-        source.enabled = true;
+        if (!isTransluratePause)
+            source.enabled = true;
     }
 
     private void OnGameResumeEvent()

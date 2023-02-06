@@ -18,7 +18,7 @@ namespace Plutono.UI
 
         private void OnGamePauseEvent()
         {
-            pausePanel.gameObject.SetActive(true);
+            //pausePanel.gameObject.SetActive(true);
         }
 
         private void OnGameResumeEvent()

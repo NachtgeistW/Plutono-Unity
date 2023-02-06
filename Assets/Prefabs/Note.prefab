@@ -430,6 +430,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5204384521400422390}
   - component: {fileID: 1968958405543738396}
+  - component: {fileID: 2045424733850168232}
   m_Layer: 0
   m_Name: Note
   m_TagString: Untagged
@@ -484,6 +485,19 @@ MonoBehaviour:
   _blankSpriteRenderer: {fileID: 8423021217620591980}
   _pianoSpriteRenderer: {fileID: 6228860794142185626}
   _slideSpriteRenderer: {fileID: 3579559003840951118}
+--- !u!65 &2045424733850168232
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5204384521400422391}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &5307101197040709396
 GameObject:
   m_ObjectHideFlags: 0

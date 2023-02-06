@@ -6,6 +6,7 @@ using Plutono.IO;
 using System;
 using System.Linq;
 using DG.Tweening;
+using Lean.Touch;
 
 public class GamePlayController : Singleton<GamePlayController>
 {
@@ -37,10 +38,12 @@ public class GamePlayController : Singleton<GamePlayController>
     public List<Note> notesOnScreen;
     //public List<Explosion> noteExplsionAinmations;
     public GameStatus Status{ get; internal set; }
+    public GameMode gameMode;
 
     [Header("-Note and Chart-")]
     [SerializeField]private NoteController noteController;
     [SerializeField]private ExplosionController explosionController;
+    [SerializeField]private HitController hitController;
     public ChartDetail ChartDetail { get; internal set; }
     public SongDetail SongSource { get; internal set; }
 
@@ -56,6 +59,7 @@ public class GamePlayController : Singleton<GamePlayController>
         EventHandler.GameResumeEvent += OnGameResumeEvent;
         EventHandler.GameRestartEvent += OnGameRestartEvent;
         EventHandler.BeforeSceneLoadedEvent += OnBeforeSceneLoadedEvent;
+        LeanTouch.OnFingerTap += OnFingerTapEvent;
     }
 
     private void OnDisable()
@@ -64,6 +68,7 @@ public class GamePlayController : Singleton<GamePlayController>
         EventHandler.GameResumeEvent -= OnGameResumeEvent;
         EventHandler.GameRestartEvent -= OnGameRestartEvent;
         EventHandler.BeforeSceneLoadedEvent -= OnBeforeSceneLoadedEvent;
+        LeanTouch.OnFingerTap -= OnFingerTapEvent;
     }
 
     private void Awake()
@@ -79,7 +84,7 @@ public class GamePlayController : Singleton<GamePlayController>
         ChartDetail = SongSource.ChartDetails[chartIndex];
 
         //Status
-        Status = new GameStatus(this, GameMode.Autoplay)
+        Status = new GameStatus(this, gameMode)
         {
             ChartPlaySpeed = 5.5f
         };
@@ -117,6 +122,12 @@ public class GamePlayController : Singleton<GamePlayController>
     // Update is called once per frame
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Debug.Log("space key was pressed");
+            EventHandler.CallGamePauseEvent();
+        }
+        
         //Synchronize Time
         if (!Status.IsPaused)
         {
@@ -134,7 +145,7 @@ public class GamePlayController : Singleton<GamePlayController>
                 if (note.transform.position.z <= Settings.judgeLightPosition)
                 {
 #if DEBUG
-                    if (note._details.id <= 10)
+                    if (note._details.id % 50 == 1)
                     {
                         Debug.Log("noteId: " + note._details.id + " noteTime: " + note._details.time + " CurTime: " + CurTime + " musicTime: " + musicSource.time);
                     }
@@ -149,22 +160,6 @@ public class GamePlayController : Singleton<GamePlayController>
         else
         {
             RecycleMissNote(CurTime);
-
-            ///Judge Note
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                var note = SearchForBestNote(CurTime);
-                if (note == null) return;
-
-                var grade = NoteGradeJudgment.JudgeNoteGrade(note._details, CurTime, Status.Mode);
-                var result = Status.Judge(note._details, grade);
-                if (result == NoteJudgmentResult.Succeeded)
-                {
-                    noteController.OnHitNote(notesOnScreen, note);
-                    explosionController.OnHitNote(note, NoteGrade.Perfect);
-                    EventHandler.CallHitNoteEvent(notesOnScreen, note, CurTime, grade);
-                }
-            }
         }
 
         //End Game
@@ -202,7 +197,9 @@ public class GamePlayController : Singleton<GamePlayController>
         if ((ticksBeforeSynchronization <= 0 || ResumeElapsedTime < 0.5f)
             && lastDspTime != curDspTime)
         {
+#if DEBUG
             Debug.Log("Sync");
+#endif
             ticksBeforeSynchronization = 600;
             lastDspTime = curDspTime;
             CurTime = (float)curDspTime - musicStartTime + chartMusicOffset;
@@ -227,11 +224,69 @@ public class GamePlayController : Singleton<GamePlayController>
         }
     }
 
+    private void OnGamePauseEvent()
+    {
+        //If game is clear or failed, do nothing
+        if (Status.IsCompleted || Status.IsFailed)
+            return;
+
+        //Status
+        Status.IsPaused = true;
+
+        //Time
+        Time.timeScale = 0;
+
+        //Audio
+        musicSource.Pause();
+    }
+
+    private void OnGameResumeEvent()
+    {
+        //TODO: Wait for a few minutes
+        //If game is clear or failed, do nothing
+        if (Status.IsCompleted || Status.IsFailed)
+            return;
+        //Status
+        Status.IsPaused = false;
+
+        //Time
+        Time.timeScale = 1;
+
+        //Audio
+        musicSource.Play();
+    }
+
+    private void OnGameRestartEvent()
+    {
+        throw new NotImplementedException();
+    }
+
+    private void OnBeforeSceneLoadedEvent()
+    {
+        //throw new NotImplementedException();
+    }
+    
+    private void OnFingerTapEvent(LeanFinger finger)
+    {
+        //var note = SearchForBestNoteOnTime(CurTime);
+        //if (note == null) return;
+        if (!hitController.IsHittedNote(finger, out Note note)) return;
+
+        var grade = NoteGradeJudgment.JudgeNoteGrade(note._details, CurTime, Status.Mode);
+        var result = Status.Judge(note._details, grade);
+        if (result == NoteJudgmentResult.Succeeded)
+        {
+            noteController.OnHitNote(notesOnScreen, note);
+            explosionController.OnHitNote(note, grade);
+            EventHandler.CallHitNoteEvent(notesOnScreen, note, CurTime, grade);
+        }
+    }
+    
     /// <summary>
     /// Search for the best note when player hit the screen
     /// </summary>
     /// <param name="touchTime">the time when player touches the screen</param>
-    Note SearchForBestNote(double touchTime)
+    Note SearchForBestNoteOnTime(double touchTime)
     {
         if (notesOnScreen.Count == 0)
         {
@@ -277,47 +332,5 @@ public class GamePlayController : Singleton<GamePlayController>
             GameMode.Ekzerco => throw new NotImplementedException(),
             _ => throw new NotImplementedException(),
         };
-    }
-
-    private void OnGamePauseEvent()
-    {
-        //If game is clear or failed, do nothing
-        if (Status.IsCompleted || Status.IsFailed)
-            return;
-
-        //Status
-        Status.IsPaused = true;
-
-        //Time
-        Time.timeScale = 0;
-
-        //Audio
-        musicSource.Pause();
-    }
-
-    private void OnGameResumeEvent()
-    {
-        //TODO: Wait for a few minutes
-        //If game is clear or failed, do nothing
-        if (Status.IsCompleted || Status.IsFailed)
-            return;
-        //Status
-        Status.IsPaused = false;
-
-        //Time
-        Time.timeScale = 1;
-
-        //Audio
-        musicSource.Play();
-    }
-
-    private void OnGameRestartEvent()
-    {
-        throw new NotImplementedException();
-    }
-
-    private void OnBeforeSceneLoadedEvent()
-    {
-        //throw new NotImplementedException();
     }
 }

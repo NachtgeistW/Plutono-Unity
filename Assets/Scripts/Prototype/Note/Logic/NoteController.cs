@@ -22,20 +22,6 @@ namespace Plutono.Song
                 OnCreatePooledItem, OnTakeFromPool, OnReturnedToPool, OnDestroyPooledItem, collectionChecks, maxPoolSize);
         }
 
-/*        private void OnEnable()
-        {
-            EventHandler.InstantiateNote += InstantiateNote;
-            EventHandler.HitNoteEvent += OnHitNoteEvent;
-            EventHandler.MissNoteEvent += OnMissNoteEvent;
-        }
-
-        private void OnDisable()
-        {
-            EventHandler.InstantiateNote -= InstantiateNote;
-            EventHandler.HitNoteEvent -= OnHitNoteEvent;
-            EventHandler.MissNoteEvent -= OnMissNoteEvent;
-        }
-*/
         public void InstantiateNote(List<NoteDetail> noteDetails, List<Note> notesOnScreen)
         {
             foreach (var noteDetail in noteDetails)
