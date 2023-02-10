@@ -2,6 +2,7 @@
 using UnityEngine;
 using Plutono.Song;
 using System;
+using Plutono.GamePlay;
 
 /*
  * 控制游戏的整体状态（注意，只存数据，不存具体的gameObject）

@@ -5,6 +5,7 @@
 
 using UnityEngine;
 using TMPro;
+using Plutono.GamePlay;
 
 namespace Plutono.UI
 {

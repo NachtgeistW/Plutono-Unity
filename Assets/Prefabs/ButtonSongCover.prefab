@@ -28,6 +28,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2669596905281656087}
   m_RootOrder: 0
@@ -109,6 +110,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2252344794399706346}
   m_Father: {fileID: 0}
@@ -222,7 +224,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8989190474575563200}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e85354d7be87779429b4dc7cf867942b, type: 3}
+  m_Script: {fileID: 11500000, guid: d9c4c4b3d6b00a54b9bc12ccfca481d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   songName: {fileID: 1245407002702073741}

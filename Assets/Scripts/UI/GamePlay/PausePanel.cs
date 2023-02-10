@@ -18,24 +18,18 @@ namespace Plutono.UI
 
         private void OnGamePauseEvent()
         {
-            //pausePanel.gameObject.SetActive(true);
+            pausePanel.SetActive(true);
         }
 
         private void OnGameResumeEvent()
         {
-            pausePanel.gameObject.SetActive(false);
+            pausePanel.SetActive(false);
         }
 
         // Start is called before the first frame update
         void Start()
         {
-            pausePanel.gameObject.SetActive(false);
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
+            pausePanel.SetActive(false);
         }
     }
 }

@@ -11,7 +11,7 @@ namespace Plutono.IO
         {
             loadFiles = new LoadFiles();
             loadFiles.RequestReadPermission();
-            loadFiles.Initialize(StoragePath).ForEach(song => songSourceList.Add(new Plutono.Song.SongDetail(song)));
+            loadFiles.Initialize(StoragePath).ForEach(song => songSourceList.Add(new Song.SongDetail(song)));
         }
     }
 }

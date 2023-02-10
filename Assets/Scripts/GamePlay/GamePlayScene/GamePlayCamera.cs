@@ -25,6 +25,7 @@ public class GamePlayCamera : MonoBehaviour
     {
         EventHandler.GamePauseEvent -= OnGamePauseEvent;
         EventHandler.GameResumeEvent -= OnGameResumeEvent;
+        EventHandler.BeforeSceneLoadedEvent -= OnBeforeSceneLoadedEvent;
         EventHandler.AfterSceneLoadedEvent -= OnAfterSceneLoadedEvent;
     }
     

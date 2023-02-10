@@ -10,8 +10,9 @@ using System.Collections.Generic;
 
 namespace Plutono.Song
 {
-
-    //class ChartDetail -- Store the information of a single chart.
+    /// <summary>
+    /// class ChartDetail -- Store the information of a single chart.
+    /// </summary>
     [System.Serializable]
     public sealed class ChartDetail
     {

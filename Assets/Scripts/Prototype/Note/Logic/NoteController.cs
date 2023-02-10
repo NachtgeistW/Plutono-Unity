@@ -1,5 +1,6 @@
 //����note�����ɣ��ж�
 using DG.Tweening;
+using Plutono.GamePlay;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
