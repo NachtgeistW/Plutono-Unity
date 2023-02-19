@@ -20,8 +20,8 @@ public static class Settings
     public static UnityEngine.Color badLightColor = new(1.0f, 0.913f, 0.529f);
     public const float minAlphaDif = 0.05f;
 
-    public const float maximumNoteRange = 240.0f;
-    public const float judgeLightPosition = 32f;
+    public const float maximumNoteRange = 240f;
+    public const float judgeLinePosition = 32f;
 
     public static float NoteFallSpeed(float chartPlaySpeed) //Maybe I'll change this into something more precise later...
     {
@@ -51,7 +51,7 @@ public static class Settings
         return speed;
     }
 
-    public static float NoteFallTime(float chartPlaySpeed) //Maybe I'll change this into something more precise later...
+    public static float NoteFallTime(float chartPlaySpeed)
     {
         return NoteFallSpeed(chartPlaySpeed) / 180.0f * maximumNoteRange;
     }

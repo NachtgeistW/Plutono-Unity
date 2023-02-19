@@ -5,8 +5,11 @@ namespace Plutono.Util.Transition
 {
     public class TransitionManager : Singleton<TransitionManager>
     {
-        [SceneName]
+#if UNITY_EDITOR
+        [SceneName] public string startSceneName = string.Empty;
+#elif UNITY_ANDROID
         public string startSceneName = string.Empty;
+#endif
 
         private void OnEnable()
         {

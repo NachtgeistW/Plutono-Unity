@@ -429,7 +429,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5204384521400422390}
-  - component: {fileID: 1968958405543738396}
   - component: {fileID: 6319030305420357399}
   - component: {fileID: 5518147771295660017}
   m_Layer: 0
@@ -460,32 +459,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1968958405543738396
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5204384521400422391}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f1d8f21399b2e744e893cc2fcc8e265c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _details:
-    id: 0
-    pos: 0
-    size: 0
-    time: 0
-    type: 2
-    duration: 0
-    sounds: []
-    isLink: 0
-    prevLink: -1
-    nextLink: -1
-  _blankSpriteRenderer: {fileID: 8423021217620591980}
-  _pianoSpriteRenderer: {fileID: 6228860794142185626}
-  _slideSpriteRenderer: {fileID: 3579559003840951118}
 --- !u!114 &6319030305420357399
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -498,7 +471,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c983fe61f8338e47bfaa50d9157a15d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  material: {fileID: 2100000, guid: 0a9b8ebd6b3abf748be6f772b5ca52d0, type: 2}
+  waveSpriteRenderer: {fileID: 5204384520451942606}
+  lightSpriteRenderer: {fileID: 5204384520973166644}
+  circleSpriteRenderer: {fileID: 5204384520089163436}
 --- !u!95 &5518147771295660017
 Animator:
   serializedVersion: 4

@@ -19,12 +19,13 @@ namespace Plutono.Song
         public Transform explosionAnimParent;
         public ObjectPool<Explosion> explosionAnimPool;
         public bool collectionChecks = true;
-        public int maxPoolSize = PlayerSettingsManager.Instance.PlayerSettings_Global_SO.ExplosionAnimateObjectpoolMaxSize;
+        public int maxPoolSize;
 
         public GamePlayController gamePlayController;
 
-        private void Awake()
+        private void Start()
         {
+            maxPoolSize = PlayerSettingsManager.Instance.PlayerSettings_Global_SO.ExplosionAnimateObjectpoolMaxSize;
             explosionAnimPool = new ObjectPool<Explosion>(
                 OnCreatePooledItem, OnTakeFromPool, OnReturnedToPool, OnDestroyPooledItem, collectionChecks, maxPoolSize);
         }
@@ -33,12 +34,12 @@ namespace Plutono.Song
         {
             if (!note._details.IsShown)
                 return;
-            var xPos = (float)(note._details.pos * 10);
+            var xPos = (float)(note._details.pos * Settings.perspectiveHorizontalScale);
             float zPos;
             switch (noteGrade)
             {
                 case NoteGrade.Perfect:
-                    zPos = Settings.judgeLightPosition;
+                    zPos = Settings.judgeLinePosition;
                     break;
                 case NoteGrade.None:
                     //Do nothing
@@ -52,7 +53,7 @@ namespace Plutono.Song
             var obj = explosionAnimPool.Get();
             obj.transform.position = new Vector3(xPos, 0, zPos);
 
-            obj.PlayAnimation(noteGrade);
+            obj.PlayAnimation(noteGrade, (float)note._details.size);
             StartCoroutine(ReleaseEnumerator(obj));
         }
 

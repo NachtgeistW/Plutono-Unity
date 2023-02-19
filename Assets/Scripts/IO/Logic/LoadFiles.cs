@@ -38,14 +38,20 @@ namespace Plutono.IO
         //List<Legacy.LegacySongDetail> Initialize -- scan specific file paths and detect the chart.
         public List<Legacy.LegacySongDetail> Initialize(string StoragePath)
         {
+#if UNITY_EDITOR
             if (string.IsNullOrEmpty(StoragePath))
+            {
+                StoragePath = Application.persistentDataPath;
+            }
+#else
                 StoragePath = Application.platform switch
                 {
-                    RuntimePlatform.Android =>
-                       StoragePath = "/storage/emulated/0/DeemoDIY",
+                    //RuntimePlatform.Android =>
+                    //    StoragePath = "/storage/emulated/0/DeemoDIY",
                     _ => StoragePath = Application.persistentDataPath,
                 };
-
+                Debug.Log(Directory.Exists(StoragePath) + " " + StoragePath);
+#endif
             if (Directory.Exists(StoragePath))
             {
                 return Directory.GetDirectories(StoragePath) // get song packs

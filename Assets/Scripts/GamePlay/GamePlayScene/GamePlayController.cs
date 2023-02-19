@@ -8,6 +8,7 @@ using System.Linq;
 using DG.Tweening;
 using Lean.Touch;
 using Assets.Scripts.GamePlay;
+using UnityEngine.Events;
 
 namespace Plutono.GamePlay
 {
@@ -50,13 +51,15 @@ namespace Plutono.GamePlay
         public AudioSource musicSource;
         public double musicStartTime;
 
+
+        /// Event
         private void OnEnable()
         {
             EventHandler.GamePauseEvent += OnGamePauseEvent;
             EventHandler.GameResumeEvent += OnGameResumeEvent;
             EventHandler.GameRestartEvent += OnGameRestartEvent;
             EventHandler.BeforeSceneLoadedEvent += OnBeforeSceneLoadedEvent;
-            LeanTouch.OnFingerTap += OnFingerTapEvent;
+            EnableInput();
         }
 
         private void OnDisable()
@@ -65,13 +68,13 @@ namespace Plutono.GamePlay
             EventHandler.GameResumeEvent -= OnGameResumeEvent;
             EventHandler.GameRestartEvent -= OnGameRestartEvent;
             EventHandler.BeforeSceneLoadedEvent -= OnBeforeSceneLoadedEvent;
-            LeanTouch.OnFingerTap -= OnFingerTapEvent;
         }
 
         private void Awake()
         {
             PlayerSetting = PlayerSettingsManager.Instance.PlayerSettings_Global_SO;
-
+            // System config
+            Application.targetFrameRate = 120;
         }
 
         private void Start()
@@ -85,7 +88,7 @@ namespace Plutono.GamePlay
             //Status
             Status = new GameStatus(this, gameMode)
             {
-                ChartPlaySpeed = 5.5f
+                ChartPlaySpeed = 6.0f
             };
 
             //Audio
@@ -117,12 +120,6 @@ namespace Plutono.GamePlay
         // Update is called once per frame
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                Debug.Log("space key was pressed");
-                EventHandler.CallGamePauseEvent();
-            }
-
             //Synchronize Time
             if (!Status.IsPaused)
             {
@@ -133,11 +130,16 @@ namespace Plutono.GamePlay
             ///Generate notes according to the time
             GenerateNote();
 
+            foreach (var note in notesOnScreen)
+            {
+                note.UpdatePosition(CurTime, Status.ChartPlaySpeed);
+            }
+            
             if (Status.Mode == GameMode.Autoplay)
             {
                 foreach (var note in notesOnScreen.ToList())
                 {
-                    if (note.transform.position.z <= Settings.judgeLightPosition)
+                    if (note.transform.position.z <= Settings.judgeLinePosition)
                     {
 #if DEBUG
                         if (note._details.id % 50 == 1)
@@ -158,7 +160,8 @@ namespace Plutono.GamePlay
             }
 
             //End Game
-            if (Status.ClearCount == ChartDetail.noteDetails.Count)
+            //if (Status.ClearCount == ChartDetail.noteDetails.Count)
+            if (musicSource.clip.length - musicSource.time <= 0.5f)
             {
                 Status.IsCompleted = true;
                 EventHandler.CallGameClearEvent();
@@ -210,7 +213,7 @@ namespace Plutono.GamePlay
         {
             foreach (var note in notesOnScreen.ToList())
             {
-                if (note.transform.position.z == 0)
+                if (note.transform.position.z <= 0)
                 {
                     Status.Judge(note._details, NoteGrade.Miss);
                     noteController.OnMissNote(notesOnScreen, note);
@@ -227,6 +230,9 @@ namespace Plutono.GamePlay
 
             //Status
             Status.IsPaused = true;
+
+            //Hit
+            hitController.DisableInput();
 
             //Time
             Time.timeScale = 0;
@@ -258,22 +264,7 @@ namespace Plutono.GamePlay
 
         private void OnBeforeSceneLoadedEvent()
         {
-        }
-
-        private void OnFingerTapEvent(LeanFinger finger)
-        {
-            //var note = SearchForBestNoteOnTime(CurTime);
-            //if (note == null) return;
-            if (!hitController.IsHittedNote(finger, out Note note)) return;
-
-            var grade = NoteGradeJudgment.JudgeNoteGrade(note._details, CurTime, Status.Mode);
-            var result = Status.Judge(note._details, grade);
-            if (result == NoteJudgmentResult.Succeeded)
-            {
-                noteController.OnHitNote(notesOnScreen, note);
-                explosionController.OnHitNote(note, grade);
-                EventHandler.CallHitNoteEvent(notesOnScreen, note, CurTime, grade);
-            }
+            notesOnScreen.Clear();
         }
 
         /// <summary>
@@ -327,5 +318,69 @@ namespace Plutono.GamePlay
                 _ => throw new NotImplementedException(),
             };
         }
+        public void EnableInput()
+        {
+            LeanTouch.OnFingerDown += OnFingerDown;
+            LeanTouch.OnFingerUpdate += OnFingerUpdate;
+            LeanTouch.OnFingerUp += OnFingerUp;
+        }
+
+        public void DisableInput()
+        {
+            LeanTouch.OnFingerDown -= OnFingerDown;
+            LeanTouch.OnFingerUpdate -= OnFingerUpdate;
+            LeanTouch.OnFingerUp -= OnFingerUp;
+        }
+
+        protected void OnFingerDown(LeanFinger finger)
+        {
+            if (!hitController.IsHittedNote(finger, out Note note)) return;
+
+            var grade = NoteGradeJudgment.JudgeNoteGrade(note._details, CurTime, Status.Mode);
+            var result = Status.Judge(note._details, grade);
+            if (result == NoteJudgmentResult.Succeeded)
+            {
+                noteController.OnHitNote(notesOnScreen, note);
+                explosionController.OnHitNote(note, grade);
+                EventHandler.CallHitNoteEvent(notesOnScreen, note, CurTime, grade);
+                Debug.Log("OnFingerDown" + " Note: " + note._details.id + " Note Time: " + note._details.time + " CurTime: " + CurTime);
+            }
+        }
+
+        private void OnFingerUpdate(LeanFinger finger)
+        {
+            if (!hitController.IsHittedNote(finger, out Note note)) return;
+            if (note._details.type == NoteType.Slide)
+            {
+                var grade = NoteGradeJudgment.JudgeNoteGrade(note._details, CurTime, Status.Mode);
+                var result = Status.Judge(note._details, grade);
+                if (result == NoteJudgmentResult.Succeeded)
+                {
+                    noteController.OnHitNote(notesOnScreen, note);
+                    explosionController.OnHitNote(note, grade);
+                    EventHandler.CallHitNoteEvent(notesOnScreen, note, CurTime, grade);
+                    Debug.Log("OnFingerUpdate" + " Note: " + note._details.id + " Note Time: " + note._details.time + " CurTime: " + CurTime);
+                }
+            }
+        }
+
+        private void OnFingerUp(LeanFinger finger)
+        {
+            
+        }
     }
+
+
+    public class GameEvent : UnityEvent<GamePlayController>
+    {
+    }
+
+    public class NoteEvent : UnityEvent<GamePlayController, Note>
+    {
+    }
+
+    //public class NoteJudgeEvent : UnityEvent<GamePlayController, Note, JudgeData>
+    //{
+    //}
 }
+

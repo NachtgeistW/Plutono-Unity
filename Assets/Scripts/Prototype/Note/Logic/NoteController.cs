@@ -13,12 +13,13 @@ namespace Plutono.Song
         public Transform noteParent;
         public ObjectPool<Note> notePool;
         public bool collectionChecks = true;
-        public int maxPoolSize = PlayerSettingsManager.Instance.PlayerSettings_Global_SO.NoteObjectpoolMaxSize;
+        public int maxPoolSize;
 
         public GamePlayController gamePlayController;
 
-        private void Awake()
+        private void Start()
         {
+            maxPoolSize = PlayerSettingsManager.Instance.PlayerSettings_Global_SO.NoteObjectpoolMaxSize;
             notePool = new ObjectPool<Note>(
                 OnCreatePooledItem, OnTakeFromPool, OnReturnedToPool, OnDestroyPooledItem, collectionChecks, maxPoolSize);
         }
@@ -34,8 +35,7 @@ namespace Plutono.Song
 
         public void OnHitNote(List<Note> notesOnScreen, Note note)
         {
-            //FIXME: Prevent judgment if there aren't any note on the screen
-            note.ForceStopAnimation();
+            //note.ForceStopAnimation();
             notePool.Release(note);
             notesOnScreen.Remove(note);
         }
@@ -50,8 +50,7 @@ namespace Plutono.Song
         Note OnCreatePooledItem()
         {
             Note note = Instantiate(
-                //notePrefab, new Vector3(notePrefab._details.pos * 10, 0, Settings.maximumNoteRange / notePrefab._details.time * Settings.NoteFallTime(gamePlayController.Status.ChartPlaySpeed)),Quaternion.identity, noteParent);  
-                notePrefab, new Vector3((float)(notePrefab._details.pos * 10), 0, Settings.maximumNoteRange), Quaternion.identity, noteParent);
+                notePrefab, new Vector3((float)(notePrefab._details.pos * Settings.perspectiveHorizontalScale), 0, Settings.maximumNoteRange), Quaternion.identity, noteParent);
             return note;
         }
 
@@ -66,10 +65,9 @@ namespace Plutono.Song
         {
             //Set the new data of the note
             note._details = notePrefab._details;
-            note.SetSpriteRenderer();
+            note.SetProperties();
             //Activate the note and make it fall down
             note.gameObject.SetActive(true);
-            note.FallingDownAnimation();
         }
 
         void OnDestroyPooledItem(Note note)

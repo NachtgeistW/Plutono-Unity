@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor;
 
@@ -73,3 +74,4 @@ public class SceneNameDrawer: PropertyDrawer
         property.stringValue = sceneNames[sceneIndex].text;
     }
 }
+#endif

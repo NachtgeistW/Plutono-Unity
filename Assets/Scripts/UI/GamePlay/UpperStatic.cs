@@ -29,11 +29,10 @@ namespace Plutono.UI
                     break;
                 case GameMode.Arbo:
                     modeText.text = "Arbo";
-                    modeText.color = Color.white;
                     break;
                 case GameMode.Floro:
                     modeText.text = "Floro";
-                    modeText.color = new Color(171, 149, 174);
+                    //modeText.color = new Color(171, 149, 174);
                     break;
                 case GameMode.Persona:
                     modeText.text = "Persona";
