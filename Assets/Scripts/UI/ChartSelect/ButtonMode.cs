@@ -6,9 +6,12 @@ using DG.Tweening;
 public class ButtonMode : MonoBehaviour
 {
     public RectTransform modeUI;
-    public void OnClick()
+    public void DragDown()
     {
         modeUI.DOAnchorPosY(0, 0.5f).SetEase(Ease.InOutSine);
-        //modeUI.transform.DOMove(new Vector3(0, 0, 0), 1);
+    }
+    public void DragUp()
+    {
+        modeUI.DOAnchorPosY(500, 0.5f).SetEase(Ease.InOutSine);
     }
 }

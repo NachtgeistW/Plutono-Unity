@@ -10,4 +10,9 @@ public class Flick : MonoBehaviour
     {
         image.DOFade(0, 1).SetLoops(-1, LoopType.Yoyo);
     }
+
+    private void OnDestroy()
+    {
+        image.DOKill();
+    }
 }

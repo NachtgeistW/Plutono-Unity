@@ -13,17 +13,15 @@
  */
 
 using Assets.Scripts.GamePlay;
-using DG.Tweening.Core.Easing;
+using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 namespace Plutono.Level.ChartSelect
 {
     public class PrefabButtonChartSelectView : MonoBehaviour
     {
-        [SerializeField] private Text _level;
-        [SerializeField] private Text _chartDesigner;
+        [SerializeField] private TMP_Text _level;
+        [SerializeField] private TMP_Text _chartDesigner;
         public Song.ChartDetail ChartOnButton { get; set; }
         private int chartIndex;
 

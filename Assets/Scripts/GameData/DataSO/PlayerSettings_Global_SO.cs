@@ -15,7 +15,6 @@ public class PlayerSettings_Global_SO : ScriptableObject
     public Language language;
 
     //game theme
-
     [Header("-Advance-")]
     [Range(200, 3125)] public int DOTweenDefaultCapacity;
     [Range(50, 500)] public int NoteObjectpoolMaxSize;

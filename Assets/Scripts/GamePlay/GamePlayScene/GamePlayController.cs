@@ -35,7 +35,6 @@ namespace Plutono.GamePlay
         [Header("-Status-")]
         public List<Note> notesOnScreen;
         public GameStatus Status { get; internal set; }
-        public GameMode gameMode;
         public PlayerSettings_Global_SO PlayerSetting { get; private set; }
 
         [Header("-Note and Chart-")]
@@ -59,7 +58,6 @@ namespace Plutono.GamePlay
             EventHandler.GameResumeEvent += OnGameResumeEvent;
             EventHandler.GameRestartEvent += OnGameRestartEvent;
             EventHandler.BeforeSceneLoadedEvent += OnBeforeSceneLoadedEvent;
-            EnableInput();
         }
 
         private void OnDisable()
@@ -86,14 +84,17 @@ namespace Plutono.GamePlay
             ChartDetail = SongSource.ChartDetails[chartIndex];
 
             //Status
+            GameMode gameMode = SongSelectDataTransformer.GameMode;
             Status = new GameStatus(this, gameMode)
             {
-                ChartPlaySpeed = 6.0f
+                ChartPlaySpeed = SongSelectDataTransformer.ChartPlaySpeed,
             };
 
-            //Audio
-            musicSource.clip = AudioClipFileManager.Read(SongSource.MusicPath);
-            musicSource.time = 0;
+            //Input
+            if (gameMode != GameMode.Autoplay)
+            {
+                EnableInput();
+            }
 
             //Synchronize
             musicPlayingDelay = 1.0f;
@@ -108,13 +109,14 @@ namespace Plutono.GamePlay
             NoteGenerationLeadTime = Settings.NoteFallTime(Status.ChartPlaySpeed) + ConfigChartOffset;
 
             //Audio
+            musicSource.clip = AudioClipFileManager.Read(SongSource.MusicPath);
+            musicSource.time = 0;
             musicStartTime = curDspTime + musicPlayingDelay;
             musicSource.PlayScheduled(musicStartTime);
 #if DEBUG
             Debug.Log("StarOrResumeTime: " + StartOrResumeTime + " DspTime: " + curDspTime + " musicStartTime: " + musicStartTime);
             Debug.Log("globalLatency: " + musicPlayingDelay + " chartMusicOffset: " + chartMusicOffset + " ConfigChartOffset: " + ConfigChartOffset);
 #endif
-            DOTween.SetTweensCapacity(PlayerSetting.DOTweenDefaultCapacity, 50);
         }
 
         // Update is called once per frame
@@ -141,12 +143,12 @@ namespace Plutono.GamePlay
                 {
                     if (note.transform.position.z <= Settings.judgeLinePosition)
                     {
-#if DEBUG
-                        if (note._details.id % 50 == 1)
-                        {
-                            Debug.Log("noteId: " + note._details.id + " noteTime: " + note._details.time + " CurTime: " + CurTime + " musicTime: " + musicSource.time);
-                        }
-#endif
+//#if DEBUG
+//                        if (note._details.id % 50 == 1)
+//                        {
+//                            Debug.Log("noteId: " + note._details.id + " noteTime: " + note._details.time + " CurTime: " + CurTime + " musicTime: " + musicSource.time);
+//                        }
+//#endif
                         Status.Judge(note._details, NoteGrade.Perfect);
                         noteController.OnHitNote(notesOnScreen, note);
                         explosionController.OnHitNote(note, NoteGrade.Perfect);
@@ -239,6 +241,11 @@ namespace Plutono.GamePlay
 
             //Audio
             musicSource.Pause();
+
+            if (Status.Mode != GameMode.Autoplay)
+            {
+                DisableInput();
+            }
         }
 
         private void OnGameResumeEvent()
