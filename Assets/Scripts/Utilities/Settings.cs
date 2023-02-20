@@ -8,12 +8,13 @@ public static class Settings
     public const float circleTime = 0.5f;
     public const float waveSize = 4.0f;
     public const float waveHeight = 6.0f;
-    public const float lightSize = 25.0f;
+    public const float lightWidth = 25.0f;
     public const float lightHeight = 40.0f;
-    public const float waveIncTime = 0.05f;
-    public const float waveDecTime = 0.5f;
+    public const float lightMaxScale = 40.0f;
     public const float lightIncTime = 8.0f / 60;
     public const float lightDecTime = 40.0f / 60;
+    public const float waveIncTime = 0.05f;
+    public const float waveDecTime = 0.5f;
     public static UnityEngine.Color linkLineColor = new(1.0f, 0.913f, 0.529f);
     public static UnityEngine.Color perfectLightColor = new(1.0f, 0.568f, 0f);
     public static UnityEngine.Color goodLightColor = new(1.0f, 0.913f, 0.529f);

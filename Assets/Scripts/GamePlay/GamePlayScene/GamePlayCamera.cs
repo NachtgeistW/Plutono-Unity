@@ -17,16 +17,12 @@ public class GamePlayCamera : MonoBehaviour
     {
         EventHandler.GamePauseEvent += OnGamePauseEvent;
         EventHandler.GameResumeEvent += OnGameResumeEvent;
-        EventHandler.BeforeSceneLoadedEvent += OnBeforeSceneLoadedEvent;
-        EventHandler.AfterSceneLoadedEvent += OnAfterSceneLoadedEvent;
     }
 
     private void OnDisable()
     {
         EventHandler.GamePauseEvent -= OnGamePauseEvent;
         EventHandler.GameResumeEvent -= OnGameResumeEvent;
-        EventHandler.BeforeSceneLoadedEvent -= OnBeforeSceneLoadedEvent;
-        EventHandler.AfterSceneLoadedEvent -= OnAfterSceneLoadedEvent;
     }
     
     // Start is called before the first frame update
@@ -50,19 +46,5 @@ public class GamePlayCamera : MonoBehaviour
     private void OnGameResumeEvent()
     {
         source.enabled = false;
-    }
-
-    private void OnBeforeSceneLoadedEvent()
-    {
-        //the Camera and the Audio Listener attatched on it should be disable before loading other scenes
-        gamePlayCamera.enabled = false;
-        audioListener.enabled = false;
-    }
-
-    private void OnAfterSceneLoadedEvent()
-    {
-        //the Camera and the Audio Listener attatched on it after loading gameplay scenes
-        gamePlayCamera.enabled = true;
-        audioListener.enabled = true;
     }
 }

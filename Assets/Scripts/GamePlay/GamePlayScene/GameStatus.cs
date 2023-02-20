@@ -3,6 +3,7 @@ using UnityEngine;
 using Plutono.Song;
 using System;
 using Plutono.GamePlay;
+using System.Linq;
 
 /*
  * 控制游戏的整体状态（注意，只存数据，不存具体的gameObject）
@@ -34,7 +35,7 @@ public sealed class GameStatus
     public GameStatus(GamePlayController controller, GameMode mode)
     {
         Mode = mode;
-        NoteCount = controller.ChartDetail.noteDetails.Count;
+        NoteCount = controller.ChartDetail.noteDetails.Where(note => note.IsShown == true).Count();
         IsStarted = false;
         IsPaused = false;
         IsCompleted = false;
@@ -62,11 +63,11 @@ public sealed class GameStatus
     /// </summary>
     /// <param name="noteDetail"></param>
     /// <param name="grade"></param>
-    /// <param name="error"></param>
     public NoteJudgmentResult Judge(NoteDetail noteDetail, NoteGrade grade)
     {
         // Status check
         if (IsFailed || IsCompleted) return NoteJudgmentResult.GameEnded;
+        if (noteDetail.IsShown == false) return NoteJudgmentResult.NoteNotShown;
         Judgments.TryGetValue(noteDetail.id, out NoteJudgment noteJudgmentCheck);
 
         if (noteJudgmentCheck != null && noteJudgmentCheck.IsJudged)
@@ -164,4 +165,7 @@ public enum NoteJudgmentResult
 
     GameEnded = -3,
     // 游戏已经结束。
+
+    NoteNotShown = -4,
+    // 无需显示Note。
 }

@@ -52,7 +52,7 @@ namespace Plutono.Song
             
             var obj = explosionAnimPool.Get();
             obj.transform.position = new Vector3(xPos, 0, zPos);
-
+            obj.transform.localScale = (float)note._details.size * new Vector3(5, 5, 5);
             obj.PlayAnimation(noteGrade, (float)note._details.size);
             StartCoroutine(ReleaseEnumerator(obj));
         }

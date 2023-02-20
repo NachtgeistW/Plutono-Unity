@@ -17,7 +17,7 @@ public class TextScore : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        scoreText.text = gamePlayController.Status.BasicScore.ToString() + " " + gamePlayController.Status.ComboScore.ToString();
+        scoreText.text = gamePlayController.Status.BasicScore.ToString() + " + " + gamePlayController.Status.ComboScore.ToString();
     }
 
 }
