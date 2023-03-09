@@ -28,10 +28,10 @@ namespace Plutono.Song
                     lightSpriteRenderer.material.color = Settings.perfectLightColor;
                     break;
                 case NoteGrade.Good:
-                    lightSpriteRenderer.material.color = Settings.goodLightColor;
+                    lightSpriteRenderer.material.color = Color.green;
                     break;
                 case NoteGrade.Bad:
-                    lightSpriteRenderer.material.color = Settings.badLightColor;
+                    lightSpriteRenderer.material.color = Color.blue;
                     break;
                 case NoteGrade.Miss:
                     lightSpriteRenderer.material.color = Color.red;

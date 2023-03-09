@@ -12,7 +12,7 @@
  *      2021.04.09  CREATE.
  */
 
-using Assets.Scripts.GamePlay;
+using Plutono.GamePlay;
 using TMPro;
 using UnityEngine;
 

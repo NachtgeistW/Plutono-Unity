@@ -19,10 +19,14 @@ using Application = UnityEngine.Application;
 
 namespace Plutono.IO
 {
-    //class LoadFiles -- Save and load resources (include charts, audios).
+    /// <summary>
+    /// class LoadFiles -- Save and load resources (include charts, audios).
+    /// </summary>
     public class LoadFiles
     {
-        //void::RequestReadPermission -- request read permission in order to read files.
+        /// <summary>
+        /// void::RequestReadPermission -- request read permission in order to read files.
+        /// </summary>
         [Tooltip("//Resource directory of DeemoDIY 2.2 and 3.2")]
         public void RequestReadPermission()
         {

@@ -49,8 +49,10 @@ namespace Plutono.Song
         #region ObjectPool
         Note OnCreatePooledItem()
         {
+            //Note note = Instantiate(
+            //    notePrefab, new Vector3((float)(notePrefab._details.pos * Settings.perspectiveHorizontalScale), 0, Settings.maximumNoteRange), Quaternion.identity, noteParent);
             Note note = Instantiate(
-                notePrefab, new Vector3((float)(notePrefab._details.pos * Settings.perspectiveHorizontalScale), 0, Settings.maximumNoteRange), Quaternion.identity, noteParent);
+                notePrefab, new Vector3((float)notePrefab._details.pos, 0, Settings.maximumNoteRange), Quaternion.identity, noteParent);
             return note;
         }
 

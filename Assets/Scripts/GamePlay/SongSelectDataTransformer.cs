@@ -1,4 +1,4 @@
-﻿namespace Assets.Scripts.GamePlay
+﻿namespace Plutono.GamePlay
 {
     public static class SongSelectDataTransformer
     {
@@ -11,7 +11,7 @@
             SelectedChartIndex = 0;
         }
 
-        public static GameMode GameMode { get; set; }
-        public static float ChartPlaySpeed { get; set; }
+        public static GameMode GameMode { get; set; } = GameMode.Stelo;
+        public static float ChartPlaySpeed { get; set; } = 0.5f;
     }
 }

@@ -8,7 +8,7 @@
  *      2021.04.08  REFACTOR with GameManager Singleton.
  */
 
-using Assets.Scripts.GamePlay;
+using Plutono.GamePlay;
 using UnityEngine;
 using UnityEngine.UI;
 

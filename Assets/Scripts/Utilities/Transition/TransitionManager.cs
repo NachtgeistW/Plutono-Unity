@@ -7,7 +7,7 @@ namespace Plutono.Util.Transition
     {
 #if UNITY_EDITOR
         [SceneName] public string startSceneName = string.Empty;
-#elif UNITY_ANDROID
+#else
         public string startSceneName = string.Empty;
 #endif
 

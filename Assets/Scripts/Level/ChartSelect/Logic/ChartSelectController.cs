@@ -4,11 +4,9 @@
  *      2021.10.3 Rewrite comments
  */
 
-using Assets.Scripts.GamePlay;
+using Plutono.GamePlay;
 using Plutono.IO;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Plutono.Level.ChartSelect

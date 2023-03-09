@@ -4,9 +4,7 @@
  */
 using UnityEngine;
 using DG.Tweening;
-using System.Collections.Generic;
-using System.Security.Cryptography;
-using System;
+using Plutono.GamePlay;
 
 namespace Plutono.Song
 {
@@ -25,23 +23,17 @@ namespace Plutono.Song
             SetProperties();
         }
 
-        public void UpdatePosition(double curTime, float chartPlaySpeed)
+        public void UpdatePosition(float chartPlaySpeed, double curTime)
         {
-            //Force the note to back to the original position where it begins to fall down
-            //gameObject.transform.position = new Vector3((float)(_details.pos * Settings.perspectiveHorizontalScale), 0, Settings.maximumNoteRange);
-            //gameObject.transform.DOMoveZ(0, Settings.NoteFallTime(5.5f)).SetEase(Ease.Linear);
             var z = (float)(Settings.maximumNoteRange / Settings.NoteFallTime(chartPlaySpeed) * (_details.time - curTime));
-            gameObject.transform.position = new Vector3((float)(_details.pos * Settings.perspectiveHorizontalScale), 0, z);
-        }
-
-        public void ForceStopAnimation()
-        {
-            //Force stop DOTween animation, or it would has effect on objectpool releasing
-            gameObject.transform.DOKill();
+            transform.position = new Vector3(_details.pos, 0, z);
         }
 
         public void SetProperties()
         {
+            //Set position
+            transform.position = new Vector3(_details.pos, 0, Settings.maximumNoteRange);
+            
             //Set renderer
             _blankSpriteRenderer.gameObject.SetActive(false);
             _pianoSpriteRenderer.gameObject.SetActive(false);

@@ -1,14 +1,12 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Plutono.Song;
 using Plutono.IO;
 using System;
 using System.Linq;
-using DG.Tweening;
 using Lean.Touch;
-using Assets.Scripts.GamePlay;
 using UnityEngine.Events;
+using Cysharp.Threading.Tasks;
 
 namespace Plutono.GamePlay
 {
@@ -25,12 +23,13 @@ namespace Plutono.GamePlay
         public float StartOrResumeTime { get; internal set; }
         public float ResumeElapsedTime { get; internal set; }
         private double musicPlayingDelay;
-        private double chartMusicOffset = 0;
         private double lastDspTime = -1;
         private double curDspTime = -1;
         private double NoteGenerationLeadTime;
-        private int ticksBeforeSynchronization;
-        private float ConfigChartOffset;
+        private int ticksBeforeSynchronization = 600;
+        
+        private double configChartMusicOffset = 0;
+        private float configGlobalChartOffset;
 
         [Header("-Status-")]
         public List<Note> notesOnScreen;
@@ -66,6 +65,7 @@ namespace Plutono.GamePlay
             EventHandler.GameResumeEvent -= OnGameResumeEvent;
             EventHandler.GameRestartEvent -= OnGameRestartEvent;
             EventHandler.BeforeSceneLoadedEvent -= OnBeforeSceneLoadedEvent;
+            DisableInput();
         }
 
         private void Awake()
@@ -77,11 +77,24 @@ namespace Plutono.GamePlay
 
         private void Start()
         {
+            Initialize();
+        }
+
+        private void Initialize()
+        {
             //Song source
             songIndex = SongSelectDataTransformer.SelectedSongIndex;
             chartIndex = SongSelectDataTransformer.SelectedChartIndex;
             SongSource = FileManager.Instance.songSourceList[songIndex];
             ChartDetail = SongSource.ChartDetails[chartIndex];
+
+            //Audio
+            musicSource.clip = AudioClipFileManager.Read(SongSource.MusicPath);
+            musicSource.time = 0;
+            curDspTime = AudioSettings.dspTime;
+            musicPlayingDelay = 1.0f;
+            musicStartTime = curDspTime + musicPlayingDelay;
+            musicSource.PlayScheduled(musicStartTime);
 
             //Status
             GameMode gameMode = SongSelectDataTransformer.GameMode;
@@ -97,29 +110,20 @@ namespace Plutono.GamePlay
             }
 
             //Synchronize
-            musicPlayingDelay = 1.0f;
-            chartMusicOffset = PlayerSetting.chartMusicOffset;
-            ConfigChartOffset = PlayerSetting.globalChartOffset;
+            configGlobalChartOffset = PlayerSetting.globalChartOffset;
+            configChartMusicOffset = PlayerSetting.chartMusicOffset;
 
             //Time
             StartOrResumeTime = Time.realtimeSinceStartup;
             CurTime = 0;
-            curDspTime = AudioSettings.dspTime;
-            ticksBeforeSynchronization = 600;
-            NoteGenerationLeadTime = Settings.NoteFallTime(Status.ChartPlaySpeed) + ConfigChartOffset;
+            NoteGenerationLeadTime = Settings.NoteFallTime(Status.ChartPlaySpeed);
 
-            //Audio
-            musicSource.clip = AudioClipFileManager.Read(SongSource.MusicPath);
-            musicSource.time = 0;
-            musicStartTime = curDspTime + musicPlayingDelay;
-            musicSource.PlayScheduled(musicStartTime);
 #if DEBUG
             Debug.Log("StarOrResumeTime: " + StartOrResumeTime + " DspTime: " + curDspTime + " musicStartTime: " + musicStartTime);
-            Debug.Log("globalLatency: " + musicPlayingDelay + " chartMusicOffset: " + chartMusicOffset + " ConfigChartOffset: " + ConfigChartOffset);
+            Debug.Log("globalLatency/musicPlayingDelay: " + musicPlayingDelay + " chartMusicOffset: " + configChartMusicOffset + " ConfigChartOffset: " + configGlobalChartOffset);
 #endif
         }
 
-        // Update is called once per frame
         private void Update()
         {
             //Synchronize Time
@@ -131,24 +135,23 @@ namespace Plutono.GamePlay
             //Note
             ///Generate notes according to the time
             GenerateNote();
-
             foreach (var note in notesOnScreen)
             {
-                note.UpdatePosition(CurTime, Status.ChartPlaySpeed);
+                note.UpdatePosition(Status.ChartPlaySpeed, CurTime);
             }
-            
+
             if (Status.Mode == GameMode.Autoplay)
             {
                 foreach (var note in notesOnScreen.ToList())
                 {
                     if (note.transform.position.z <= Settings.judgeLinePosition)
                     {
-//#if DEBUG
-//                        if (note._details.id % 50 == 1)
-//                        {
-//                            Debug.Log("noteId: " + note._details.id + " noteTime: " + note._details.time + " CurTime: " + CurTime + " musicTime: " + musicSource.time);
-//                        }
-//#endif
+#if DEBUG
+                        if (note._details.id % 50 == 1)
+                        {
+                            Debug.Log("noteId: " + note._details.id + " noteTime: " + note._details.time + " CurTime: " + CurTime + " musicTime: " + musicSource.time);
+                        }
+#endif
                         Status.Judge(note._details, NoteGrade.Perfect);
                         noteController.OnHitNote(notesOnScreen, note);
                         explosionController.OnHitNote(note, NoteGrade.Perfect);
@@ -177,7 +180,9 @@ namespace Plutono.GamePlay
             while (lastApperanceNoteIndex < ChartDetail.noteDetails.Count)
             {
                 //添加生成的提前量
-                if (ChartDetail.noteDetails[lastApperanceNoteIndex].time <= CurTime + NoteGenerationLeadTime)
+                var nextNoteTime = ChartDetail.noteDetails[lastApperanceNoteIndex].time;
+                if (nextNoteTime - (CurTime + NoteGenerationLeadTime) < 0.01
+                    || CurTime + NoteGenerationLeadTime >= nextNoteTime)
                 {
                     notesToGenerate.Add(ChartDetail.noteDetails[lastApperanceNoteIndex]);
                     lastApperanceNoteIndex++;
@@ -197,12 +202,15 @@ namespace Plutono.GamePlay
             if ((ticksBeforeSynchronization <= 0 || ResumeElapsedTime < 0.5f)
                 && lastDspTime != curDspTime)
             {
-#if DEBUG
-                Debug.Log("Sync");
-#endif
                 ticksBeforeSynchronization = 600;
                 lastDspTime = curDspTime;
-                CurTime = (float)curDspTime - musicStartTime + chartMusicOffset;
+                CurTime = (float)curDspTime - musicStartTime - configGlobalChartOffset + configChartMusicOffset;
+#if DEBUG
+                Debug.Log("--SynchronizeTime--");
+                Debug.Log("StarOrResumeTime: " + StartOrResumeTime + " DspTime: " + curDspTime 
+                    + " CurTime: " + CurTime + " musicTime: " + musicSource.time);
+
+#endif
             }
             else
             {
@@ -215,7 +223,7 @@ namespace Plutono.GamePlay
         {
             foreach (var note in notesOnScreen.ToList())
             {
-                if (note.transform.position.z <= 0)
+                if (note.transform.position.z <= Settings.recycleNotePosition)
                 {
                     Status.Judge(note._details, NoteGrade.Miss);
                     noteController.OnMissNote(notesOnScreen, note);
@@ -230,14 +238,14 @@ namespace Plutono.GamePlay
             if (Status.IsCompleted || Status.IsFailed)
                 return;
 
+            //Time
+            Time.timeScale = 0;
+
             //Status
             Status.IsPaused = true;
 
             //Hit
-            hitController.DisableInput();
-
-            //Time
-            Time.timeScale = 0;
+            DisableInput();
 
             //Audio
             musicSource.Pause();
@@ -258,6 +266,7 @@ namespace Plutono.GamePlay
             Status.IsPaused = false;
 
             //Time
+            StartOrResumeTime = Time.realtimeSinceStartup;
             Time.timeScale = 1;
 
             //Audio
@@ -272,6 +281,12 @@ namespace Plutono.GamePlay
         private void OnBeforeSceneLoadedEvent()
         {
             notesOnScreen.Clear();
+            ResultDataTransformer.BasicScore = Status.BasicScore;
+            ResultDataTransformer.ComboScore = Status.ComboScore;
+            ResultDataTransformer.PCount = Status.pCount;
+            ResultDataTransformer.GCount = Status.gCount;
+            ResultDataTransformer.BCount = Status.bCount;
+            ResultDataTransformer.MCount = Status.mCount;
         }
 
         /// <summary>
@@ -325,6 +340,8 @@ namespace Plutono.GamePlay
                 _ => throw new NotImplementedException(),
             };
         }
+        
+        //Input
         public void EnableInput()
         {
             LeanTouch.OnFingerDown += OnFingerDown;
@@ -350,23 +367,28 @@ namespace Plutono.GamePlay
                 noteController.OnHitNote(notesOnScreen, note);
                 explosionController.OnHitNote(note, grade);
                 EventHandler.CallHitNoteEvent(notesOnScreen, note, CurTime, grade);
-                Debug.Log("OnFingerDown" + " Note: " + note._details.id + " Note Time: " + note._details.time + " CurTime: " + CurTime);
+                Debug.Log("OnFingerDown" + " Finger: " + finger.Index + " Note: " + note._details.id + " Note Type: " + note._details.type + " Note Time: " + note._details.time + " CurTime: " + CurTime);
             }
         }
 
         private void OnFingerUpdate(LeanFinger finger)
         {
+            if (finger.Index == -42) return;
             if (!hitController.IsHittedNote(finger, out Note note)) return;
+
             if (note._details.type == NoteType.Slide)
             {
-                var grade = NoteGradeJudgment.JudgeNoteGrade(note._details, CurTime, Status.Mode);
-                var result = Status.Judge(note._details, grade);
-                if (result == NoteJudgmentResult.Succeeded)
+                if (note._details.time - CurTime < Settings.SteloMode.perfectDeltaTime)
                 {
-                    noteController.OnHitNote(notesOnScreen, note);
-                    explosionController.OnHitNote(note, grade);
-                    EventHandler.CallHitNoteEvent(notesOnScreen, note, CurTime, grade);
-                    Debug.Log("OnFingerUpdate" + " Note: " + note._details.id + " Note Time: " + note._details.time + " CurTime: " + CurTime);
+                    var grade = NoteGradeJudgment.JudgeNoteGrade(note._details, CurTime, Status.Mode);
+                    var result = Status.Judge(note._details, grade);
+                    if (result == NoteJudgmentResult.Succeeded)
+                    {
+                        noteController.OnHitNote(notesOnScreen, note);
+                        explosionController.OnHitNote(note, grade);
+                        EventHandler.CallHitNoteEvent(notesOnScreen, note, CurTime, grade);
+                        Debug.Log("OnFingerUpdate" + " Finger: " + finger.Index + " Note: " + note._details.id + " Note Type: " + note._details.type + " Note Time: " + note._details.time + " CurTime: " + CurTime);
+                    }
                 }
             }
         }

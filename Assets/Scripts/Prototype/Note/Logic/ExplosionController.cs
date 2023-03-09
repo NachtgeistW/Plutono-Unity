@@ -14,7 +14,6 @@ namespace Plutono.Song
 
     public class ExplosionController : MonoBehaviour
     {
-        private List<GameObject> explosionAnims;
         public Explosion explosionAnimPrefab;
         public Transform explosionAnimParent;
         public ObjectPool<Explosion> explosionAnimPool;
@@ -34,7 +33,6 @@ namespace Plutono.Song
         {
             if (!note._details.IsShown)
                 return;
-            var xPos = (float)(note._details.pos * Settings.perspectiveHorizontalScale);
             float zPos;
             switch (noteGrade)
             {
@@ -49,10 +47,10 @@ namespace Plutono.Song
                     zPos = note.gameObject.transform.position.z;
                     break;
             }
-            
+
             var obj = explosionAnimPool.Get();
-            obj.transform.position = new Vector3(xPos, 0, zPos);
-            obj.transform.localScale = (float)note._details.size * new Vector3(5, 5, 5);
+            obj.transform.position = new Vector3(note._details.pos, 0, zPos);
+            obj.transform.localScale = new Vector3((float)note._details.size, 1, 1);
             obj.PlayAnimation(noteGrade, (float)note._details.size);
             StartCoroutine(ReleaseEnumerator(obj));
         }
@@ -62,7 +60,7 @@ namespace Plutono.Song
             yield return new WaitForSeconds(Settings.noteAnimationPlayingTime);
             explosionAnimPool.Release(explosion);
         }
-        
+
         #region ObjectPool
         Explosion OnCreatePooledItem()
         {

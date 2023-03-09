@@ -42,6 +42,7 @@ public sealed class GameStatus
         IsFailed = false;
         BasicScore = 0;
         ComboScore = 0;
+        mCount = NoteCount;
     }
 
     public void Reset()
@@ -56,6 +57,8 @@ public sealed class GameStatus
         MaxCombo = 0;
         ClearCount = 0;
         Judgments.Clear();
+        mCount = NoteCount;
+
     }
 
     /// <summary>
@@ -83,7 +86,7 @@ public sealed class GameStatus
             Grade = grade,
             IsJudged = true
         });
-        
+
         // Combo
         var miss = grade == NoteGrade.Bad || grade == NoteGrade.Miss;
 
@@ -95,15 +98,17 @@ public sealed class GameStatus
         {
             case NoteGrade.Perfect:
                 pCount++;
+                mCount--;
                 break;
             case NoteGrade.Good:
                 gCount++;
+                mCount--;
                 break;
             case NoteGrade.Bad:
                 bCount++;
+                mCount--;
                 break;
             case NoteGrade.Miss:
-                mCount++;
                 break;
             default:
                 throw new Exception($"Unknown grade on note {noteDetail.id}");
