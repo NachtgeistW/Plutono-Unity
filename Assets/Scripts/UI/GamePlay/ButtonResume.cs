@@ -6,13 +6,19 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-/// <summary>
-/// Contro the behaivour on resume bottom
-/// </summary>
-public class ButtonResume : MonoBehaviour
+namespace Plutono.UI
 {
-    public void OnClick()
+
+    /// <summary>
+    /// Contro the behaivour on resume bottom
+    /// </summary>
+    public class ButtonResume : MonoBehaviour
     {
-        EventHandler.CallGameResumeEvent();
+        [SerializeField] TextCountdown textCountdown;
+        public void OnClick()
+        {
+            StartCoroutine(textCountdown.ResumeCountdown());
+            //textCountdown.ResumeCountdown();
+        }
     }
 }

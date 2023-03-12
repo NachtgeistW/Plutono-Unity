@@ -39,11 +39,8 @@ namespace Plutono.UI
         public void OnClick()
         {
             //If the game is playing (IsPaused == false), call the pause event;
-            if (!controller.Status.IsPaused)
-            {
                 EventHandler.CallGamePauseEvent();
                 pauseButton.interactable = false;
-            }
         }
 
         private void DeactivateButton()

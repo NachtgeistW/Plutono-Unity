@@ -7,7 +7,7 @@ namespace Plutono.UI
     public class TextCombo : MonoBehaviour
     {
         public TMP_Text comboText;
-        public GamePlayController gamePlayController;
+
         // Start is called before the first frame update
         void Start()
         {
@@ -17,7 +17,7 @@ namespace Plutono.UI
         // Update is called once per frame
         void Update()
         {
-            comboText.text = gamePlayController.Status.Combo.ToString();
+            comboText.text = GamePlayController.Instance.Status.Combo.ToString();
         }
 
     }

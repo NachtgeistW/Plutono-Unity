@@ -7,6 +7,7 @@ using System.Linq;
 using Lean.Touch;
 using UnityEngine.Events;
 using Cysharp.Threading.Tasks;
+using System.Collections;
 
 namespace Plutono.GamePlay
 {
@@ -27,7 +28,7 @@ namespace Plutono.GamePlay
         private double curDspTime = -1;
         private double NoteGenerationLeadTime;
         private int ticksBeforeSynchronization = 600;
-        
+
         private double configChartMusicOffset = 0;
         private float configGlobalChartOffset;
 
@@ -35,6 +36,7 @@ namespace Plutono.GamePlay
         public List<Note> notesOnScreen;
         public GameStatus Status { get; internal set; }
         public PlayerSettings_Global_SO PlayerSetting { get; private set; }
+        public bool IsStatusLoaded { get; private set; } = false;
 
         [Header("-Note and Chart-")]
         [SerializeField] private NoteController noteController;
@@ -49,10 +51,10 @@ namespace Plutono.GamePlay
         public AudioSource musicSource;
         public double musicStartTime;
 
-
         /// Event
         private void OnEnable()
         {
+            EventHandler.GameStartEvent += OnGameStartEvent;
             EventHandler.GamePauseEvent += OnGamePauseEvent;
             EventHandler.GameResumeEvent += OnGameResumeEvent;
             EventHandler.GameRestartEvent += OnGameRestartEvent;
@@ -61,6 +63,7 @@ namespace Plutono.GamePlay
 
         private void OnDisable()
         {
+            EventHandler.GameStartEvent -= OnGameStartEvent;
             EventHandler.GamePauseEvent -= OnGamePauseEvent;
             EventHandler.GameResumeEvent -= OnGameResumeEvent;
             EventHandler.GameRestartEvent -= OnGameRestartEvent;
@@ -68,20 +71,12 @@ namespace Plutono.GamePlay
             DisableInput();
         }
 
-        private void Awake()
+        private void Start() 
         {
             PlayerSetting = PlayerSettingsManager.Instance.PlayerSettings_Global_SO;
             // System config
             Application.targetFrameRate = 120;
-        }
 
-        private void Start()
-        {
-            Initialize();
-        }
-
-        private void Initialize()
-        {
             //Song source
             songIndex = SongSelectDataTransformer.SelectedSongIndex;
             chartIndex = SongSelectDataTransformer.SelectedChartIndex;
@@ -91,20 +86,16 @@ namespace Plutono.GamePlay
             //Audio
             musicSource.clip = AudioClipFileManager.Read(SongSource.MusicPath);
             musicSource.time = 0;
-            curDspTime = AudioSettings.dspTime;
-            musicPlayingDelay = 1.0f;
-            musicStartTime = curDspTime + musicPlayingDelay;
-            musicSource.PlayScheduled(musicStartTime);
-
+            
             //Status
-            GameMode gameMode = SongSelectDataTransformer.GameMode;
-            Status = new GameStatus(this, gameMode)
+            Status = new GameStatus(this, SongSelectDataTransformer.GameMode)
             {
                 ChartPlaySpeed = SongSelectDataTransformer.ChartPlaySpeed,
             };
+            IsStatusLoaded = true;
 
             //Input
-            if (gameMode != GameMode.Autoplay)
+            if (Status.Mode != GameMode.Autoplay)
             {
                 EnableInput();
             }
@@ -112,11 +103,21 @@ namespace Plutono.GamePlay
             //Synchronize
             configGlobalChartOffset = PlayerSetting.globalChartOffset;
             configChartMusicOffset = PlayerSetting.chartMusicOffset;
+        }
+
+        private void OnGameStartEvent()
+        {
+            curDspTime = AudioSettings.dspTime;
+            musicPlayingDelay = 1.0f;
+            musicStartTime = curDspTime + musicPlayingDelay;
+            musicSource.PlayScheduled(musicStartTime);
 
             //Time
             StartOrResumeTime = Time.realtimeSinceStartup;
             CurTime = 0;
             NoteGenerationLeadTime = Settings.NoteFallTime(Status.ChartPlaySpeed);
+
+            Status.IsStarted = true;
 
 #if DEBUG
             Debug.Log("StarOrResumeTime: " + StartOrResumeTime + " DspTime: " + curDspTime + " musicStartTime: " + musicStartTime);
@@ -126,11 +127,12 @@ namespace Plutono.GamePlay
 
         private void Update()
         {
+            if (!Status.IsStarted)
+                return;
+
             //Synchronize Time
             if (!Status.IsPaused)
-            {
                 SynchronizeTime();
-            }
 
             //Note
             ///Generate notes according to the time
@@ -174,6 +176,7 @@ namespace Plutono.GamePlay
             }
         }
 
+
         private void GenerateNote()
         {
             List<NoteDetail> notesToGenerate = new();
@@ -207,9 +210,8 @@ namespace Plutono.GamePlay
                 CurTime = (float)curDspTime - musicStartTime - configGlobalChartOffset + configChartMusicOffset;
 #if DEBUG
                 Debug.Log("--SynchronizeTime--");
-                Debug.Log("StarOrResumeTime: " + StartOrResumeTime + " DspTime: " + curDspTime 
+                Debug.Log("StarOrResumeTime: " + StartOrResumeTime + " DspTime: " + curDspTime
                     + " CurTime: " + CurTime + " musicTime: " + musicSource.time);
-
 #endif
             }
             else
@@ -245,23 +247,22 @@ namespace Plutono.GamePlay
             Status.IsPaused = true;
 
             //Hit
-            DisableInput();
-
-            //Audio
-            musicSource.Pause();
-
             if (Status.Mode != GameMode.Autoplay)
             {
                 DisableInput();
             }
+
+            //Audio
+            musicSource.Pause();
+
         }
 
         private void OnGameResumeEvent()
         {
-            //TODO: Wait for a few minutes
             //If game is clear or failed, do nothing
             if (Status.IsCompleted || Status.IsFailed)
                 return;
+            
             //Status
             Status.IsPaused = false;
 
@@ -340,7 +341,7 @@ namespace Plutono.GamePlay
                 _ => throw new NotImplementedException(),
             };
         }
-        
+
         //Input
         public void EnableInput()
         {
@@ -395,7 +396,7 @@ namespace Plutono.GamePlay
 
         private void OnFingerUp(LeanFinger finger)
         {
-            
+
         }
     }
 

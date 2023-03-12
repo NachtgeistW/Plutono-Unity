@@ -17,6 +17,9 @@ public static class EventHandler
     public static void CallInstantiateNote(List<Plutono.Song.NoteDetail> noteDetails, List<Plutono.Song.Note> notesOnScreen) 
         => InstantiateNoteEvent?.Invoke(noteDetails, notesOnScreen);
 
+    public static event Action GameStartEvent;
+    public static void CallGameStartEvent() => GameStartEvent?.Invoke();
+    
     public static event Action GamePauseEvent;
     public static void CallGamePauseEvent() => GamePauseEvent?.Invoke();
     

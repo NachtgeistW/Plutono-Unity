@@ -10,8 +10,18 @@ namespace Plutono.UI
     {
         [SerializeField] GamePlayController controller;
         [SerializeField] Slider slider;
-        // Start is called before the first frame update
-        void Start()
+        
+        private void OnEnable()
+        {
+            EventHandler.GameStartEvent += OnGameStartEvent;
+        }
+
+        private void OnDisable()
+        {
+            EventHandler.GameStartEvent -= OnGameStartEvent;
+        }
+
+        void OnGameStartEvent()
         {
             slider.maxValue = controller.musicSource.clip.length;
         }

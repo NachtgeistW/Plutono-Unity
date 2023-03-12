@@ -1,23 +1,23 @@
 using Plutono.GamePlay;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class TextScore : MonoBehaviour
+namespace Plutono.UI
 {
-    public TMP_Text scoreText;
-    public GamePlayController gamePlayController;
-    // Start is called before the first frame update
-    void Start()
+    public class TextScore : MonoBehaviour
     {
-        scoreText.text = "0 + 0";
-    }
+        public TMP_Text scoreText;
 
-    // Update is called once per frame
-    void Update()
-    {
-        scoreText.text = gamePlayController.Status.BasicScore.ToString() + " + " + gamePlayController.Status.ComboScore.ToString();
-    }
+        // Start is called before the first frame update
+        void Start()
+        {
+            scoreText.text = "0 + 0";
+        }
 
+        // Update is called once per frame
+        void Update()
+        {
+            scoreText.text = GamePlayController.Instance.Status.BasicScore.ToString() + " + " + GamePlayController.Instance.Status.ComboScore.ToString();
+        }
+    }
 }

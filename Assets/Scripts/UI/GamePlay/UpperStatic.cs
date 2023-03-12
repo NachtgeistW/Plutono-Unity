@@ -14,15 +14,13 @@ namespace Plutono.UI
         public TMP_Text titleText;
         public TMP_Text modeText;
         public TMP_Text levelText;
-        public GamePlayController gamePlayController;
 
-        // Start is called before the first frame update
         void Start()
         {
-            titleText.text = gamePlayController.SongSource.SongName;
-            levelText.text = "Lv." + gamePlayController.ChartDetail.level;
+            titleText.text = GamePlayController.Instance.SongSource.SongName;
+            levelText.text = "Lv." + GamePlayController.Instance.ChartDetail.level;
             //mode
-            switch (gamePlayController.Status.Mode)
+            switch (GamePlayController.Instance.Status.Mode)
             {
                 case GameMode.Stelo:
                     modeText.text = "Stelo";
