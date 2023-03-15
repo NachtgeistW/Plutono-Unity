@@ -33,7 +33,6 @@ namespace Plutono.Level.SongSelectScene
             songName.text = songDetail.SongName;
             SongDetailOnButton = songDetail;
             cover.sprite = songDetail.Cover;
-            Debug.Log(songDetail.SongName);
             this.songIndex = songIndex;
         }
 

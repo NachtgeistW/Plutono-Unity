@@ -2,9 +2,8 @@
  * History:
  *      2022.07.25  CREATED
  */
+using System;
 using UnityEngine;
-using DG.Tweening;
-using Plutono.GamePlay;
 
 namespace Plutono.Song
 {
@@ -33,7 +32,7 @@ namespace Plutono.Song
         {
             //Set position
             transform.position = new Vector3(_details.pos, 0, Settings.maximumNoteRange);
-            
+
             //Set renderer
             _blankSpriteRenderer.gameObject.SetActive(false);
             _pianoSpriteRenderer.gameObject.SetActive(false);
@@ -44,7 +43,7 @@ namespace Plutono.Song
                 {
                     case NoteType.Blank:
                         _blankSpriteRenderer.gameObject.SetActive(true);
-                        _blankSpriteRenderer.transform.localScale = 
+                        _blankSpriteRenderer.transform.localScale =
                             new Vector3((float)_details.size, 1, 1);
                         break;
                     case NoteType.Piano:
@@ -64,12 +63,49 @@ namespace Plutono.Song
                         break;
                 }
             }
-            
+
             //Set collider box size
             if (_details.size > 1)
                 _boxCollider.size = new Vector3((float)_details.size * 2, 1, 1);
             else
                 _boxCollider.size = new Vector3(2, 1, 1);
+        }
+
+        /// <summary>
+        /// Check if the note is hitted by player.
+        /// </summary>
+        /// <param name="xPos">the x positon of player's finger on world position</param>
+        /// <param name="hitTime">the time when player touches the screen</param>
+        /// <param name="mode">Current mode of game</param>
+        /// <returns>true if hitted or is in Autoplay mode</returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public NoteGrade IsHitted(float xPos, double hitTime, GameMode mode)
+        {
+            if (mode == GameMode.Autoplay) return NoteGrade.Perfect;
+            if (Mathf.Abs(xPos - _details.pos) <= _details.size)
+            {
+                var hitTreshold = hitTime - _details.time;
+                return mode switch
+                {
+                    GameMode.Stelo => hitTreshold switch
+                    {
+                        <= Settings.SteloMode.perfectDeltaTime => NoteGrade.Perfect,
+                        <= Settings.SteloMode.goodDeltaTime => NoteGrade.Good,
+                        _ => NoteGrade.Bad
+                    },
+                    GameMode.Arbo or GameMode.Floro => hitTreshold switch
+                    {
+                        <= Settings.ArboMode.perfectDeltaTime => NoteGrade.Perfect,
+                        <= Settings.ArboMode.goodDeltaTime => NoteGrade.Good,
+                        _ => NoteGrade.Bad
+                    },
+                    //TODO: Finish other mode.
+                    GameMode.Persona => throw new NotImplementedException(),
+                    GameMode.Ekzerco => throw new NotImplementedException(),
+                    _ => throw new NotImplementedException(),
+                };
+            }
+            return NoteGrade.None;
         }
     }
 }

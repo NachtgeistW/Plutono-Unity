@@ -4,12 +4,13 @@ namespace Plutono.Song
 {
     public enum NoteGrade
     {
-        Perfect,
-        Good,
-        Bad,
+        None,
         Miss,
-        None
+        Bad,
+        Good,
+        Perfect
     }
+    
     public static class NoteGradeJudgment
     {
         public static NoteGrade JudgeNoteGrade(NoteDetail noteDetail, double curTime, GameMode mode)

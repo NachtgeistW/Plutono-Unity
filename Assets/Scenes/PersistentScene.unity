@@ -413,7 +413,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49fa987dc06d7ec4dafc21b0b063a32f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StoragePath: C:\Users\night\OneDrive\code\CSharp-Project\Plutono\Assets\TestChart
+  StoragePath: C:\Users\night\OneDrive\code\CSharp-Project\Plutono\TestChart
   songSourceList: []
 --- !u!1001 &1944975647
 PrefabInstance:

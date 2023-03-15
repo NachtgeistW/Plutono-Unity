@@ -1,18 +1,18 @@
-using System.Collections.Generic;
-using UnityEngine;
-using Plutono.Song;
-using Plutono.IO;
-using System;
-using System.Linq;
 using Lean.Touch;
+using Plutono.IO;
+using Plutono.Song;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 using UnityEngine.Events;
-using Cysharp.Threading.Tasks;
-using System.Collections;
 
 namespace Plutono.GamePlay
 {
     public class GamePlayController : Singleton<GamePlayController>
     {
+        public Camera camera;
+
         [Header("-Specify in Inspector-")]
         public string StoragePath;
         public int songIndex;
@@ -71,7 +71,7 @@ namespace Plutono.GamePlay
             DisableInput();
         }
 
-        private void Start() 
+        private void Start()
         {
             PlayerSetting = PlayerSettingsManager.Instance.PlayerSettings_Global_SO;
             // System config
@@ -86,7 +86,7 @@ namespace Plutono.GamePlay
             //Audio
             musicSource.clip = AudioClipFileManager.Read(SongSource.MusicPath);
             musicSource.time = 0;
-            
+
             //Status
             Status = new GameStatus(this, SongSelectDataTransformer.GameMode)
             {
@@ -262,7 +262,7 @@ namespace Plutono.GamePlay
             //If game is clear or failed, do nothing
             if (Status.IsCompleted || Status.IsFailed)
                 return;
-            
+
             //Status
             Status.IsPaused = false;
 
@@ -290,58 +290,6 @@ namespace Plutono.GamePlay
             ResultDataTransformer.MCount = Status.mCount;
         }
 
-        /// <summary>
-        /// Search for the best note when player hit the screen
-        /// </summary>
-        /// <param name="touchTime">the time when player touches the screen</param>
-        Note SearchForBestNoteOnTime(double touchTime)
-        {
-            if (notesOnScreen.Count == 0)
-            {
-                return null;
-            }
-            Note bestNote = null;
-            foreach (var curDetectingNote in notesOnScreen)
-            {
-                if (bestNote == null)
-                    bestNote = curDetectingNote;
-                var curDeltaTime = Math.Abs(touchTime - curDetectingNote._details.time);
-                var bestDeltaTime = Math.Abs(touchTime - bestNote._details.time);
-                if (bestDeltaTime > curDeltaTime)
-                {
-                    bestNote = curDetectingNote;
-                    continue;
-                }
-                if (curDeltaTime > GetClosedBestNoteRange(bestDeltaTime))
-                    return bestNote;
-            }
-            //Bestnote not found, return null
-            return null;
-        }
-
-        private double GetClosedBestNoteRange(double timeRange)
-        {
-            return Status.Mode switch
-            {
-                GameMode.Stelo => timeRange switch
-                {
-                    <= Settings.SteloMode.perfectDeltaTime => Settings.SteloMode.perfectDeltaTime,
-                    <= Settings.SteloMode.goodDeltaTime => Settings.SteloMode.goodDeltaTime,
-                    _ => Settings.SteloMode.badDeltaTime
-                },
-                GameMode.Arbo or GameMode.Floro => timeRange switch
-                {
-                    <= Settings.ArboMode.perfectDeltaTime => Settings.ArboMode.perfectDeltaTime,
-                    <= Settings.ArboMode.goodDeltaTime => Settings.ArboMode.goodDeltaTime,
-                    _ => Settings.ArboMode.badDeltaTime
-                },
-                //TODO: Finish other mode.
-                GameMode.Persona => throw new NotImplementedException(),
-                GameMode.Ekzerco => throw new NotImplementedException(),
-                _ => throw new NotImplementedException(),
-            };
-        }
-
         //Input
         public void EnableInput()
         {
@@ -358,8 +306,8 @@ namespace Plutono.GamePlay
         }
 
         protected void OnFingerDown(LeanFinger finger)
-        {
-            if (!hitController.IsHittedNote(finger, out Note note)) return;
+        {            
+            if (!hitController.TryHitNote(finger, CurTime, out Note note)) return;
 
             var grade = NoteGradeJudgment.JudgeNoteGrade(note._details, CurTime, Status.Mode);
             var result = Status.Judge(note._details, grade);
@@ -368,14 +316,19 @@ namespace Plutono.GamePlay
                 noteController.OnHitNote(notesOnScreen, note);
                 explosionController.OnHitNote(note, grade);
                 EventHandler.CallHitNoteEvent(notesOnScreen, note, CurTime, grade);
-                Debug.Log("OnFingerDown" + " Finger: " + finger.Index + " Note: " + note._details.id + " Note Type: " + note._details.type + " Note Time: " + note._details.time + " CurTime: " + CurTime);
+#if DEBUG
+                var pos = camera.ScreenToWorldPoint(new Vector3(finger.ScreenPosition.x, finger.ScreenPosition.y, camera.nearClipPlane));
+                Debug.Log("--OnFingerDown--");
+                Debug.Log("Finger: " + finger.Index + " ScreenPos:" + finger.ScreenPosition + " Pos:" + pos);
+                Debug.Log("Note: " + note._details.id + " Note Type: " + note._details.type + " Note Time: " + note._details.time + " CurTime: " + CurTime);
+#endif
             }
         }
 
         private void OnFingerUpdate(LeanFinger finger)
         {
             if (finger.Index == -42) return;
-            if (!hitController.IsHittedNote(finger, out Note note)) return;
+            if (!hitController.TryHitNote(finger, CurTime, out Note note)) return;
 
             if (note._details.type == NoteType.Slide)
             {
@@ -388,7 +341,13 @@ namespace Plutono.GamePlay
                         noteController.OnHitNote(notesOnScreen, note);
                         explosionController.OnHitNote(note, grade);
                         EventHandler.CallHitNoteEvent(notesOnScreen, note, CurTime, grade);
-                        Debug.Log("OnFingerUpdate" + " Finger: " + finger.Index + " Note: " + note._details.id + " Note Type: " + note._details.type + " Note Time: " + note._details.time + " CurTime: " + CurTime);
+#if DEBUG
+                        var pos = camera.ScreenToWorldPoint(new Vector3(finger.ScreenPosition.x, finger.ScreenPosition.y, camera.nearClipPlane));
+                        //pos = Vector3.ProjectOnPlane(pos, Vector3.up);
+                        Debug.Log("--OnFingerUpdate--");
+                        Debug.Log("Note: " + note._details.id + " Note Type: " + note._details.type + " Note Time: " + note._details.time + " CurTime: " + CurTime);
+                        Debug.Log("Finger: " + finger.Index + " ScreenPos:" + finger.ScreenPosition + " Pos:" + pos + " Note Pos: " + note._details.pos);
+#endif
                     }
                 }
             }

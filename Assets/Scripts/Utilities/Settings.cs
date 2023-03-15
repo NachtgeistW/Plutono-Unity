@@ -52,6 +52,4 @@ public static class Settings
         public const float goodDeltaTime = 0.7f;
         public const float badDeltaTime = 1.0f;
     }
-
-
 }
