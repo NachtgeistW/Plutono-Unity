@@ -76,36 +76,30 @@ namespace Plutono.Song
         /// </summary>
         /// <param name="xPos">the x positon of player's finger on world position</param>
         /// <param name="hitTime">the time when player touches the screen</param>
-        /// <param name="mode">Current mode of game</param>
+        /// <param name="deltaTime">the interval between the hit time and note time</param>
+        /// <param name="deltaXPos">the distance between the hit pos and note pos</param>
         /// <returns>true if hitted or is in Autoplay mode</returns>
-        /// <exception cref="NotImplementedException"></exception>
-        public NoteGrade IsHitted(float xPos, double hitTime, GameMode mode)
+        public bool IsHitted(float xPos, double hitTime, GameMode mode, out double deltaTime, out float deltaXPos)
         {
-            if (mode == GameMode.Autoplay) return NoteGrade.Perfect;
-            if (Mathf.Abs(xPos - _details.pos) <= _details.size)
+            if (mode == GameMode.Autoplay)
             {
-                var hitTreshold = hitTime - _details.time;
-                return mode switch
-                {
-                    GameMode.Stelo => hitTreshold switch
-                    {
-                        <= Settings.SteloMode.perfectDeltaTime => NoteGrade.Perfect,
-                        <= Settings.SteloMode.goodDeltaTime => NoteGrade.Good,
-                        _ => NoteGrade.Bad
-                    },
-                    GameMode.Arbo or GameMode.Floro => hitTreshold switch
-                    {
-                        <= Settings.ArboMode.perfectDeltaTime => NoteGrade.Perfect,
-                        <= Settings.ArboMode.goodDeltaTime => NoteGrade.Good,
-                        _ => NoteGrade.Bad
-                    },
-                    //TODO: Finish other mode.
-                    GameMode.Persona => throw new NotImplementedException(),
-                    GameMode.Ekzerco => throw new NotImplementedException(),
-                    _ => throw new NotImplementedException(),
-                };
+                deltaTime = 0;
+                deltaXPos = 0;
+                return true;
             }
-            return NoteGrade.None;
+            var noteSize = _details.size < 1.2 ? 2.4 : _details.size * 2;
+            if (Mathf.Abs(xPos - _details.pos) <= noteSize)
+            {
+                deltaTime = hitTime - _details.time;
+                deltaXPos = Mathf.Abs(xPos - _details.pos);
+                return true;
+            }
+            else
+            {
+                deltaTime = double.MaxValue;
+                deltaXPos = float.MaxValue;
+                return false;
+            }
         }
     }
 }

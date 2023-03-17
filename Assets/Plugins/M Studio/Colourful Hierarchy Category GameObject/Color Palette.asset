@@ -21,7 +21,7 @@ MonoBehaviour:
   - keyChar: ///
     textColor: {r: 1, g: 1, b: 1, a: 1}
     backgroundColor: {r: 0, g: 0.6152477, b: 1, a: 1}
-    textAlignment: 4
+    textAlignment: 5
     fontStyle: 1
   - keyChar: '#'
     textColor: {r: 1, g: 1, b: 1, a: 1}

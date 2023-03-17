@@ -230,6 +230,11 @@ namespace Plutono.GamePlay
                     Status.Judge(note._details, NoteGrade.Miss);
                     noteController.OnMissNote(notesOnScreen, note);
                     EventHandler.CallMissNoteEvent(notesOnScreen, note, CurTime, NoteGrade.Miss);
+#if DEBUG
+                    Debug.Log("--OnNoteMiss--");
+                    Debug.Log("CurTime: " + CurTime +" Note: " + note._details.id + " Time: " + note._details.time + " Pos: " + note._details.pos 
+                    + " Judge Size: " + (note._details.size < 1.2 ? 2.4 : note._details.size * 2));
+#endif                    
                 }
             }
         }
@@ -309,7 +314,7 @@ namespace Plutono.GamePlay
         {            
             if (!hitController.TryHitNote(finger, CurTime, out Note note)) return;
 
-            var grade = NoteGradeJudgment.JudgeNoteGrade(note._details, CurTime, Status.Mode);
+            var grade = NoteGradeJudgment.Judge(note._details, CurTime, Status.Mode);
             var result = Status.Judge(note._details, grade);
             if (result == NoteJudgmentResult.Succeeded)
             {
@@ -317,10 +322,14 @@ namespace Plutono.GamePlay
                 explosionController.OnHitNote(note, grade);
                 EventHandler.CallHitNoteEvent(notesOnScreen, note, CurTime, grade);
 #if DEBUG
-                var pos = camera.ScreenToWorldPoint(new Vector3(finger.ScreenPosition.x, finger.ScreenPosition.y, camera.nearClipPlane));
-                Debug.Log("--OnFingerDown--");
-                Debug.Log("Finger: " + finger.Index + " ScreenPos:" + finger.ScreenPosition + " Pos:" + pos);
-                Debug.Log("Note: " + note._details.id + " Note Type: " + note._details.type + " Note Time: " + note._details.time + " CurTime: " + CurTime);
+                if (grade < NoteGrade.Perfect)
+                {
+                    var pos = camera.ScreenToWorldPoint(new Vector3(finger.ScreenPosition.x, finger.ScreenPosition.y, camera.nearClipPlane));
+                    Debug.Log("--OnFingerDown--");
+                    Debug.Log("Finger: " + finger.Index + " ScreenPos:" + finger.ScreenPosition + " Pos:" + pos);
+                    Debug.Log("CurTime: " + CurTime +" Note: " + note._details.id + " Time: " + note._details.time + " Pos: " + note._details.pos 
+                    + " Judge Size: " + (note._details.size < 1.2 ? 2.4 : note._details.size * 2));
+                }
 #endif
             }
         }
@@ -330,25 +339,27 @@ namespace Plutono.GamePlay
             if (finger.Index == -42) return;
             if (!hitController.TryHitNote(finger, CurTime, out Note note)) return;
 
-            if (note._details.type == NoteType.Slide)
+            if (note._details.type != NoteType.Slide)
+                return;
+            if (note._details.time - CurTime < Settings.SteloMode.perfectDeltaTime)
             {
-                if (note._details.time - CurTime < Settings.SteloMode.perfectDeltaTime)
+                var grade = NoteGradeJudgment.Judge(note._details, CurTime, Status.Mode);
+                var result = Status.Judge(note._details, grade);
+                if (result == NoteJudgmentResult.Succeeded)
                 {
-                    var grade = NoteGradeJudgment.JudgeNoteGrade(note._details, CurTime, Status.Mode);
-                    var result = Status.Judge(note._details, grade);
-                    if (result == NoteJudgmentResult.Succeeded)
-                    {
-                        noteController.OnHitNote(notesOnScreen, note);
-                        explosionController.OnHitNote(note, grade);
-                        EventHandler.CallHitNoteEvent(notesOnScreen, note, CurTime, grade);
+                    noteController.OnHitNote(notesOnScreen, note);
+                    explosionController.OnHitNote(note, grade);
+                    EventHandler.CallHitNoteEvent(notesOnScreen, note, CurTime, grade);
 #if DEBUG
+                    if (grade < NoteGrade.Perfect)
+                    {
                         var pos = camera.ScreenToWorldPoint(new Vector3(finger.ScreenPosition.x, finger.ScreenPosition.y, camera.nearClipPlane));
-                        //pos = Vector3.ProjectOnPlane(pos, Vector3.up);
                         Debug.Log("--OnFingerUpdate--");
-                        Debug.Log("Note: " + note._details.id + " Note Type: " + note._details.type + " Note Time: " + note._details.time + " CurTime: " + CurTime);
-                        Debug.Log("Finger: " + finger.Index + " ScreenPos:" + finger.ScreenPosition + " Pos:" + pos + " Note Pos: " + note._details.pos);
-#endif
+                        Debug.Log("Finger: " + finger.Index + " ScreenPos:" + finger.ScreenPosition + " Pos:" + pos);
+                        Debug.Log("CurTime: " + CurTime +" Note: " + note._details.id + " Time: " + note._details.time + " Pos: " + note._details.pos 
+                        + " Judge Size: " + (note._details.size < 1.2 ? 2.4 : note._details.size * 2));
                     }
+#endif
                 }
             }
         }

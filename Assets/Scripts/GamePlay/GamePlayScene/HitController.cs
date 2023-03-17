@@ -18,36 +18,38 @@ namespace Plutono.GamePlay
         public bool TryHitNote(LeanFinger finger, double touchTime, out Note note)
         {
             note = null;
-            if (finger.IsOverGui == false)
-            {
-                var pos = orthoCam.ScreenToWorldPoint(new Vector3(finger.ScreenPosition.x, finger.ScreenPosition.y, orthoCam.nearClipPlane));
-                if (pos.y < 0.6) return false;
+            if (finger.IsOverGui == true)
+                return false;
+            
+            var pos = orthoCam.ScreenToWorldPoint(new Vector3(finger.ScreenPosition.x, finger.ScreenPosition.y, orthoCam.nearClipPlane));
+            if (pos.y < 0.6) return false;
 
-                NoteGrade lastDetectGrade = NoteGrade.None;
-                foreach (var curDetectingNote in GamePlayController.Instance.notesOnScreen)
+            var lastDeltaXPos = float.MaxValue;
+            var lastNoteGrade = NoteGrade.None;
+            var mode = GamePlayController.Instance.Status.Mode;
+            foreach (var curDetectingNote in GamePlayController.Instance.notesOnScreen)
+            {
+                if (curDetectingNote.IsHitted(pos.x, touchTime, mode, out var deltaTime, out var deltaXPos))
                 {
-                    var grade = curDetectingNote.IsHitted(pos.x, touchTime, GamePlayController.Instance.Status.Mode);
-                    if (grade != NoteGrade.None)
-                    { 
-                        if (grade == NoteGrade.Perfect)
-                        {
-                            note = curDetectingNote;
-                            return true;
-                        }
-                        if (note == null)
-                            note = curDetectingNote;
-                        if (grade > lastDetectGrade)
-                        {
-                            note = curDetectingNote;
-                            lastDetectGrade = grade;
-                        }
+                    var curNoteGrade = NoteGradeJudgment.Judge(deltaTime, mode);
+                    if (curNoteGrade > lastNoteGrade)
+                    {
+                        note = curDetectingNote;
+                        lastDeltaXPos = deltaXPos;
+                        lastNoteGrade = curNoteGrade;
+                    }
+                    else if (curNoteGrade == lastNoteGrade && deltaXPos < lastDeltaXPos)
+                    {
+                        note = curDetectingNote;
+                        lastDeltaXPos = deltaXPos;
+                        lastNoteGrade = curNoteGrade;
                     }
                 }
             }
-            if (note == null)   return false;
-            else                return true;
+            if (note == null || lastNoteGrade < NoteGrade.Bad) return false;
+            else return true;
         }
-        
+
         //        public bool IsHittedNote(LeanFinger finger, double hitTime, out Note note)
         //        {
         //            note = null;
@@ -56,9 +58,9 @@ namespace Plutono.GamePlay
         //                var ray = gamePlayCamera.ScreenPointToRay(finger.ScreenPosition);
         //                if (ray.direction.y > -0.4) return false;
 
-        //                //ÔÚyÖáÉÏµÄÍ¶Ó°
+        //                //åœ¨yè½´ä¸Šçš„æŠ•å½±
         //                ray.direction = Vector3.ProjectOnPlane(ray.direction, Vector3.up);
-        //                //½«rayµÄÆðµãÒÆ¶¯µ½Ïà»úµÄ¸ß¶È£¨yÖá
+        //                //å°†rayçš„èµ·ç‚¹ç§»åŠ¨åˆ°ç›¸æœºçš„é«˜åº¦ï¼ˆyè½´
         //                ray.origin = new Vector3(ray.origin.x, ray.origin.y - gamePlayCamera.transform.position.y, ray.origin.z);
         //#if DEBUG
         //                Debug.DrawRay(ray.origin, ray.direction * 50, Color.red, 5);

@@ -13,19 +13,29 @@ namespace Plutono.Song
     
     public static class NoteGradeJudgment
     {
-        public static NoteGrade JudgeNoteGrade(NoteDetail noteDetail, double curTime, GameMode mode)
+        public static NoteGrade Judge(NoteDetail noteDetail, double curTime, GameMode mode)
         {
-            var time = Math.Abs(noteDetail.time - curTime);
+            var interval = Math.Abs(noteDetail.time - curTime);
+            return GetNoteGrade(interval, mode);
+        }
+
+        public static NoteGrade Judge(double interval, GameMode mode)
+        {
+            return GetNoteGrade(interval, mode);
+        }
+
+        private static NoteGrade GetNoteGrade(double interval, GameMode mode)
+        {
             return mode switch
             {
-                GameMode.Stelo => time switch
+                GameMode.Stelo => interval switch
                 {
                     <= Settings.SteloMode.perfectDeltaTime => NoteGrade.Perfect,
                     <= Settings.SteloMode.goodDeltaTime => NoteGrade.Good,
                     <= Settings.SteloMode.badDeltaTime => NoteGrade.Bad,
                     _ => NoteGrade.Miss
                 },
-                GameMode.Arbo or GameMode.Floro => time switch
+                GameMode.Arbo or GameMode.Floro => interval switch
                 {
                     <= Settings.ArboMode.perfectDeltaTime => NoteGrade.Perfect,
                     <= Settings.ArboMode.goodDeltaTime => NoteGrade.Good,
