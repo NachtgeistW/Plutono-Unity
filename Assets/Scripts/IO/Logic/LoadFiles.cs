@@ -11,7 +11,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Android;
 
@@ -39,8 +39,12 @@ namespace Plutono.IO
             Permission.RequestUserPermission("android.permission.INTERNET");
         }
 
-        //List<Legacy.LegacySongDetail> Initialize -- scan specific file paths and detect the chart.
-        public List<Legacy.LegacySongDetail> Initialize(string StoragePath)
+        /// <summary>
+        /// scan specific file paths and detect the chart.
+        /// </summary>
+        /// <param name="StoragePath"></param>
+        /// <returns></returns>
+        public List<Legacy.LegacySongDetail> LoadSongData(string StoragePath)
         {
 #if UNITY_EDITOR
             if (string.IsNullOrEmpty(StoragePath))
@@ -48,13 +52,13 @@ namespace Plutono.IO
                 StoragePath = Application.persistentDataPath;
             }
 #else
-                StoragePath = Application.platform switch
-                {
-                    //RuntimePlatform.Android =>
-                    //    StoragePath = "/storage/emulated/0/DeemoDIY",
-                    _ => StoragePath = Application.persistentDataPath,
-                };
-                Debug.Log(Directory.Exists(StoragePath) + " " + StoragePath);
+            StoragePath = Application.platform switch
+            {
+                //RuntimePlatform.Android =>
+                //    StoragePath = "/storage/emulated/0/DeemoDIY",
+                _ => StoragePath = Application.persistentDataPath,
+            };
+            Debug.Log(Directory.Exists(StoragePath) + " " + StoragePath);
 #endif
             if (Directory.Exists(StoragePath))
             {
@@ -72,6 +76,21 @@ namespace Plutono.IO
                 Debug.LogWarning("Storage path not found");
                 return new();
             }
+        }
+
+        public void LoadPlayerSettingsFromJson()
+        {
+            var playerSettingsPath = Application.persistentDataPath + "/PlayerSettings_Global.json";
+            if (File.Exists(playerSettingsPath))
+            {
+                JsonUtility.FromJsonOverwrite(File.ReadAllText(playerSettingsPath), PlayerSettingsManager.Instance.PlayerSettings_Global_SO);
+            }
+        }
+
+        public void SavePlayerSettingsToJson()
+        {
+            string json = JsonUtility.ToJson(PlayerSettingsManager.Instance.PlayerSettings_Global_SO);
+            File.WriteAllText(Application.persistentDataPath + "/PlayerSettings_Global.json", json);
         }
     }
 }

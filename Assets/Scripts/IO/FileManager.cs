@@ -6,12 +6,12 @@ namespace Plutono.IO
     {
         public string StoragePath;
         public List<Song.SongDetail> songSourceList;
-        private LoadFiles loadFiles;
+        public LoadFiles loadFiles;
         private void Start()
         {
             loadFiles = new LoadFiles();
             loadFiles.RequestReadPermission();
-            loadFiles.Initialize(StoragePath).ForEach(song => songSourceList.Add(new Song.SongDetail(song)));
+            loadFiles.LoadSongData(StoragePath).ForEach(song => songSourceList.Add(new Song.SongDetail(song)));
         }
     }
 }

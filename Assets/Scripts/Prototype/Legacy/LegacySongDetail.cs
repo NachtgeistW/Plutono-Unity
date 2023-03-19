@@ -53,7 +53,7 @@ namespace Plutono.Legacy
                     if (File.Exists(path)) chartDetail.noteDetails = loadJson(path).ToList();
                     else
                     {
-                        Debug.LogWarning($"Level Easy in Song {IniInfo.SongName}, Level {difficulty} has defined a difficulty but doesn't provide a chart.");
+                        Debug.LogWarning($"Level {difficulty} in Song {IniInfo.SongName} has defined a difficulty but doesn't provide a chart.");
                         return null;
                     }
                 }

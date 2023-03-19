@@ -4,8 +4,8 @@ namespace Plutono.Song
 {
     public enum NoteGrade
     {
-        None,
         Miss,
+        None,
         Bad,
         Good,
         Perfect

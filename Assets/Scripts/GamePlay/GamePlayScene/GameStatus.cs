@@ -71,8 +71,9 @@ public sealed class GameStatus
         // Status check
         if (IsFailed || IsCompleted) return NoteJudgmentResult.GameEnded;
         if (noteDetail.IsShown == false) return NoteJudgmentResult.NoteNotShown;
-        Judgments.TryGetValue(noteDetail.id, out NoteJudgment noteJudgmentCheck);
+        if (grade == NoteGrade.None) return NoteJudgmentResult.NoteNotFound;
 
+        Judgments.TryGetValue(noteDetail.id, out NoteJudgment noteJudgmentCheck);
         if (noteJudgmentCheck != null && noteJudgmentCheck.IsJudged)
         {
             Debug.Log("ID:" + noteDetail.id + " Judgment" + noteJudgmentCheck.IsJudged);
@@ -86,12 +87,6 @@ public sealed class GameStatus
             Grade = grade,
             IsJudged = true
         });
-
-        // Combo
-        var miss = grade == NoteGrade.Bad || grade == NoteGrade.Miss;
-
-        if (miss) Combo = 0; else Combo++;
-        if (Combo > MaxCombo) MaxCombo = Combo;
 
         // Score
         switch (grade)
@@ -113,6 +108,12 @@ public sealed class GameStatus
             default:
                 throw new Exception($"Unknown grade on note {noteDetail.id}");
         }
+
+        // Combo
+        var miss = grade == NoteGrade.Bad || grade == NoteGrade.Miss;
+
+        if (miss) Combo = 0; else Combo++;
+        if (Combo > MaxCombo) MaxCombo = Combo;
 
         CalculateBasicScore();
         CalculateComboScore(grade);

@@ -68,12 +68,13 @@ namespace Plutono.Legacy
         /// <returns>A transferred LegacyChartDetail</returns>
         public static LegacyChartDetail JsonToLegacyChartDetail(string jsonPath)
         {
-            var settings = new JsonSerializerSettings();
-            settings.MetadataPropertyHandling = MetadataPropertyHandling.Ignore;
+            var settings = new JsonSerializerSettings()
+            {
+                MetadataPropertyHandling = MetadataPropertyHandling.Ignore
+            };
             var r = new StreamReader(jsonPath);
             var json = r.ReadToEnd();
-            var res = JsonConvert.DeserializeObject<LegacyChartDetail>(json, settings);
-            return res;
+            return JsonConvert.DeserializeObject<LegacyChartDetail>(json, settings);
         }
     }
 

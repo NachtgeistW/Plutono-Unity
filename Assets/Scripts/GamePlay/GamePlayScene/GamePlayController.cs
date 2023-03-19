@@ -120,8 +120,8 @@ namespace Plutono.GamePlay
             Status.IsStarted = true;
 
 #if DEBUG
-            Debug.Log("StarOrResumeTime: " + StartOrResumeTime + " DspTime: " + curDspTime + " musicStartTime: " + musicStartTime);
-            Debug.Log("globalLatency/musicPlayingDelay: " + musicPlayingDelay + " chartMusicOffset: " + configChartMusicOffset + " ConfigChartOffset: " + configGlobalChartOffset);
+            // Debug.Log("StarOrResumeTime: " + StartOrResumeTime + " DspTime: " + curDspTime + " musicStartTime: " + musicStartTime);
+            // Debug.Log("globalLatency/musicPlayingDelay: " + musicPlayingDelay + " chartMusicOffset: " + configChartMusicOffset + " ConfigChartOffset: " + configGlobalChartOffset);
 #endif
         }
 
@@ -209,9 +209,9 @@ namespace Plutono.GamePlay
                 lastDspTime = curDspTime;
                 CurTime = (float)curDspTime - musicStartTime - configGlobalChartOffset + configChartMusicOffset;
 #if DEBUG
-                Debug.Log("--SynchronizeTime--");
-                Debug.Log("StarOrResumeTime: " + StartOrResumeTime + " DspTime: " + curDspTime
-                    + " CurTime: " + CurTime + " musicTime: " + musicSource.time);
+                // Debug.Log("--SynchronizeTime--");
+                // Debug.Log("StarOrResumeTime: " + StartOrResumeTime + " DspTime: " + curDspTime
+                //     + " CurTime: " + CurTime + " musicTime: " + musicSource.time);
 #endif
             }
             else
@@ -312,38 +312,35 @@ namespace Plutono.GamePlay
 
         protected void OnFingerDown(LeanFinger finger)
         {            
-            if (!hitController.TryHitNote(finger, CurTime, out Note note)) return;
+            if (!hitController.TryHitNote(finger, CurTime, out Note note, out NoteGrade grade)) return;
 
-            var grade = NoteGradeJudgment.Judge(note._details, CurTime, Status.Mode);
+#if DEBUG
+            var pos = camera.ScreenToWorldPoint(new Vector3(finger.ScreenPosition.x, finger.ScreenPosition.y, camera.nearClipPlane));
+            Debug.Log("--OnFingerDown--");
+            Debug.Log("Finger: " + finger.Index + " ScreenPos:" + finger.ScreenPosition + " Pos:" + pos);
+            Debug.Log("Note: " + note._details.id + " Time: " + note._details.time + " Pos: " + note._details.pos 
+                + " Judge Size: " + (note._details.size < 1.2 ? 1.2: note._details.size));
+            Debug.Log("CurTime: " + CurTime + " Grade: " + grade);
+#endif
+
             var result = Status.Judge(note._details, grade);
             if (result == NoteJudgmentResult.Succeeded)
             {
                 noteController.OnHitNote(notesOnScreen, note);
                 explosionController.OnHitNote(note, grade);
                 EventHandler.CallHitNoteEvent(notesOnScreen, note, CurTime, grade);
-#if DEBUG
-                if (grade < NoteGrade.Perfect)
-                {
-                    var pos = camera.ScreenToWorldPoint(new Vector3(finger.ScreenPosition.x, finger.ScreenPosition.y, camera.nearClipPlane));
-                    Debug.Log("--OnFingerDown--");
-                    Debug.Log("Finger: " + finger.Index + " ScreenPos:" + finger.ScreenPosition + " Pos:" + pos);
-                    Debug.Log("CurTime: " + CurTime +" Note: " + note._details.id + " Time: " + note._details.time + " Pos: " + note._details.pos 
-                    + " Judge Size: " + (note._details.size < 1.2 ? 2.4 : note._details.size * 2));
-                }
-#endif
             }
         }
 
         private void OnFingerUpdate(LeanFinger finger)
         {
             if (finger.Index == -42) return;
-            if (!hitController.TryHitNote(finger, CurTime, out Note note)) return;
+            if (!hitController.TryHitNote(finger, CurTime, out Note note, out NoteGrade grade)) return;
 
             if (note._details.type != NoteType.Slide)
                 return;
             if (note._details.time - CurTime < Settings.SteloMode.perfectDeltaTime)
             {
-                var grade = NoteGradeJudgment.Judge(note._details, CurTime, Status.Mode);
                 var result = Status.Judge(note._details, grade);
                 if (result == NoteJudgmentResult.Succeeded)
                 {
@@ -357,7 +354,7 @@ namespace Plutono.GamePlay
                         Debug.Log("--OnFingerUpdate--");
                         Debug.Log("Finger: " + finger.Index + " ScreenPos:" + finger.ScreenPosition + " Pos:" + pos);
                         Debug.Log("CurTime: " + CurTime +" Note: " + note._details.id + " Time: " + note._details.time + " Pos: " + note._details.pos 
-                        + " Judge Size: " + (note._details.size < 1.2 ? 2.4 : note._details.size * 2));
+                        + " Judge Size: " + (note._details.size < 1.2 ? 1.2: note._details.size));
                     }
 #endif
                 }

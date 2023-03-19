@@ -20,7 +20,11 @@ namespace Plutono.Level.SongSelectScene
         [Header("(放prefab不是script！)包含曲绘和曲名的button prefab。")]
         [SerializeField] PrefabCoverView prefabCoverView;
 
-        private void Start() => PopulateSong(IO.FileManager.Instance.songSourceList);
+        private void Start()
+        {
+            PopulateSong(IO.FileManager.Instance.songSourceList);
+            IO.FileManager.Instance.loadFiles.LoadPlayerSettingsFromJson();
+        }
 
         /// <summary>
         /// Instantiate the name and cover of songs in songPackList using selected prefab.

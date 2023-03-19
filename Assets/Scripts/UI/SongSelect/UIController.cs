@@ -3,23 +3,27 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIController : MonoBehaviour
+namespace Plutono.UI
 {
-    [SerializeField] Button settingButton;
-    [SerializeField] Button backButton;
-    [SerializeField] Canvas settingCanvas;
-    // Start is called before the first frame update
-    void Start()
+    public class UIController : MonoBehaviour
     {
-        settingButton.onClick.AddListener(delegate
+        [SerializeField] Button settingButton;
+        [SerializeField] Button backButton;
+        [SerializeField] Canvas settingCanvas;
+        // Start is called before the first frame update
+        void Start()
         {
-            settingCanvas.gameObject.SetActive(true);
-            settingButton.interactable = false;
-        });
-        backButton.onClick.AddListener(delegate
-        {
-            settingCanvas.gameObject.SetActive(false);
-            settingButton.interactable = true;
-        });
+            settingButton.onClick.AddListener(delegate
+            {
+                settingCanvas.gameObject.SetActive(true);
+                settingButton.interactable = false;
+            });
+            backButton.onClick.AddListener(delegate
+            {
+                IO.FileManager.Instance.loadFiles.SavePlayerSettingsToJson();
+                settingCanvas.gameObject.SetActive(false);
+                settingButton.interactable = true;
+            });
+        }
     }
 }

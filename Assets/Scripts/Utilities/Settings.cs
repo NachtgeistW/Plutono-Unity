@@ -38,9 +38,9 @@ public static class Settings
     /// </summary>
     public static class ArboMode
     {
-        public const float perfectDeltaTime = 0.5f;
-        public const float goodDeltaTime = 0.7f;
-        public const float badDeltaTime = 1.0f;
+        public const float perfectDeltaTime = 0.05f;
+        public const float goodDeltaTime = 0.07f;
+        public const float badDeltaTime = 0.1f;
     }
 
     /// <summary>
@@ -48,8 +48,8 @@ public static class Settings
     /// </summary>
     public static class SteloMode
     {
-        public const float perfectDeltaTime = 0.35f;
-        public const float goodDeltaTime = 0.7f;
-        public const float badDeltaTime = 1.0f;
+        public const float perfectDeltaTime = 0.035f;
+        public const float goodDeltaTime = 0.07f;
+        public const float badDeltaTime = 0.1f;
     }
 }

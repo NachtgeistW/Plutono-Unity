@@ -15,9 +15,10 @@ namespace Plutono.GamePlay
         /// <param name="touchTime">the time when player touches the screen</param>
         /// <param name="note">The hitted note. null if none</param>
         /// <returns>True if hit note. </returns>
-        public bool TryHitNote(LeanFinger finger, double touchTime, out Note note)
+        public bool TryHitNote(LeanFinger finger, double touchTime, out Note note, out NoteGrade grade)
         {
             note = null;
+            grade = NoteGrade.None;
             if (finger.IsOverGui == true)
                 return false;
             
@@ -25,28 +26,27 @@ namespace Plutono.GamePlay
             if (pos.y < 0.6) return false;
 
             var lastDeltaXPos = float.MaxValue;
-            var lastNoteGrade = NoteGrade.None;
             var mode = GamePlayController.Instance.Status.Mode;
             foreach (var curDetectingNote in GamePlayController.Instance.notesOnScreen)
             {
                 if (curDetectingNote.IsHitted(pos.x, touchTime, mode, out var deltaTime, out var deltaXPos))
                 {
                     var curNoteGrade = NoteGradeJudgment.Judge(deltaTime, mode);
-                    if (curNoteGrade > lastNoteGrade)
+                    if (curNoteGrade > grade)
                     {
                         note = curDetectingNote;
                         lastDeltaXPos = deltaXPos;
-                        lastNoteGrade = curNoteGrade;
+                        grade = curNoteGrade;
                     }
-                    else if (curNoteGrade == lastNoteGrade && deltaXPos < lastDeltaXPos)
+                    else if (curNoteGrade == grade && deltaXPos < lastDeltaXPos)
                     {
                         note = curDetectingNote;
                         lastDeltaXPos = deltaXPos;
-                        lastNoteGrade = curNoteGrade;
+                        grade = curNoteGrade;
                     }
                 }
             }
-            if (note == null || lastNoteGrade < NoteGrade.Bad) return false;
+            if (note == null || grade < NoteGrade.Bad) return false;
             else return true;
         }
 

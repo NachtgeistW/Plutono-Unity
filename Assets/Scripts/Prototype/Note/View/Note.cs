@@ -87,11 +87,12 @@ namespace Plutono.Song
                 deltaXPos = 0;
                 return true;
             }
-            var noteSize = _details.size < 1.2 ? 2.4 : _details.size * 2;
-            if (Mathf.Abs(xPos - _details.pos) <= noteSize)
+            var noteJudgingSize = _details.size < 1.2 ? 1.2 : _details.size;
+            var noteDeltaXPos = Mathf.Abs(xPos - _details.pos);
+            if (noteDeltaXPos <= noteJudgingSize)
             {
-                deltaTime = hitTime - _details.time;
-                deltaXPos = Mathf.Abs(xPos - _details.pos);
+                deltaTime = Math.Abs(hitTime - _details.time);
+                deltaXPos = noteDeltaXPos;
                 return true;
             }
             else
