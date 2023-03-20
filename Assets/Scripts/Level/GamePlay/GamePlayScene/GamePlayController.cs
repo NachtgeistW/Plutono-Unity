@@ -182,10 +182,10 @@ namespace Plutono.GamePlay
             List<NoteDetail> notesToGenerate = new();
             while (lastApperanceNoteIndex < ChartDetail.noteDetails.Count)
             {
+                var nextNote = ChartDetail.noteDetails[lastApperanceNoteIndex];
                 //添加生成的提前量
-                var nextNoteTime = ChartDetail.noteDetails[lastApperanceNoteIndex].time;
-                if (nextNoteTime - (CurTime + NoteGenerationLeadTime) < 0.01
-                    || CurTime + NoteGenerationLeadTime >= nextNoteTime)
+                var nextNoteTime = nextNote.time;
+                if (nextNoteTime - (CurTime + NoteGenerationLeadTime) < 0.01 || CurTime + NoteGenerationLeadTime >= nextNoteTime)
                 {
                     notesToGenerate.Add(ChartDetail.noteDetails[lastApperanceNoteIndex]);
                     lastApperanceNoteIndex++;
@@ -232,7 +232,7 @@ namespace Plutono.GamePlay
                     EventHandler.CallMissNoteEvent(notesOnScreen, note, CurTime, NoteGrade.Miss);
 #if DEBUG
                     Debug.Log("--OnNoteMiss--");
-                    Debug.Log("CurTime: " + CurTime +" Note: " + note._details.id + " Time: " + note._details.time + " Pos: " + note._details.pos 
+                    Debug.Log("CurTime: " + CurTime + " Note: " + note._details.id + " Time: " + note._details.time + " Pos: " + note._details.pos
                     + " Judge Size: " + (note._details.size < 1.2 ? 2.4 : note._details.size * 2));
 #endif                    
                 }
@@ -311,15 +311,15 @@ namespace Plutono.GamePlay
         }
 
         protected void OnFingerDown(LeanFinger finger)
-        {            
+        {
             if (!hitController.TryHitNote(finger, CurTime, out Note note, out NoteGrade grade)) return;
 
 #if DEBUG
             var pos = camera.ScreenToWorldPoint(new Vector3(finger.ScreenPosition.x, finger.ScreenPosition.y, camera.nearClipPlane));
             Debug.Log("--OnFingerDown--");
             Debug.Log("Finger: " + finger.Index + " ScreenPos:" + finger.ScreenPosition + " Pos:" + pos);
-            Debug.Log("Note: " + note._details.id + " Time: " + note._details.time + " Pos: " + note._details.pos 
-                + " Judge Size: " + (note._details.size < 1.2 ? 1.2: note._details.size));
+            Debug.Log("Note: " + note._details.id + " Time: " + note._details.time + " Pos: " + note._details.pos
+                + " Judge Size: " + (note._details.size < 1.2 ? 1.2 : note._details.size));
             Debug.Log("CurTime: " + CurTime + " Grade: " + grade);
 #endif
 
@@ -353,8 +353,8 @@ namespace Plutono.GamePlay
                         var pos = camera.ScreenToWorldPoint(new Vector3(finger.ScreenPosition.x, finger.ScreenPosition.y, camera.nearClipPlane));
                         Debug.Log("--OnFingerUpdate--");
                         Debug.Log("Finger: " + finger.Index + " ScreenPos:" + finger.ScreenPosition + " Pos:" + pos);
-                        Debug.Log("CurTime: " + CurTime +" Note: " + note._details.id + " Time: " + note._details.time + " Pos: " + note._details.pos 
-                        + " Judge Size: " + (note._details.size < 1.2 ? 1.2: note._details.size));
+                        Debug.Log("CurTime: " + CurTime + " Note: " + note._details.id + " Time: " + note._details.time + " Pos: " + note._details.pos
+                        + " Judge Size: " + (note._details.size < 1.2 ? 1.2 : note._details.size));
                     }
 #endif
                 }

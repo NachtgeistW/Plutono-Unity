@@ -1,13 +1,13 @@
-using AwesomeCharts;
 using Plutono.IO;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using AwesomeCharts;
 
 public class NewBehaviourScript : MonoBehaviour
 {
     MusicBarCaculator MusicBarCaculator = new MusicBarCaculator();
-    public AwesomeCharts.BarChart barChart;
+    public BarChart barChart;
     // Start is called before the first frame update
     void Start()
     {
