@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: 7a0f40832bf99364bb2c093a6e36eed9
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Bauer Bodoni Std 1
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: e7172afdf5778db4682062d062cbe5c9, type: 3}
+  - {fileID: 12800000, guid: d5d43564e2993db41a39dc63164b4d93, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
