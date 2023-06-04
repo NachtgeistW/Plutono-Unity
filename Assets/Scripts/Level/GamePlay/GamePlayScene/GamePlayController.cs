@@ -135,7 +135,7 @@ namespace Plutono.GamePlay
                 SynchronizeTime();
 
             //Note
-            ///Generate notes according to the time
+            //Generate notes according to the time
             GenerateNote();
             foreach (var note in notesOnScreen)
             {
@@ -203,7 +203,7 @@ namespace Plutono.GamePlay
             curDspTime = AudioSettings.dspTime;
             // Sync: every 600 ticks (=10 seconds) and every tick within the first 0.5 seconds after start/resume
             if ((ticksBeforeSynchronization <= 0 || ResumeElapsedTime < 0.5f)
-                && lastDspTime != curDspTime)
+                && Math.Abs(lastDspTime - curDspTime) > 0.001)
             {
                 ticksBeforeSynchronization = 600;
                 lastDspTime = curDspTime;

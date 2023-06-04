@@ -12,8 +12,8 @@ namespace Plutono.Song
     {
         public string SongName = "";
         public string Composer = "";
-        public List<ChartDetail> ChartDetails = new();
         public string MusicPath = "";
+        public List<ChartDetail> ChartDetails = new();
 #nullable enable
         public Sprite? Cover;
 #nullable disable

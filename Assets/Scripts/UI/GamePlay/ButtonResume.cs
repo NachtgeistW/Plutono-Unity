@@ -10,7 +10,7 @@ namespace Plutono.UI
 {
 
     /// <summary>
-    /// Contro the behaivour on resume bottom
+    /// Control the behaivour on resume bottom
     /// </summary>
     public class ButtonResume : MonoBehaviour
     {

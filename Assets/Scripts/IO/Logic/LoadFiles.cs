@@ -1,3 +1,5 @@
+#region File Info
+
 // /*
 //  * Function
 //  *      List<string>::InitializeApplication -- call the GetAllLocalSongList with different path by different platform.
@@ -8,10 +10,10 @@
 //  *      2021.04.07  CHANGE the platformPath
 //  */
 
+#endregion
+
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Android;
 
@@ -62,14 +64,36 @@ namespace Plutono.IO
 #endif
             if (Directory.Exists(StoragePath))
             {
-                return Directory.GetDirectories(StoragePath) // get song packs
-                    .SelectMany(
-                        packPath => Directory.GetDirectories(packPath)
-                            .Select(
-                                songPath => Directory.GetFiles(songPath, "*.ini"))
-                            .SelectMany(iniPaths => iniPaths.Select(ini => new Legacy.LegacySongDetail(ini)))
-                    ) // get song detail
-                    .ToList();
+                var songList = new List<Legacy.LegacySongDetail>();
+                // songList.AddRange(Directory.GetDirectories(StoragePath) // get song packs
+                //     .SelectMany(
+                //         packPath => Directory.GetDirectories(packPath)
+                //             .Select(songPath => Directory.GetFiles(songPath, "*.ini"))
+                //             .SelectMany(iniPaths => iniPaths.Select(ini => new Legacy.LegacySongDetail(ini)))
+                //     ) // get song detail
+                //     .ToList());
+                var path = Directory.GetDirectories(StoragePath);
+                foreach (var packPath in path)
+                {
+                    var songPath = Directory.GetDirectories(packPath);
+                    foreach (var song in songPath)
+                    {
+                        if (File.Exists(song + "/config.json"))
+                        {
+                            songList.Add(new Legacy.LegacySongDetail(song));
+                            continue;
+                        }
+                        else
+                        {
+                            var iniPaths = Directory.GetFiles(song, "*.ini");
+                            foreach (var ini in iniPaths)
+                            {
+                                songList.Add(new Legacy.LegacySongDetail(ini));
+                            }
+                        }
+                    }
+                }
+                return songList;
             }
             else
             {

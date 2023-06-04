@@ -94,6 +94,12 @@ namespace Plutono.Legacy
                 );
         }
 
+        private void LoadFromJson(string json)
+        {
+            Util.JsonFile<LegacySongDetail> jsonFile = new();
+            
+        }
+
         /// <summary>
         /// Load a PNG or JPG file from disk to a Texture2D
         /// </summary>

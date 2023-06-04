@@ -75,6 +75,7 @@ namespace Plutono.Legacy
             var r = new StreamReader(jsonPath);
             var json = r.ReadToEnd();
             return JsonConvert.DeserializeObject<LegacyChartDetail>(json, settings);
+            //Util.JsonFile<LegacyChartDetail> jsonFile = new();
         }
     }
 

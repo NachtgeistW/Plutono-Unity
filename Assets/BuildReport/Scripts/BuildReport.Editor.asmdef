@@ -1,0 +1,18 @@
+{
+    "name": "BuildReport.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:7a264f61838f12b4aaa2d1fa0c6d4e56"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

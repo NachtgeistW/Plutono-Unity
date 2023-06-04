@@ -19,7 +19,7 @@ namespace Plutono.GamePlay
         {
             note = null;
             grade = NoteGrade.None;
-            if (finger.IsOverGui == true)
+            if (finger.IsOverGui)
                 return false;
             
             var pos = orthoCam.ScreenToWorldPoint(new Vector3(finger.ScreenPosition.x, finger.ScreenPosition.y, orthoCam.nearClipPlane));

@@ -74,7 +74,7 @@ public sealed class GameStatus
         if (grade == NoteGrade.None) return NoteJudgmentResult.NoteNotFound;
 
         Judgments.TryGetValue(noteDetail.id, out NoteJudgment noteJudgmentCheck);
-        if (noteJudgmentCheck != null && noteJudgmentCheck.IsJudged)
+        if (noteJudgmentCheck is { IsJudged: true })
         {
             Debug.Log("ID:" + noteDetail.id + " Judgment" + noteJudgmentCheck.IsJudged);
             Debug.LogWarning($"Trying to judge note {noteDetail.id} which is already judged.");
@@ -110,7 +110,7 @@ public sealed class GameStatus
         }
 
         // Combo
-        var miss = grade == NoteGrade.Bad || grade == NoteGrade.Miss;
+        var miss = grade is NoteGrade.Bad or NoteGrade.Miss;
 
         if (miss) Combo = 0; else Combo++;
         if (Combo > MaxCombo) MaxCombo = Combo;

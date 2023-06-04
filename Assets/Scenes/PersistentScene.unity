@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44402233, g: 0.49316537, b: 0.5722318, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -413,7 +413,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49fa987dc06d7ec4dafc21b0b063a32f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StoragePath: C:\Users\night\OneDrive\code\CSharp-Project\Plutono\TestChart
+  StoragePath: D:\Deemo DIY
   songSourceList: []
 --- !u!1001 &1944975647
 PrefabInstance:

@@ -10,7 +10,7 @@ using UnityEngine.UI;
 namespace Plutono.UI
 {
     /// <summary>
-    /// Contro the behaivour on pause bottom
+    /// Control the behaivour on pause bottom
     /// </summary>
     public class ButtonPause : MonoBehaviour
     {
