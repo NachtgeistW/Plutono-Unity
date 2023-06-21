@@ -85,3 +85,7 @@ Assets/Packages/
 
 # Paid Plugins
 Assets/Plugins
+Assets/EditorPlugins
+
+# Large Files
+*.psd

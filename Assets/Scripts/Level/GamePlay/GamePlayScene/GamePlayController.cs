@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
+using static UnityEditor.PlayerSettings;
 
 namespace Plutono.GamePlay
 {
@@ -45,7 +47,8 @@ namespace Plutono.GamePlay
         public ChartDetail ChartDetail { get; internal set; }
         public SongDetail SongSource { get; internal set; }
 
-        public int lastApperanceNoteIndex = 0;
+        public int lastAppearanceNoteIndex;
+        private Dictionary<int, NoteDetail> slidingNotes; //Finger index and sliding note on it
 
         [Header("-Audio-")]
         public AudioSource musicSource;
@@ -180,15 +183,15 @@ namespace Plutono.GamePlay
         private void GenerateNote()
         {
             List<NoteDetail> notesToGenerate = new();
-            while (lastApperanceNoteIndex < ChartDetail.noteDetails.Count)
+            while (lastAppearanceNoteIndex < ChartDetail.noteDetails.Count)
             {
-                var nextNote = ChartDetail.noteDetails[lastApperanceNoteIndex];
+                var nextNote = ChartDetail.noteDetails[lastAppearanceNoteIndex];
                 //添加生成的提前量
                 var nextNoteTime = nextNote.time;
                 if (nextNoteTime - (CurTime + NoteGenerationLeadTime) < 0.01 || CurTime + NoteGenerationLeadTime >= nextNoteTime)
                 {
-                    notesToGenerate.Add(ChartDetail.noteDetails[lastApperanceNoteIndex]);
-                    lastApperanceNoteIndex++;
+                    notesToGenerate.Add(ChartDetail.noteDetails[lastAppearanceNoteIndex]);
+                    lastAppearanceNoteIndex++;
                 }
                 else
                     break;
@@ -313,16 +316,20 @@ namespace Plutono.GamePlay
         protected void OnFingerDown(LeanFinger finger)
         {
             if (!hitController.TryHitNote(finger, CurTime, out Note note, out NoteGrade grade)) return;
+            var pos = camera.ScreenToWorldPoint(new Vector3(finger.ScreenPosition.x, finger.ScreenPosition.y, camera.nearClipPlane));
 
 #if DEBUG
-            var pos = camera.ScreenToWorldPoint(new Vector3(finger.ScreenPosition.x, finger.ScreenPosition.y, camera.nearClipPlane));
             Debug.Log("--OnFingerDown--");
             Debug.Log("Finger: " + finger.Index + " ScreenPos:" + finger.ScreenPosition + " Pos:" + pos);
             Debug.Log("Note: " + note._details.id + " Time: " + note._details.time + " Pos: " + note._details.pos
                 + " Judge Size: " + (note._details.size < 1.2 ? 1.2 : note._details.size));
             Debug.Log("CurTime: " + CurTime + " Grade: " + grade);
 #endif
-
+            if (note._details.type == NoteType.Slide)
+            {
+                slidingNotes.Add(finger.Index, note._details);
+                note._details.StartSliding(CurTime, pos);
+            }
             var result = Status.Judge(note._details, grade);
             if (result == NoteJudgmentResult.Succeeded)
             {
@@ -335,30 +342,54 @@ namespace Plutono.GamePlay
         private void OnFingerUpdate(LeanFinger finger)
         {
             if (finger.Index == -42) return;
-            if (!hitController.TryHitNote(finger, CurTime, out Note note, out NoteGrade grade)) return;
+            var pos = camera.ScreenToWorldPoint(new Vector3(finger.ScreenPosition.x, finger.ScreenPosition.y, camera.nearClipPlane));
 
-            if (note._details.type != NoteType.Slide)
-                return;
-            if (note._details.time - CurTime < Settings.SteloMode.perfectDeltaTime)
+            // Handle Slide Note
+            if (slidingNotes.ContainsKey(finger.Index))
             {
-                var result = Status.Judge(note._details, grade);
-                if (result == NoteJudgmentResult.Succeeded)
+                var slidingNote = slidingNotes[finger.Index];
+                var slidingDistance = Mathf.Abs(pos.x - slidingNote.slideStartPos.x);
+                if (slidingDistance > slidingNote.size * 0.25)
                 {
-                    noteController.OnHitNote(notesOnScreen, note);
-                    explosionController.OnHitNote(note, grade);
-                    EventHandler.CallHitNoteEvent(notesOnScreen, note, CurTime, grade);
-#if DEBUG
-                    if (grade < NoteGrade.Perfect)
+                    //TODO: Change grade according to mode
+                    var grade = NoteGrade.Perfect;
+                    var result = Status.Judge(slidingNote, grade);
+                    if (result == NoteJudgmentResult.Succeeded)
                     {
-                        var pos = camera.ScreenToWorldPoint(new Vector3(finger.ScreenPosition.x, finger.ScreenPosition.y, camera.nearClipPlane));
-                        Debug.Log("--OnFingerUpdate--");
-                        Debug.Log("Finger: " + finger.Index + " ScreenPos:" + finger.ScreenPosition + " Pos:" + pos);
-                        Debug.Log("CurTime: " + CurTime + " Note: " + note._details.id + " Time: " + note._details.time + " Pos: " + note._details.pos
-                        + " Judge Size: " + (note._details.size < 1.2 ? 1.2 : note._details.size));
+                        //noteController.OnHitNote(notesOnScreen, note);
+                        //explosionController.OnHitNote(note, grade);
+                        //EventHandler.CallHitNoteEvent(notesOnScreen, note, CurTime, grade);
                     }
-#endif
                 }
+                slidingNotes.Remove(finger.Index);
             }
+
+            //If this is a new finger
+
+            //if (!hitController.TryHitNote(finger, CurTime, out Note note, out NoteGrade grade)) return;
+
+            //if (note._details.type != NoteType.Slide)
+            //    return;
+//            if (note._details.time - CurTime < Settings.SteloMode.perfectDeltaTime)
+//            {
+//                var result = Status.Judge(note._details, grade);
+//                if (result == NoteJudgmentResult.Succeeded)
+//                {
+//                    noteController.OnHitNote(notesOnScreen, note);
+//                    explosionController.OnHitNote(note, grade);
+//                    EventHandler.CallHitNoteEvent(notesOnScreen, note, CurTime, grade);
+//#if DEBUG
+//                    if (grade < NoteGrade.Perfect)
+//                    {
+//                        var pos = camera.ScreenToWorldPoint(new Vector3(finger.ScreenPosition.x, finger.ScreenPosition.y, camera.nearClipPlane));
+//                        Debug.Log("--OnFingerUpdate--");
+//                        Debug.Log("Finger: " + finger.Index + " ScreenPos:" + finger.ScreenPosition + " Pos:" + pos);
+//                        Debug.Log("CurTime: " + CurTime + " Note: " + note._details.id + " Time: " + note._details.time + " Pos: " + note._details.pos
+//                        + " Judge Size: " + (note._details.size < 1.2 ? 1.2 : note._details.size));
+//                    }
+//#endif
+//                }
+//            }
         }
 
         private void OnFingerUp(LeanFinger finger)

@@ -11,6 +11,8 @@ using System.Collections.Generic;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 using Plutono.Legacy;
+using UnityEngine;
+using static UnityEditor.PlayerSettings;
 
 namespace Plutono.Song
 {
@@ -27,15 +29,25 @@ namespace Plutono.Song
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         [CanBeNull] public List<GamePianoSound> sounds;
         //slide
-        public bool isLink = false;
+        public bool isLink;
         public int prevLink = -1;
         public int nextLink = -1;
+        public bool isSliding;
+        public double slideStartTime;
+        public Vector3 slideStartPos;
 
         public static object NoteType { get; internal set; }
 
-        public bool IsShown => pos <= 2.0f && pos >= -2.0f;     //TRUE if this note should be shown
+        public bool IsShown => pos is <= 2.0f and >= -2.0f;     //TRUE if this note should be shown
 
+        public void StartSliding(double slideStartTime, Vector3 fingerPos)
+        {
+            isSliding = true;
+            slideStartPos = fingerPos;
+            this.slideStartTime = slideStartTime;
+        }
     }
+
     public enum NoteType
     {
         Piano, Slide, Blank, Vibrate, Swipe
