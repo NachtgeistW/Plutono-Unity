@@ -1,10 +1,12 @@
+using UnityEngine;
+using System.Collections.Generic;
+
 namespace Plutono.IO
 {
-    using System.Collections.Generic;
     
     public class FileManager : Singleton<FileManager>
     {
-        public string StoragePath;
+        [field: SerializeField] public string StoragePath { get; set; }
         public List<Song.SongDetail> songSourceList;
         public LoadFiles loadFiles;
         private void Start()

@@ -19,7 +19,8 @@ namespace Plutono.Song
 
         private void Start()
         {
-            maxPoolSize = PlayerSettingsManager.Instance.PlayerSettings_Global_SO.NoteObjectpoolMaxSize;
+            maxPoolSize = 1000;
+            //maxPoolSize = PlayerSettingsManager.Instance.PlayerSettings_Global_SO.NoteObjectpoolMaxSize;
             notePool = new ObjectPool<Note>(
                 OnCreatePooledItem, OnTakeFromPool, OnReturnedToPool, OnDestroyPooledItem, collectionChecks, maxPoolSize);
         }

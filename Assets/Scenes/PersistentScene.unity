@@ -167,7 +167,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab00252ae9273ad4ca0fd2dc0895c646, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerSettings_Global_SO: {fileID: 11400000, guid: e69be12aac64bee49b37408df03a0a0a, type: 2}
+  <GSettings>k__BackingField:
+    <IsSuddenOn>k__BackingField: 0
+    <SuddenHeight>k__BackingField: 0
+    <GlobalChartOffset>k__BackingField: 0
+    <ChartMusicOffset>k__BackingField: 0
+    language: 0
+    <DOTweenDefaultCapacity>k__BackingField: 0
+    <NoteObjectpoolMaxSize>k__BackingField: 0
+    <ExplosionAnimateObjectpoolMaxSize>k__BackingField: 0
 --- !u!1 &170076733
 GameObject:
   m_ObjectHideFlags: 0
@@ -413,7 +421,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49fa987dc06d7ec4dafc21b0b063a32f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StoragePath: D:\Deemo DIY
+  <StoragePath>k__BackingField: D:\OneDrive\code\CSharp-Project\Plutono\Assets\StreamingAssets\TestChart
   songSourceList: []
 --- !u!1001 &1944975647
 PrefabInstance:

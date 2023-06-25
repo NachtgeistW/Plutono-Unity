@@ -76,7 +76,7 @@ namespace Plutono.GamePlay
 
         private void Start()
         {
-            PlayerSetting = PlayerSettingsManager.Instance.PlayerSettings_Global_SO;
+            //PlayerSetting = PlayerSettingsManager.Instance.PlayerSettings_Global_SO;
             // System config
             Application.targetFrameRate = 120;
 
@@ -104,8 +104,10 @@ namespace Plutono.GamePlay
             }
 
             //Synchronize
-            configGlobalChartOffset = PlayerSetting.globalChartOffset;
-            configChartMusicOffset = PlayerSetting.chartMusicOffset;
+            configGlobalChartOffset = 0f;
+            configChartMusicOffset = 0f;
+            //configGlobalChartOffset = PlayerSetting.globalChartOffset;
+            //configChartMusicOffset = PlayerSetting.chartMusicOffset;
         }
 
         private void OnGameStartEvent()

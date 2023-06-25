@@ -24,7 +24,8 @@ namespace Plutono.Song
 
         private void Start()
         {
-            maxPoolSize = PlayerSettingsManager.Instance.PlayerSettings_Global_SO.ExplosionAnimateObjectpoolMaxSize;
+            //maxPoolSize = PlayerSettingsManager.Instance.PlayerSettings_Global_SO.ExplosionAnimateObjectpoolMaxSize;
+            maxPoolSize = 250;
             explosionAnimPool = new ObjectPool<Explosion>(
                 OnCreatePooledItem, OnTakeFromPool, OnReturnedToPool, OnDestroyPooledItem, collectionChecks, maxPoolSize);
         }

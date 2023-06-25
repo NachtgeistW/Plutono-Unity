@@ -23,7 +23,6 @@ namespace Plutono.Level.SongSelectScene
         private void Start()
         {
             PopulateSong(IO.FileManager.Instance.songSourceList);
-            IO.FileManager.Instance.loadFiles.LoadPlayerSettingsFromJson();
         }
 
         /// <summary>
