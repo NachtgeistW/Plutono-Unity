@@ -17,7 +17,7 @@ public class ScoreInfo : MonoBehaviour
 
     void Start()
     {
-        _songNameText.text = FileManager.Instance.songSourceList[SongSelectDataTransformer.SelectedSongIndex].SongName;
+        _songNameText.text = FileManager.Instance.songSourceList[SongSelectDataTransformer.SelectedSongIndex].songName;
         _perfectText.text = Convert.ToString("P " + ResultDataTransformer.PCount);
         _goodText.text = Convert.ToString("G " + ResultDataTransformer.GCount);
         _badText.text = Convert.ToString("B " + ResultDataTransformer.BCount);

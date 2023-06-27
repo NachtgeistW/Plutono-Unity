@@ -30,7 +30,7 @@ namespace Plutono.Level.SongSelectScene
         /// <param name="songDetail"></param>
         public void SetSongDetail(Song.SongDetail songDetail, int songIndex)
         {
-            songName.text = songDetail.SongName;
+            songName.text = songDetail.songName;
             SongDetailOnButton = songDetail;
             cover.sprite = songDetail.Cover;
             this.songIndex = songIndex;

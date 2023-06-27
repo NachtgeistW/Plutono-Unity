@@ -7,13 +7,16 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using Plutono.Song;
+using Unity.VisualScripting.YamlDotNet.Core.Tokens;
 using UnityEngine;
 
 namespace Plutono.Legacy
 {
 #nullable enable
-    [System.Serializable]
+    [Serializable]
     public class LegacySongDetail
     {
         public readonly IniDetail IniInfo;
@@ -30,7 +33,7 @@ namespace Plutono.Legacy
 
             // convert ini to a config file used in Plutono.
             // Also convert legacyChart to chartDetail.
-            Func<string, string?, ChartDetail?> loadChart = (difficulty, level) =>
+            ChartDetail? LoadChart(string difficulty, string? level)
             {
                 if (level is null) return null;
 
@@ -40,17 +43,30 @@ namespace Plutono.Legacy
                     level = level,
                     chartDesigner = IniInfo.ChartDesigner
                 };
-                IEnumerable<NoteDetail> loadJson(string path) =>
+
+                static IEnumerable<NoteDetail> LoadJson(string path) =>
                     LegacyChartDetail.JsonToLegacyChartDetail(path).ToNoteDetailList();
-                
-                if (File.Exists(path)) chartDetail.noteDetails = loadJson(path).ToList();
+
+                if (File.Exists(path))
+                {
+                    chartDetail.noteDetails = LoadJson(path).OrderBy(n => n.time).ToList();
+                    var chart = File.ReadAllText(path);
+                    var id = IniInfo.SongName + IniInfo.Artist + difficulty + IniInfo.ChartDesigner + chart;
+                    chartDetail.id = Sha256HashString(id);
+                }
                 else
                 {
                     var arr = path.ToCharArray();
                     arr[0] = char.ToUpper(arr[0]);
                     path = arr.ToString();
 
-                    if (File.Exists(path)) chartDetail.noteDetails = loadJson(path).ToList();
+                    if (File.Exists(path))
+                    {
+                        chartDetail.noteDetails = LoadJson(path).OrderBy(n => n.time).ToList();
+                        var chart = File.ReadAllText(path);
+                        var id = IniInfo.SongName + IniInfo.Artist + difficulty + IniInfo.ChartDesigner + chart;
+                        chartDetail.id = Sha256HashString(id);
+                    }
                     else
                     {
                         Debug.LogWarning($"Level {difficulty} in Song {IniInfo.SongName} has defined a difficulty but doesn't provide a chart.");
@@ -59,63 +75,61 @@ namespace Plutono.Legacy
                 }
 
                 return chartDetail;
-            };
-
-            {
-                if (loadChart("easy", IniInfo.LevelEasy?.ToString()) is { } chart)
-                    ChartDetails.Add(chart);
-            }
-            {
-                if (loadChart("normal", IniInfo.LevelNormal?.ToString()) is { } chart)
-                    ChartDetails.Add(chart);
-            }
-            {
-                if (loadChart("hard", IniInfo.LevelHard?.ToString()) is { } chart)
-                    ChartDetails.Add(chart);
-            }
-            {
-                if (loadChart("extra", IniInfo.LevelUltra?.ToString()) is { } chart)
-                    ChartDetails.Add(chart);
-            }
-            {
-                if (loadChart("ultra", IniInfo.LevelUltra?.ToString()) is { } chart)
-                    ChartDetails.Add(chart);
             }
 
-            var coverPath = Path.Combine(iniFolderPath, "cover.png");
-            if (File.Exists(coverPath) && LoadTexture(coverPath) is { } spriteTexture)
-                Cover = Sprite.Create(
-                    spriteTexture,
-                    new Rect(0, 0, spriteTexture.width, spriteTexture.height),
-                    new Vector2(0, 0),
-                    100.0f,
-                    0,
-                    SpriteMeshType.Tight
-                );
+            {
+                if (LoadChart("easy", IniInfo.LevelEasy?.ToString()) is { } chart)
+                    ChartDetails.Add(chart);
+            }
+            {
+                if (LoadChart("normal", IniInfo.LevelNormal?.ToString()) is { } chart)
+                    ChartDetails.Add(chart);
+            }
+            {
+                if (LoadChart("hard", IniInfo.LevelHard?.ToString()) is { } chart)
+                    ChartDetails.Add(chart);
+            }
+            {
+                if (LoadChart("extra", IniInfo.LevelUltra?.ToString()) is { } chart)
+                    ChartDetails.Add(chart);
+            }
+            {
+                if (LoadChart("ultra", IniInfo.LevelUltra?.ToString()) is { } chart)
+                    ChartDetails.Add(chart);
+            }
+
+            try
+            {
+                var coverPath = Path.Combine(iniFolderPath ?? throw new InvalidOperationException(), "cover.png");
+                if (File.Exists(coverPath) && Util.Texture.LoadTexture(coverPath) is { } spriteTexture)
+                    Cover = Sprite.Create(
+                        spriteTexture,
+                        new Rect(0, 0, spriteTexture.width, spriteTexture.height),
+                        new Vector2(0, 0),
+                        100.0f,
+                        0,
+                        SpriteMeshType.Tight
+                    );
+            }
+            catch (Exception)
+            {
+                Debug.LogError($"Failed to load cover for {IniInfo.SongName}.");
+            }
         }
 
-        private void LoadFromJson(string json)
+        public static string Sha256HashString(string value)
         {
-            Util.JsonFile<LegacySongDetail> jsonFile = new();
-            
-        }
+            var sb = new StringBuilder();
 
-        /// <summary>
-        /// Load a PNG or JPG file from disk to a Texture2D
-        /// </summary>
-        /// <param name="filePath"></param>
-        /// <returns>The Texture2D. Returns null if load fails</returns>
-        static Texture2D? LoadTexture(string filePath)
-        {
-            if (File.Exists(filePath))
+            using (var hash = SHA256.Create())
             {
-                Texture2D tex2D = new(0, 0);           // Create new "empty" texture
-                if (tex2D.LoadImage(File.ReadAllBytes(filePath)))           // Load the image data into the texture (size is set automatically)
-                    return tex2D;                 // If data = readable -> return texture
-            }
+                var enc = Encoding.UTF8;
+                var result = hash.ComputeHash(enc.GetBytes(value));
 
-            return null;                     // Return null if load failed
+                foreach (var b in result)
+                    sb.Append(b.ToString("x2"));
+            }
+            return sb.ToString();
         }
     }
-#nullable disable
 }

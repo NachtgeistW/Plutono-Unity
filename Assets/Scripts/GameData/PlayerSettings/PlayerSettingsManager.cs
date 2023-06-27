@@ -42,8 +42,7 @@ namespace Plutono
             if (!File.Exists(playerSettingsPath)) return;
             try
             {
-                var jsonFile = new JsonFile<GlobalPlayerSettings>();
-                GSettings = jsonFile.FromPath(playerSettingsPath);
+                GSettings = JsonFile<GlobalPlayerSettings>.FromPath(playerSettingsPath);
             }
             catch (Exception e)
             {
@@ -58,8 +57,7 @@ namespace Plutono
             var playerSettingsPath = Application.persistentDataPath + "/PlayerSettings_Global.json";
             try
             {
-                var jsonFile = new JsonFile<GlobalPlayerSettings>();
-                File.WriteAllText(playerSettingsPath, jsonFile.ToJson(GSettings));
+                File.WriteAllText(playerSettingsPath, JsonFile<GlobalPlayerSettings>.ToJson(GSettings));
             }
             catch (Exception e)
             {

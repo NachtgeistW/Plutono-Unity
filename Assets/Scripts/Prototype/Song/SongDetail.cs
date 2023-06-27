@@ -10,10 +10,10 @@ namespace Plutono.Song
     [System.Serializable]
     public class SongDetail
     {
-        public string SongName = "";
-        public string Composer = "";
-        public string MusicPath = "";
-        public List<ChartDetail> ChartDetails = new();
+        public string songName = "";
+        public string composer = "";
+        public string musicPath = "";
+        public List<ChartDetail> chartDetails = new();
 #nullable enable
         public Sprite? Cover;
 #nullable disable
@@ -21,11 +21,11 @@ namespace Plutono.Song
         public SongDetail () {}
         public SongDetail (Legacy.LegacySongDetail legacySongDetail) 
         {
-            SongName = legacySongDetail.IniInfo.SongName;
-            Composer = legacySongDetail.IniInfo.Artist;
-            ChartDetails = legacySongDetail.ChartDetails;
+            songName = legacySongDetail.IniInfo.SongName;
+            composer = legacySongDetail.IniInfo.Artist;
+            chartDetails = legacySongDetail.ChartDetails;
             Cover = legacySongDetail.Cover;
-            MusicPath = legacySongDetail.MusicPath;
+            musicPath = legacySongDetail.MusicPath;
         }
     }
 }

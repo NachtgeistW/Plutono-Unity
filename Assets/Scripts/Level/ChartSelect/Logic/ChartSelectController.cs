@@ -37,8 +37,8 @@ namespace Plutono.Level.ChartSelect
         /// <param name="packInfo"></param>
         public void SetSongInfo(Song.SongDetail songDetail)
         {
-            _view.SetSongName(songDetail.SongName);
-            _view.SetComposer(songDetail.Composer);
+            _view.SetSongName(songDetail.songName);
+            _view.SetComposer(songDetail.composer);
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace Plutono.Level.ChartSelect
         public void PopulateChart(Song.SongDetail songDetail)
         {
             int i = 0;
-            foreach (var chart in songDetail.ChartDetails)
+            foreach (var chart in songDetail.chartDetails)
             {
                 var newButton = Instantiate(_prefab, transform);
                 newButton.SetChartInfo(chart, i);

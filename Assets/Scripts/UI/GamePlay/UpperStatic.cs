@@ -17,7 +17,7 @@ namespace Plutono.UI
 
         void Start()
         {
-            titleText.text = GamePlayController.Instance.SongSource.SongName;
+            titleText.text = GamePlayController.Instance.SongSource.songName;
             levelText.text = "Lv." + GamePlayController.Instance.ChartDetail.level;
             //mode
             switch (GamePlayController.Instance.Status.Mode)

@@ -16,6 +16,7 @@ namespace Plutono.Song
     [System.Serializable]
     public sealed class ChartDetail
     {
+        public string id;   //id: string, the id of a chart. value = MD5(songName + composer + level + chartDesigner + noteDetails)
         public List<float> beats = new();       //beats: List<float>, used to quantize the note.
         public string chartDesigner = "";       //chartDesigner: string, the name of the chart maker
         public string level = "";               //level: string, the level of a song.

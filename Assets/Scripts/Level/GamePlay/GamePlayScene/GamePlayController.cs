@@ -84,10 +84,10 @@ namespace Plutono.GamePlay
             songIndex = SongSelectDataTransformer.SelectedSongIndex;
             chartIndex = SongSelectDataTransformer.SelectedChartIndex;
             SongSource = FileManager.Instance.songSourceList[songIndex];
-            ChartDetail = SongSource.ChartDetails[chartIndex];
+            ChartDetail = SongSource.chartDetails[chartIndex];
 
             //Audio
-            musicSource.clip = AudioClipFileManager.Read(SongSource.MusicPath);
+            musicSource.clip = AudioClipFileManager.Read(SongSource.musicPath);
             musicSource.time = 0;
 
             //Status
