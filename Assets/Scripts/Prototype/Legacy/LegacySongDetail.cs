@@ -12,6 +12,7 @@ using System.Text;
 using Plutono.Song;
 using Unity.VisualScripting.YamlDotNet.Core.Tokens;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Plutono.Legacy
 {
@@ -21,15 +22,15 @@ namespace Plutono.Legacy
     {
         public readonly IniDetail IniInfo;
         public readonly List<ChartDetail> ChartDetails = new();
-        public Sprite? Cover;
-        public string MusicPath;
+        [FormerlySerializedAs("Cover")] public Sprite? cover;
+        [FormerlySerializedAs("MusicPath")] public string musicPath;
 
         public LegacySongDetail(string iniPath)
         {
             var iniFolderPath = Path.GetDirectoryName(iniPath);
 
             IniInfo = IniDetail.ReadIniFromPath(iniPath);
-            MusicPath = Path.Combine(iniFolderPath, "music.mp3");
+            musicPath = Path.Combine(iniFolderPath, "music.mp3");
 
             // convert ini to a config file used in Plutono.
             // Also convert legacyChart to chartDetail.
@@ -50,9 +51,9 @@ namespace Plutono.Legacy
                 if (File.Exists(path))
                 {
                     chartDetail.noteDetails = LoadJson(path).OrderBy(n => n.time).ToList();
-                    var chart = File.ReadAllText(path);
-                    var id = IniInfo.SongName + IniInfo.Artist + difficulty + IniInfo.ChartDesigner + chart;
-                    chartDetail.id = Sha256HashString(id);
+                    var chartContent = File.ReadAllText(path);
+                    var id = IniInfo.SongName + IniInfo.Artist + difficulty + IniInfo.ChartDesigner + chartContent;
+                    chartDetail.id = Md5HashString(id);
                 }
                 else
                 {
@@ -63,9 +64,9 @@ namespace Plutono.Legacy
                     if (File.Exists(path))
                     {
                         chartDetail.noteDetails = LoadJson(path).OrderBy(n => n.time).ToList();
-                        var chart = File.ReadAllText(path);
-                        var id = IniInfo.SongName + IniInfo.Artist + difficulty + IniInfo.ChartDesigner + chart;
-                        chartDetail.id = Sha256HashString(id);
+                        var chartContent = File.ReadAllText(path);
+                        var id = IniInfo.SongName + IniInfo.Artist + difficulty + IniInfo.ChartDesigner + chartContent;
+                        chartDetail.id = Md5HashString(id);
                     }
                     else
                     {
@@ -102,7 +103,7 @@ namespace Plutono.Legacy
             {
                 var coverPath = Path.Combine(iniFolderPath ?? throw new InvalidOperationException(), "cover.png");
                 if (File.Exists(coverPath) && Util.Texture.LoadTexture(coverPath) is { } spriteTexture)
-                    Cover = Sprite.Create(
+                    cover = Sprite.Create(
                         spriteTexture,
                         new Rect(0, 0, spriteTexture.width, spriteTexture.height),
                         new Vector2(0, 0),
@@ -117,11 +118,11 @@ namespace Plutono.Legacy
             }
         }
 
-        public static string Sha256HashString(string value)
+        public static string Md5HashString(string value)
         {
             var sb = new StringBuilder();
 
-            using (var hash = SHA256.Create())
+            using (var hash = MD5.Create())
             {
                 var enc = Encoding.UTF8;
                 var result = hash.ComputeHash(enc.GetBytes(value));

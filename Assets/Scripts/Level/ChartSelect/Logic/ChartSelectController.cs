@@ -17,8 +17,8 @@ namespace Plutono.Level.ChartSelect
     public class ChartSelectController : MonoBehaviour
     {
         [Header("(Attatch prefab, not script!)�Ա��б��õ�ѡ�����õ�prefab��")]
-        [SerializeField] private PrefabButtonChartSelectView _prefab;
-        [SerializeField] private ChartSelectView _view;
+        [SerializeField] private PrefabButtonChartSelectView prefab;
+        [SerializeField] private ChartSelectView view;
         [SerializeField] private Image cover;
         private int songIndex;
 
@@ -26,7 +26,7 @@ namespace Plutono.Level.ChartSelect
         {
             songIndex = SongSelectDataTransformer.SelectedSongIndex;
             var pack = FileManager.Instance.songSourceList[songIndex];
-            cover.sprite = pack.Cover;
+            cover.sprite = pack.cover;
             SetSongInfo(pack);
             PopulateChart(pack);
         }
@@ -37,8 +37,8 @@ namespace Plutono.Level.ChartSelect
         /// <param name="packInfo"></param>
         public void SetSongInfo(Song.SongDetail songDetail)
         {
-            _view.SetSongName(songDetail.songName);
-            _view.SetComposer(songDetail.composer);
+            view.SetSongName(songDetail.songName);
+            view.SetComposer(songDetail.composer);
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace Plutono.Level.ChartSelect
             int i = 0;
             foreach (var chart in songDetail.chartDetails)
             {
-                var newButton = Instantiate(_prefab, transform);
+                var newButton = Instantiate(prefab, transform);
                 newButton.SetChartInfo(chart, i);
                 i++;
             }

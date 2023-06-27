@@ -15,7 +15,7 @@ namespace Plutono.Song
         public string musicPath = "";
         public List<ChartDetail> chartDetails = new();
 #nullable enable
-        public Sprite? Cover;
+        public Sprite? cover;
 #nullable disable
 
         public SongDetail () {}
@@ -24,8 +24,8 @@ namespace Plutono.Song
             songName = legacySongDetail.IniInfo.SongName;
             composer = legacySongDetail.IniInfo.Artist;
             chartDetails = legacySongDetail.ChartDetails;
-            Cover = legacySongDetail.Cover;
-            musicPath = legacySongDetail.MusicPath;
+            cover = legacySongDetail.cover;
+            musicPath = legacySongDetail.musicPath;
         }
     }
 }

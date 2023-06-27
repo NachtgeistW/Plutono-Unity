@@ -36,18 +36,16 @@ public class SettingPanel : MonoBehaviour
         });
 
         //Game Play
-        var gSettings = PlayerSettingsManager.Instance.GSettings;
-
         isSuddenOnToggle.onValueChanged.AddListener(isSuddenOn =>
         {
-            gSettings.IsSuddenOn = isSuddenOn;
+            PlayerSettingsManager.Instance.GSettings.IsSuddenOn = isSuddenOn;
             suddenHeightSlider.interactable = isSuddenOn;
         });
-        isSuddenOnToggle.isOn = gSettings.IsSuddenOn;
+        isSuddenOnToggle.isOn = PlayerSettingsManager.Instance.GSettings.IsSuddenOn;
 
-        suddenHeightSlider.onValueChanged.AddListener(suddenHeight => 
-            gSettings.SuddenHeight = SetSuddenHeight(suddenHeight));
-        suddenHeightSlider.value = SetSuddenHeight(gSettings.SuddenHeight);
+        suddenHeightSlider.onValueChanged.AddListener(suddenHeight =>
+            PlayerSettingsManager.Instance.GSettings.SuddenHeight = SetSuddenHeight(suddenHeight));
+        suddenHeightSlider.value = SetSuddenHeight(PlayerSettingsManager.Instance.GSettings.SuddenHeight);
 
         globalChartOffsetInputField.onSubmit.AddListener(text =>
         {
@@ -57,9 +55,9 @@ public class SettingPanel : MonoBehaviour
                 > 3f => 3f,
                 _ => float.Parse(text)
             };
-            gSettings.GlobalChartOffset = globalChartOffset;
+            PlayerSettingsManager.Instance.GSettings.GlobalChartOffset = globalChartOffset;
         });
-        globalChartOffsetInputField.text = gSettings.GlobalChartOffset.ToString("F2");
+        globalChartOffsetInputField.text = PlayerSettingsManager.Instance.GSettings.GlobalChartOffset.ToString("F2");
 
         chartMusicOffsetInputField.onSubmit.AddListener(text =>
         {
@@ -69,9 +67,9 @@ public class SettingPanel : MonoBehaviour
                 > 3f => 3f,
                 _ => float.Parse(text)
             };
-            gSettings.ChartMusicOffset = chartMusicOffset;
+            PlayerSettingsManager.Instance.GSettings.ChartMusicOffset = chartMusicOffset;
         });
-        chartMusicOffsetInputField.text = gSettings.ChartMusicOffset.ToString("F2");
+        chartMusicOffsetInputField.text = PlayerSettingsManager.Instance.GSettings.ChartMusicOffset.ToString("F2");
     }
 
     private float SetSuddenHeight(float value)
