@@ -12,6 +12,6 @@
         }
 
         public static GameMode GameMode { get; set; } = GameMode.Stelo;
-        public static float ChartPlaySpeed { get; set; } = 0.5f;
+        public static float ChartPlaySpeed { get; set; } = 5.5f;
     }
 }
