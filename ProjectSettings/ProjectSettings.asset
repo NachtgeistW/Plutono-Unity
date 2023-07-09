@@ -135,7 +135,10 @@ PlayerSettings:
   stadiaPresentMode: 0
   stadiaTargetFramerate: 0
   vulkanNumSwapchainBuffers: 3
+<<<<<<< HEAD
   vulkanEnableSetSRGBWrite: 0
+=======
+>>>>>>> 1a359878a7456f5602f494a6c8cb969753ca5bec
   vulkanEnablePreTransform: 0
   vulkanEnableLateAcquireNextImage: 0
   vulkanEnableCommandBufferRecycling: 1
@@ -472,13 +475,19 @@ PlayerSettings:
       m_Kind: 0
       m_SubKind: 
   m_BuildTargetBatching: []
+<<<<<<< HEAD
   m_BuildTargetShaderSettings: []
+=======
+>>>>>>> 1a359878a7456f5602f494a6c8cb969753ca5bec
   m_BuildTargetGraphicsJobs: []
   m_BuildTargetGraphicsJobMode: []
   m_BuildTargetGraphicsAPIs: []
   m_BuildTargetVRSettings: []
+<<<<<<< HEAD
   m_DefaultShaderChunkSizeInMB: 16
   m_DefaultShaderChunkCount: 0
+=======
+>>>>>>> 1a359878a7456f5602f494a6c8cb969753ca5bec
   openGLRequireES31: 0
   openGLRequireES31AEP: 0
   openGLRequireES32: 0
