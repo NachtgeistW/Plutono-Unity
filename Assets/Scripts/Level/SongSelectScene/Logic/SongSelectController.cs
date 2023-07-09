@@ -18,11 +18,12 @@ namespace Plutono.Level.SongSelectScene
     public sealed class SongSelectController : MonoBehaviour
     {
         [Header("(放prefab不是script！)包含曲绘和曲名的button prefab。")]
-        [SerializeField] PrefabCoverView prefabCoverView;
+        [SerializeField]
+        private PrefabCoverView prefabCoverView;
 
         private void Start()
         {
-            PopulateSong(IO.FileManager.Instance.songSourceList);
+            PopulateSong(FileManager.Instance.songSourceList);
         }
 
         /// <summary>

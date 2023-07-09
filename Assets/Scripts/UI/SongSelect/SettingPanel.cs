@@ -1,3 +1,4 @@
+using Plutono.GameData;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;

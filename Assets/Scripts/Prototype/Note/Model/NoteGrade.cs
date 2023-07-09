@@ -42,9 +42,6 @@ namespace Plutono.Song
                     <= Settings.ArboMode.badDeltaTime => NoteGrade.Bad,
                     _ => NoteGrade.Miss
                 },
-                //TODO: Finish other mode.
-                GameMode.Persona => throw new NotImplementedException(),
-                GameMode.Ekzerco => throw new NotImplementedException(),
                 _ => throw new NotImplementedException(),
             };
         }

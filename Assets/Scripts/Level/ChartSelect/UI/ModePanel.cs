@@ -5,6 +5,7 @@ using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 namespace Plutono.Level.ChartSelect
 {
@@ -22,6 +23,10 @@ namespace Plutono.Level.ChartSelect
         [SerializeField] private TMP_Dropdown modeDropdown;
         [SerializeField] private TMP_Dropdown speedDropdown;
 
+        [Space(10)]
+        [Header("Basic Panel")]
+        [SerializeField] private Text modeText;
+
         private void Start()
         {
             // Set default dropdown values
@@ -38,6 +43,7 @@ namespace Plutono.Level.ChartSelect
             modeDropdown.onValueChanged.AddListener(value =>
             {
                 SongSelectDataTransformer.GameMode = (GameMode)value;
+                modeText.text = Convert.ToString(SongSelectDataTransformer.GameMode);
             });
             speedDropdown.onValueChanged.AddListener(value =>
             {

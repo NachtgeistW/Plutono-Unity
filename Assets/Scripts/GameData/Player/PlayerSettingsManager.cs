@@ -3,7 +3,7 @@ using System.IO;
 using Plutono.Util;
 using UnityEngine;
 
-namespace Plutono
+namespace Plutono.GameData
 {
     public class PlayerSettingsManager : Singleton<PlayerSettingsManager>
     {

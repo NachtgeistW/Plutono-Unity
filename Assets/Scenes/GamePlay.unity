@@ -206,7 +206,7 @@ MonoBehaviour:
   noteController: {fileID: 1600262291}
   explosionController: {fileID: 765917183}
   hitController: {fileID: 2124253415}
-  lastApperanceNoteIndex: 0
+  lastAppearanceNoteIndex: 0
   musicSource: {fileID: 2084485536}
   musicStartTime: 0
 --- !u!1 &120241186
@@ -3428,7 +3428,7 @@ MonoBehaviour:
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 55
 --- !u!114 &1723595528
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3920,7 +3920,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1847665112}
   m_Layer: 0
-  m_Name: ///UI
+  m_Name: '#UI'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

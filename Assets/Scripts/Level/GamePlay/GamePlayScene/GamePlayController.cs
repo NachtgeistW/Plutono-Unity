@@ -4,10 +4,9 @@ using Plutono.Song;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Plutono.Level;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Serialization;
-using static UnityEditor.PlayerSettings;
 
 namespace Plutono.GamePlay
 {
@@ -22,7 +21,7 @@ namespace Plutono.GamePlay
 
         //[HideInInspector]
         //[Header("-Time and Synchronize-")]
-        [SerializeField] public double CurTime { get; private set; }
+        public double CurTime { get; private set; }
         public float StartOrResumeTime { get; internal set; }
         public float ResumeElapsedTime { get; internal set; }
         private double musicPlayingDelay;

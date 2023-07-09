@@ -280,8 +280,8 @@ GameObject:
   m_Component:
   - component: {fileID: 9122007263551698130}
   - component: {fileID: 9122007263551698143}
-  - component: {fileID: 9122007263551698129}
   - component: {fileID: 3490661716100683837}
+  - component: {fileID: 9122007263551698129}
   - component: {fileID: 2365399121560435341}
   - component: {fileID: 6338320761154069052}
   - component: {fileID: 5709105936945915271}
@@ -324,6 +324,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9122007263551698131}
   m_CullTransparentMesh: 0
+--- !u!114 &3490661716100683837
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9122007263551698131}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3854c52dda5fc264e90141156f299fc2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Button>k__BackingField: {fileID: 9122007263551698129}
+  level: {fileID: 9122007265264697687}
+  chartDesigner: {fileID: 9122007263611552449}
+  image: {fileID: 2365399121560435341}
 --- !u!114 &9122007263551698129
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -367,33 +383,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2365399121560435341}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 3490661716100683837}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: JumpToGameScene
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
---- !u!114 &3490661716100683837
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9122007263551698131}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3854c52dda5fc264e90141156f299fc2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  level: {fileID: 9122007265264697687}
-  chartDesigner: {fileID: 9122007263611552449}
+      m_Calls: []
 --- !u!114 &2365399121560435341
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -401,14 +391,14 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9122007263551698131}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 41f1c5417c9d7ab4b84e531f83f60a4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.627451, g: 0.56078434, b: 0.48235294, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:

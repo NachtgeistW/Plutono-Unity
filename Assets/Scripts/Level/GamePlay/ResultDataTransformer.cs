@@ -1,4 +1,4 @@
-namespace Plutono.GamePlay
+namespace Plutono.Level
 {
     public static class ResultDataTransformer
     {

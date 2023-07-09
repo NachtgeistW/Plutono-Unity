@@ -32,12 +32,6 @@ namespace Plutono.UI
                     modeText.text = "Floro";
                     //modeText.color = new Color(171, 149, 174);
                     break;
-                case GameMode.Persona:
-                    modeText.text = "Persona";
-                    break;
-                case GameMode.Ekzerco:
-                    modeText.text = "Ekzerco";
-                    break;
                 case GameMode.Autoplay:
                     modeText.text = "Auto";
                     break;

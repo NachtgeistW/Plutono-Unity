@@ -12,6 +12,7 @@
  *      2021.04.09  CREATE.
  */
 
+using System;
 using Plutono.GamePlay;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,22 +21,30 @@ namespace Plutono.Level.ChartSelect
 {
     public class PrefabButtonChartSelectView : MonoBehaviour
     {
+        [field: SerializeField] public Button Button { get; set; }
         [SerializeField] private Text level;
         [SerializeField] private Text chartDesigner;
+        [SerializeField] private Image image;
+
         public Song.ChartDetail ChartOnButton { get; set; }
-        private int chartIndex;
+        public int ChartIndex { get; private set; }
+
+        public void SetSelected(bool value)
+        {
+            image.enabled = value;
+        }
 
         public void SetChartInfo(Song.ChartDetail chart, int index)
         {
             ChartOnButton = chart;
             level.text = chart.level;
             chartDesigner.text = chart.chartDesigner;
-            chartIndex = index;
+            ChartIndex = index;
         }
 
         public void JumpToGameScene()
         {
-            SongSelectDataTransformer.SelectedChartIndex = chartIndex;
+            SongSelectDataTransformer.SelectedChartIndex = ChartIndex;
             EventHandler.CallTransitionEvent("GamePlay");
         }
     }
