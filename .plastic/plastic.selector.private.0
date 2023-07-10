@@ -1,0 +1,4 @@
+repository "Plutono@nachtgeistw@cloud.cn"
+  path "/"
+    smartbranch "/main" 
+     
