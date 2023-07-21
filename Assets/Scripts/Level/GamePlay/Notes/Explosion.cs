@@ -3,10 +3,7 @@
  *      2022.07.22  CREATED
  */
 
-using DG.Tweening;
-using System.Collections.Generic;
 using UnityEngine;
-
 
 namespace Plutono.Song
 {

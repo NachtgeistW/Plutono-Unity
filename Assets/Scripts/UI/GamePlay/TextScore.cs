@@ -17,7 +17,7 @@ namespace Plutono.UI
         // Update is called once per frame
         void Update()
         {
-            scoreText.text = GamePlayController.Instance.Status.BasicScore.ToString() + " + " + GamePlayController.Instance.Status.ComboScore.ToString();
+            //scoreText.text = GamePlayController.Instance.Status.BasicScore.ToString() + " + " + GamePlayController.Instance.Status.ComboScore.ToString();
         }
     }
 }

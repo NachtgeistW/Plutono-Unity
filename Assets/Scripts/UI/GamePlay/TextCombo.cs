@@ -17,7 +17,7 @@ namespace Plutono.UI
         // Update is called once per frame
         void Update()
         {
-            comboText.text = GamePlayController.Instance.Status.Combo.ToString();
+            //comboText.text = GamePlayController.Instance.Status.Combo.ToString();
         }
 
     }

@@ -4,6 +4,7 @@ using Plutono.Song;
 using System;
 using Plutono.GamePlay;
 using System.Linq;
+using Plutono.GamePlay.Notes;
 
 /*
  * 控制游戏的整体状态（注意，只存数据，不存具体的gameObject）
@@ -30,12 +31,12 @@ public sealed class GameStatus
     public int ComboScore { get; private set; }
 
     public int ClearCount { get; private set; }
-    public Dictionary<uint, NoteJudgment> Judgments { get; private set; } = new Dictionary<uint, NoteJudgment>();
+    public Dictionary<uint, NoteJudgmentStatus> Judgments { get; private set; } = new();
 
     public GameStatus(GamePlayController controller, GameMode mode)
     {
         Mode = mode;
-        NoteCount = controller.ChartDetail.noteDetails.Where(note => note.IsShown == true).Count();
+        NoteCount = controller.ChartDetail.noteDetails.Count(note => note.IsShown);
         IsStarted = false;
         IsPaused = false;
         IsCompleted = false;
@@ -66,23 +67,23 @@ public sealed class GameStatus
     /// </summary>
     /// <param name="noteDetail"></param>
     /// <param name="grade"></param>
-    public NoteJudgmentResult Judge(NoteDetail noteDetail, NoteGrade grade)
+    public CalculateResult CalculateScore(uint noteId, NoteGrade grade)
     {
         // Status check
-        if (IsFailed || IsCompleted) return NoteJudgmentResult.GameEnded;
-        if (noteDetail.IsShown == false) return NoteJudgmentResult.NoteNotShown;
-        if (grade == NoteGrade.None) return NoteJudgmentResult.NoteNotFound;
+        if (IsFailed || IsCompleted) return CalculateResult.GameEnded;
+        //if (noteDetail.IsShown == false) return CalculateResult.NoteNotShown;
+        if (grade == NoteGrade.None) return CalculateResult.NoteNotFound;
 
-        Judgments.TryGetValue(noteDetail.id, out NoteJudgment noteJudgmentCheck);
+        Judgments.TryGetValue(noteId, out var noteJudgmentCheck);
         if (noteJudgmentCheck is { IsJudged: true })
         {
-            Debug.Log("ID:" + noteDetail.id + " Judgment" + noteJudgmentCheck.IsJudged);
-            Debug.LogWarning($"Trying to judge note {noteDetail.id} which is already judged.");
-            return NoteJudgmentResult.HasBeenJudged;
+            Debug.Log("ID: " + noteId + " Judgment: " + noteJudgmentCheck.IsJudged);
+            Debug.LogWarning($"Trying to judge note {noteId} which is already judged.");
+            return CalculateResult.HasBeenJudged;
         }
 
         ClearCount++;
-        Judgments.Add(noteDetail.id, new NoteJudgment
+        Judgments.Add(noteId, new NoteJudgmentStatus
         {
             Grade = grade,
             IsJudged = true
@@ -106,7 +107,7 @@ public sealed class GameStatus
             case NoteGrade.Miss:
                 break;
             default:
-                throw new Exception($"Unknown grade on note {noteDetail.id}");
+                throw new Exception($"Unknown grade on note {noteId}");
         }
 
         // Combo
@@ -117,7 +118,7 @@ public sealed class GameStatus
 
         CalculateBasicScore();
         CalculateComboScore(grade);
-        return NoteJudgmentResult.Succeeded;
+        return CalculateResult.Succeeded;
     }
 
     private void CalculateBasicScore()
@@ -148,9 +149,9 @@ public sealed class GameStatus
 
     private bool IsJudged(uint noteId) => Judgments[noteId].IsJudged;
 
-    private NoteJudgment GetJudgment(uint noteId) => Judgments[noteId];
+    private NoteJudgmentStatus GetJudgment(uint noteId) => Judgments[noteId];
 }
-public class NoteJudgment
+public class NoteJudgmentStatus
 {
     public bool IsJudged;
     public NoteGrade Grade;
@@ -158,7 +159,7 @@ public class NoteJudgment
     private bool v;
 }
 
-public enum NoteJudgmentResult
+public enum CalculateResult
 {
     Succeeded = 0,
     // 成功。

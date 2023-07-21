@@ -5,9 +5,11 @@
 
 using Plutono.GamePlay;
 using System.Collections;
-using System.Collections.Generic;
+using Plutono.GamePlay.Notes;
+using Plutono.Util;
 using UnityEngine;
 using UnityEngine.Pool;
+using Plutono.Level.GamePlay;
 
 namespace Plutono.Song
 {
@@ -22,6 +24,13 @@ namespace Plutono.Song
 
         public GamePlayController gamePlayController;
 
+        private void OnEnable()
+        {
+            EventCenter.AddListener<NoteClearEvent<BlankNote>>(OnNoteClear);
+            EventCenter.AddListener<NoteClearEvent<PianoNote>>(OnNoteClear);
+            EventCenter.AddListener<NoteClearEvent<SlideNote>>(OnNoteClear);
+        }
+
         private void Start()
         {
             //maxPoolSize = PlayerSettingsManager.Instance.PlayerSettings_Global_SO.ExplosionAnimateObjectpoolMaxSize;
@@ -30,10 +39,12 @@ namespace Plutono.Song
                 OnCreatePooledItem, OnTakeFromPool, OnReturnedToPool, OnDestroyPooledItem, collectionChecks, maxPoolSize);
         }
 
-        public void OnHitNote(Note note, NoteGrade noteGrade)
+        private void OnNoteClear(NoteClearEvent<BlankNote> evt) => OnHitNote(evt.Note, evt.Grade);
+        private void OnNoteClear(NoteClearEvent<PianoNote> evt) => OnHitNote(evt.Note, evt.Grade);
+        private void OnNoteClear(NoteClearEvent<SlideNote> evt) => OnHitNote(evt.Note, evt.Grade);
+
+        public void OnHitNote(BaseNote note, NoteGrade noteGrade)
         {
-            if (!note._details.IsShown)
-                return;
             float zPos;
             switch (noteGrade)
             {
@@ -50,9 +61,9 @@ namespace Plutono.Song
             }
 
             var obj = explosionAnimPool.Get();
-            obj.transform.position = new Vector3(note._details.pos, 0, zPos);
-            obj.transform.localScale = new Vector3((float)note._details.size, 1, 1);
-            obj.PlayAnimation(noteGrade, (float)note._details.size);
+            obj.transform.position = new Vector3(note.pos, 0, zPos);
+            obj.transform.localScale = new Vector3((float)note.size, 1, 1);
+            obj.PlayAnimation(noteGrade, (float)note.size);
             StartCoroutine(ReleaseEnumerator(obj));
         }
 
