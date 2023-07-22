@@ -54,12 +54,6 @@ namespace Plutono.Song
             notePool.Release(evt.Note);
         }
 
-        //public void OnNoteMiss(List<TNote> notes, TNote note)
-        //{
-        //    notePool.Release(note);
-        //    notes.Remove(note);
-        //}
-
         #region ObjectPool
         private TNote OnCreatePooledItem()
         {

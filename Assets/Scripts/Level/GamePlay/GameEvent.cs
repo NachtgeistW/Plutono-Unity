@@ -18,8 +18,10 @@ namespace Plutono.Level.GamePlay
         public TNote Note;
     }
 
-    public struct GamePauseEvent : IEvent
-    {
-
-    }
+    public struct GamePrepareEvent : IEvent { }
+    public struct GameStartEvent : IEvent { }
+    public struct GamePauseEvent : IEvent { }
+    public struct GameResumeEvent : IEvent { }
+    public struct GameFailEvent : IEvent { }
+    public struct GameClearEvent : IEvent { }
 }

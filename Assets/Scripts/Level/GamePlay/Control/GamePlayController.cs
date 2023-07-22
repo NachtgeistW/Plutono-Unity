@@ -1,16 +1,12 @@
+using System;
+using Plutono.GamePlay;
 using Plutono.IO;
 using Plutono.Song;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Plutono.GamePlay.Control;
 using Plutono.GamePlay.Notes;
-using Plutono.Level;
-using Plutono.Level.GamePlay;
 using Plutono.Util;
 using UnityEngine;
 
-namespace Plutono.GamePlay
+namespace Plutono.Level.GamePlay
 {
     public class GamePlayController : Singleton<GamePlayController>
     {
@@ -39,14 +35,16 @@ namespace Plutono.GamePlay
         public AudioSource musicSource;
         public double musicStartTime;
 
+        #region UnityEvent
+
         /// Event
         private void OnEnable()
         {
-            EventHandler.GameStartEvent += OnGameStartEvent;
-            EventHandler.GamePauseEvent += OnGamePauseEvent;
-            EventHandler.GameResumeEvent += OnGameResumeEvent;
-            EventHandler.GameRestartEvent += OnGameRestartEvent;
             EventHandler.BeforeSceneLoadedEvent += OnBeforeSceneLoadedEvent;
+            EventCenter.AddListener<GamePrepareEvent>(_ => { OnGamePrepare(); });
+            EventCenter.AddListener<GameStartEvent>(OnGameStart);
+            EventCenter.AddListener<GameResumeEvent>(OnGameResume);
+            EventCenter.AddListener<GamePauseEvent>(OnGamePause);
 
             EventCenter.AddListener<NoteClearEvent<BlankNote>>(OnNoteClear);
             EventCenter.AddListener<NoteClearEvent<PianoNote>>(OnNoteClear);
@@ -58,15 +56,25 @@ namespace Plutono.GamePlay
 
         private void OnDisable()
         {
-            EventHandler.GameStartEvent -= OnGameStartEvent;
-            EventHandler.GamePauseEvent -= OnGamePauseEvent;
-            EventHandler.GameResumeEvent -= OnGameResumeEvent;
-            EventHandler.GameRestartEvent -= OnGameRestartEvent;
             EventHandler.BeforeSceneLoadedEvent -= OnBeforeSceneLoadedEvent;
+            EventCenter.RemoveListener<GamePrepareEvent>(_ => { OnGamePrepare(); });
+            EventCenter.RemoveListener<GameStartEvent>(OnGameStart);
+            EventCenter.RemoveListener<GameResumeEvent>(OnGameResume);
+            EventCenter.RemoveListener<GamePauseEvent>(OnGamePause);
+
+            EventCenter.RemoveListener<NoteClearEvent<BlankNote>>(OnNoteClear);
+            EventCenter.RemoveListener<NoteClearEvent<PianoNote>>(OnNoteClear);
+            EventCenter.RemoveListener<NoteClearEvent<SlideNote>>(OnNoteClear);
+            EventCenter.RemoveListener<NoteMissEvent<BlankNote>>(OnNoteMiss);
+            EventCenter.RemoveListener<NoteMissEvent<PianoNote>>(OnNoteMiss);
+            EventCenter.RemoveListener<NoteMissEvent<SlideNote>>(OnNoteMiss);
         }
 
-        private void Start()
+        protected override void Awake()
         {
+            base.Awake();
+
+            //TODO: Player Setting
             //PlayerSetting = PlayerSettingsManager.Instance.PlayerSettings_Global_SO;
             // System config
             Application.targetFrameRate = 120;
@@ -79,6 +87,64 @@ namespace Plutono.GamePlay
 
             //Audio
             musicSource.clip = AudioClipFileManager.Read(SongSource.musicPath);
+
+            //Synchronize
+            //TODO: Player Setting
+            configGlobalChartOffset = 0f;
+            configChartMusicOffset = 0f;
+        }
+
+        private void Start()
+        {
+            OnGamePrepare();
+        }
+
+        private void Update()
+        {
+            if (!Status.IsStarted)
+                return;
+
+            //Synchronize Time
+            if (!Status.IsPaused)
+                SynchronizeTime();
+
+            //End Game
+            //if (Status.ClearCount == ChartDetail.noteDetails.Count)
+            if (musicSource.clip.length - musicSource.time <= 0.05f)
+            {
+                Status.IsCompleted = true;
+                EventCenter.Broadcast(new GameClearEvent());
+                EventHandler.CallTransitionEvent("Result");
+            }
+        }
+
+        #endregion
+
+        private void SynchronizeTime()
+        {
+            ticksBeforeSynchronization--;
+            ResumeElapsedTime = Time.realtimeSinceStartup - StartOrResumeTime;
+            curDspTime = AudioSettings.dspTime;
+            // Sync: every 600 ticks (=10 seconds) and every tick within the first 0.5 seconds after start/resume
+            if ((ticksBeforeSynchronization <= 0 || ResumeElapsedTime < 0.5f)
+                && Math.Abs(lastDspTime - curDspTime) > 0.001)
+            {
+                ticksBeforeSynchronization = 600;
+                lastDspTime = curDspTime;
+                CurTime = (float)curDspTime - musicStartTime - configGlobalChartOffset + configChartMusicOffset;
+#if DEBUG
+                Debug.Log("--SynchronizeTime--\nStarOrResumeTime: " + StartOrResumeTime + " DspTime: " + curDspTime
+                    + " CurTime: " + CurTime + " musicTime: " + musicSource.time);
+#endif
+            }
+            else
+            {
+                CurTime += Time.unscaledDeltaTime;
+            }
+        }
+        
+        private void OnGamePrepare()
+        {
             musicSource.time = 0;
 
             //Status
@@ -93,16 +159,9 @@ namespace Plutono.GamePlay
             {
                 //EnableInput();
             }
-
-            //Synchronize
-            configGlobalChartOffset = 0f;
-            configChartMusicOffset = 0f;
-            //TODO: Player Setting
-            //configGlobalChartOffset = PlayerSetting.globalChartOffset;
-            //configChartMusicOffset = PlayerSetting.chartMusicOffset;
         }
 
-        private void OnGameStartEvent()
+        private void OnGameStart(GameStartEvent evt)
         {
             curDspTime = AudioSettings.dspTime;
             musicPlayingDelay = 1.0f;
@@ -121,74 +180,10 @@ namespace Plutono.GamePlay
 #endif
         }
 
-        private void Update()
+        private void OnGamePause(GamePauseEvent evt)
         {
-            if (!Status.IsStarted)
-                return;
+            Debug.Log("GamePlayControl OnGamePause");
 
-            //Synchronize Time
-            if (!Status.IsPaused)
-                SynchronizeTime();
-
-            //Note
-
-//            if (Status.Mode == GameMode.Autoplay)
-//            {
-//                foreach (var note in notesOnScreen.ToList())
-//                {
-//                    if (note.transform.position.z <= Settings.judgeLinePosition)
-//                    {
-//#if DEBUG
-//                        if (note.details.id % 50 == 1)
-//                        {
-//                            Debug.Log("noteId: " + note.details.id + " noteTime: " + note.details.time + " CurTime: " + CurTime + " musicTime: " + musicSource.time);
-//                        }
-//#endif
-//                        Status.CalculateScore(note.details, NoteGrade.Perfect);
-//                        BlankNoteSpawnerClient.OnNoteClear(notesOnScreen, note);
-//                        explosionController.OnHitNote(note, NoteGrade.Perfect);
-//                        EventHandler.CallHitNoteEvent(notesOnScreen, note, CurTime, NoteGrade.Perfect);
-//                    }
-//                }
-//            }
-
-            //End Game
-            //if (Status.ClearCount == ChartDetail.noteDetails.Count)
-            if (musicSource.clip.length - musicSource.time <= 0.5f)
-            {
-                Status.IsCompleted = true;
-                EventHandler.CallGameClearEvent();
-                EventHandler.CallTransitionEvent("Result");
-            }
-        }
-
-
-        private void SynchronizeTime()
-        {
-            ticksBeforeSynchronization--;
-            ResumeElapsedTime = Time.realtimeSinceStartup - StartOrResumeTime;
-            curDspTime = AudioSettings.dspTime;
-            // Sync: every 600 ticks (=10 seconds) and every tick within the first 0.5 seconds after start/resume
-            if ((ticksBeforeSynchronization <= 0 || ResumeElapsedTime < 0.5f)
-                && Math.Abs(lastDspTime - curDspTime) > 0.001)
-            {
-                ticksBeforeSynchronization = 600;
-                lastDspTime = curDspTime;
-                CurTime = (float)curDspTime - musicStartTime - configGlobalChartOffset + configChartMusicOffset;
-#if DEBUG
-                // Debug.Log("--SynchronizeTime--");
-                // Debug.Log("StarOrResumeTime: " + StartOrResumeTime + " DspTime: " + curDspTime
-                //     + " CurTime: " + CurTime + " musicTime: " + musicSource.time);
-#endif
-            }
-            else
-            {
-                CurTime += Time.unscaledDeltaTime;
-            }
-        }
-
-        private void OnGamePauseEvent()
-        {
             //If game is clear or failed, do nothing
             if (Status.IsCompleted || Status.IsFailed)
                 return;
@@ -207,11 +202,11 @@ namespace Plutono.GamePlay
 
             //Audio
             musicSource.Pause();
-
         }
 
-        private void OnGameResumeEvent()
+        private void OnGameResume(GameResumeEvent evt)
         {
+            Debug.Log("GamePlayControl OnGameResume");
             //If game is clear or failed, do nothing
             if (Status.IsCompleted || Status.IsFailed)
                 return;
@@ -225,11 +220,6 @@ namespace Plutono.GamePlay
 
             //Audio
             musicSource.Play();
-        }
-
-        private void OnGameRestartEvent()
-        {
-            throw new NotImplementedException();
         }
 
         private void OnBeforeSceneLoadedEvent()
@@ -246,10 +236,12 @@ namespace Plutono.GamePlay
         {
             Status.CalculateScore(evt.Note.id, Status.Mode == GameMode.Autoplay ? NoteGrade.Perfect : evt.Grade);
         }
+        
         private void OnNoteClear(NoteClearEvent<PianoNote> evt)
         {
             Status.CalculateScore(evt.Note.id, Status.Mode == GameMode.Autoplay ? NoteGrade.Perfect : evt.Grade);
         }
+        
         private void OnNoteClear(NoteClearEvent<SlideNote> evt)
         {
             Status.CalculateScore(evt.Note.id, Status.Mode == GameMode.Autoplay ? NoteGrade.Perfect : evt.Grade);

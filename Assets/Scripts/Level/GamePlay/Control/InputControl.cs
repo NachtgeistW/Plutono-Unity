@@ -1,3 +1,4 @@
+using Plutono.Level.GamePlay;
 using UnityEngine;
 using UnityEngine.InputSystem.EnhancedTouch;
 using EnhancedTouch = UnityEngine.InputSystem.EnhancedTouch;
@@ -47,16 +48,18 @@ namespace Plutono.GamePlay
 
         private void OnEnable()
         {
-            EnhancedTouch.Touch.onFingerDown += OnFingerDown;
-            EnhancedTouch.Touch.onFingerMove += OnFingerMove;
-            EnhancedTouch.Touch.onFingerUp += OnFingerUp;
+            EnableInput();
+
+            EventCenter.AddListener<GamePauseEvent>(_ => DisableInput());
+            EventCenter.AddListener<GameResumeEvent>(_ => EnableInput());
         }
 
         private void OnDisable()
         {
-            EnhancedTouch.Touch.onFingerDown -= OnFingerDown;
-            EnhancedTouch.Touch.onFingerMove -= OnFingerMove;
-            EnhancedTouch.Touch.onFingerUp -= OnFingerUp;
+            DisableInput();
+
+            EventCenter.RemoveListener<GamePauseEvent>(_ => DisableInput());
+            EventCenter.RemoveListener<GameResumeEvent>(_ => EnableInput());
         }
 
         #endregion
@@ -92,6 +95,20 @@ namespace Plutono.GamePlay
                 new Vector3(finger.screenPosition.x, finger.screenPosition.y, orthoCam.nearClipPlane));
 
             EventCenter.Broadcast(new FingerUpEvent { Finger = finger, Time = game.CurTime, WorldPos = worldPos });
+        }
+
+        private void EnableInput()
+        {
+            EnhancedTouch.Touch.onFingerDown += OnFingerDown;
+            EnhancedTouch.Touch.onFingerMove += OnFingerMove;
+            EnhancedTouch.Touch.onFingerUp += OnFingerUp;
+        }
+
+        private void DisableInput()
+        {
+            EnhancedTouch.Touch.onFingerDown -= OnFingerDown;
+            EnhancedTouch.Touch.onFingerMove -= OnFingerMove;
+            EnhancedTouch.Touch.onFingerUp -= OnFingerUp;
         }
     }
 }

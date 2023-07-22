@@ -5,6 +5,7 @@ using System;
 using Plutono.GamePlay;
 using System.Linq;
 using Plutono.GamePlay.Notes;
+using Plutono.Level.GamePlay;
 
 /*
  * 控制游戏的整体状态（注意，只存数据，不存具体的gameObject）
