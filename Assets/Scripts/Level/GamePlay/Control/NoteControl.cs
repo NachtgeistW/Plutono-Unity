@@ -16,9 +16,9 @@ namespace Plutono.GamePlay.Control
     [RequireComponent(typeof(ExplosionController))]
     public class NoteControl : MonoBehaviour
     {
-        public List<BlankNote> blankNotes;
-        public List<PianoNote> pianoNotes;
-        public List<SlideNote> slideNotes;
+        public List<BlankNote> blankNotes = new();
+        public List<PianoNote> pianoNotes = new();
+        public List<SlideNote> slideNotes = new();
 
         public INoteSpawner<BlankNote> BlankNoteSpawnerClient;
         public INoteSpawner<PianoNote> PianoNoteSpawnerClient;
@@ -119,7 +119,8 @@ namespace Plutono.GamePlay.Control
                     EventCenter.Broadcast(new NoteMissEvent<PianoNote> { Note = note });
                     pianoNotes.Remove(note);
                 }
-
+                Debug.Log("NoteControl Broadcast NoteMissEvent\n" +
+                          $"Note: {note.id} Time: {note.time} CurTime: {curTime} JudgeSize: {(note.size < 1.2 ? 1.2 : note.size)}");
                 note.OnMove(chartPlaySpeed, curTime);
             }
 

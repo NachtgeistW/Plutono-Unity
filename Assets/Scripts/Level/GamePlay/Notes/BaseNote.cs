@@ -43,6 +43,7 @@ namespace Plutono.GamePlay.Notes
             pos = noteDetail.pos;
             time = noteDetail.time;
             size = noteDetail.size;
+            IsClear = false;
         }
 
         /// <summary>
@@ -55,7 +56,7 @@ namespace Plutono.GamePlay.Notes
         /// <returns>true if hit or is in Autoplay mode</returns>
         public bool IsHit(float xPos, out float deltaXPos, double curTime, out double deltaTime)
         {
-            var noteJudgingSize = size < 1.2 ? 1.2 : size;
+            var noteJudgingSize = size < 1.2 ? 0.6 : size / 2;
             var noteDeltaXPos = Mathf.Abs(xPos - pos);
             if (noteDeltaXPos <= noteJudgingSize)
             {

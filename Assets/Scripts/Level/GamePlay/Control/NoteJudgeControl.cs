@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Plutono.GamePlay.Notes;
 using Plutono.Level.GamePlay;
 using Plutono.Song;
 using Plutono.Util;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Plutono.GamePlay.Control
 {
@@ -25,13 +23,16 @@ namespace Plutono.GamePlay.Control
             EventCenter.AddListener<FingerMoveEvent>(OnFingerMove);
             EventCenter.AddListener<FingerUpEvent>(OnFingerUp);
 
-            // Game event
             EventCenter.AddListener<GamePauseEvent>(OnGamePause);
         }
 
         private void OnDisable()
         {
-            EventCenter.RemoveAllListener<GamePauseEvent>();
+            EventCenter.RemoveListener<FingerDownEvent>(OnFingerDown);
+            EventCenter.RemoveListener<FingerMoveEvent>(OnFingerMove);
+            EventCenter.RemoveListener<FingerUpEvent>(OnFingerUp);
+
+            EventCenter.RemoveListener<GamePauseEvent>(OnGamePause);
         }
 
         private void Start()
@@ -69,7 +70,8 @@ namespace Plutono.GamePlay.Control
             }
             {
                 // Blank note
-                if (FindClosestHitNote(noteControl.blankNotes, worldPos, curTime, out var note, out var deltaTime, out var deltaXPos))
+                if (FindClosestHitNote(noteControl.blankNotes, worldPos, curTime,
+                        out var note, out var deltaTime, out var deltaXPos))
                 {
                     EventCenter.Broadcast(new NoteClearEvent<BlankNote>
                     {
@@ -90,6 +92,8 @@ namespace Plutono.GamePlay.Control
                         Grade = NoteGradeJudgment.Judge(deltaTime, mode),
                         DeltaXPos = deltaXPos
                     });
+                    Debug.Log("NoteJudgeControl OnFingerDown\n" +
+                              $"Note: {note.id} Time: {note.time} CurTime: {curTime} JudgeSize: {(note.size < 1.2 ? 1.2 : note.size)}");
                     noteControl.pianoNotes.Remove(note);
                 }
             }
@@ -103,18 +107,31 @@ namespace Plutono.GamePlay.Control
 
             if (notesOnSliding.TryGetValue(evt.Finger.index, out var note))
             {
-                var canBeClear = note.UpdateSlide(worldPos);
-                if (!canBeClear) return;
+                if (note.IsClear) return;
 
-                note.OnSlideEnd(curTime, out var deltaTime, out var deltaXPos);
-                EventCenter.Broadcast(new NoteClearEvent<SlideNote>
+                var canBeClear = note.UpdateSlide(worldPos);
+                if (canBeClear)
                 {
-                    Note = note,
-                    Grade = NoteGradeJudgment.Judge(deltaTime, mode),
-                    DeltaXPos = deltaXPos
-                });
-                notesOnSliding.Remove(evt.Finger.index);
-                noteControl.slideNotes.Remove(note);
+                    note.OnSlideEnd(curTime, out var deltaTime, out var deltaXPos);
+                    EventCenter.Broadcast(new NoteClearEvent<SlideNote>
+                    {
+                        Note = note,
+                        Grade = NoteGradeJudgment.Judge(deltaTime, mode),
+                        DeltaXPos = deltaXPos
+                    });
+                    notesOnSliding.Remove(evt.Finger.index);
+                    noteControl.slideNotes.Remove(note);
+                }
+            }
+            else
+            {
+                foreach (var curDetectingNote in noteControl.slideNotes
+                             .Where(newNote => newNote.OnTap(worldPos, curTime, out _, out _)))
+                {
+                    notesOnSliding.Add(evt.Finger.index, curDetectingNote);
+                    curDetectingNote.OnSlideStart(worldPos, curTime);
+                    return;
+                }
             }
         }
 
@@ -125,6 +142,7 @@ namespace Plutono.GamePlay.Control
             // Force clear this note
             if (notesOnSliding.TryGetValue(evt.Finger.index, out var note))
             {
+                if (note.IsClear) return;
                 note.OnSlideEnd(curTime,
                     out var deltaTime, out var deltaXPos);
                 EventCenter.Broadcast(new NoteClearEvent<SlideNote>

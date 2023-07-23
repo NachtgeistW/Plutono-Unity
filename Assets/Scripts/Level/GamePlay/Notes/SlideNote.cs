@@ -72,7 +72,7 @@ namespace Plutono.GamePlay.Notes
         /// <returns>Can be cleared</returns>
         public bool UpdateSlide(Vector2 worldPos)
         {
-            var noteJudgingSize = size < 1.2 ? 1.2 : size;
+            var noteJudgingSize = size < 1.2 ? 0.6 : size / 2;
             if (!IsHit (worldPos.x, out _, time, out _)) 
                 return true;
             moved = worldPos - slideStartPos;

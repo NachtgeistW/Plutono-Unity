@@ -31,6 +31,7 @@ namespace Plutono.GamePlay
     {
         [SerializeField] private Camera orthoCam;
         [SerializeField] private GamePlayController game;
+        private readonly GameMode mode = SongSelectDataTransformer.GameMode;
 
         #region UnityEvent
 
@@ -72,6 +73,8 @@ namespace Plutono.GamePlay
             var worldPos = orthoCam.ScreenToWorldPoint(
                 new Vector3(finger.screenPosition.x, finger.screenPosition.y, orthoCam.nearClipPlane));
 
+            Debug.Log("InputControl Broadcast FingerDownEvent\n" +
+                      $"worldPos: {worldPos} CurTime: {game.CurTime}");
             EventCenter.Broadcast(new FingerDownEvent { Finger = finger, Time = game.CurTime, WorldPos = worldPos });
         }
 
@@ -99,6 +102,8 @@ namespace Plutono.GamePlay
 
         private void EnableInput()
         {
+            if (mode == GameMode.Autoplay) return;
+
             EnhancedTouch.Touch.onFingerDown += OnFingerDown;
             EnhancedTouch.Touch.onFingerMove += OnFingerMove;
             EnhancedTouch.Touch.onFingerUp += OnFingerUp;
@@ -106,6 +111,8 @@ namespace Plutono.GamePlay
 
         private void DisableInput()
         {
+            if (mode == GameMode.Autoplay) return;
+
             EnhancedTouch.Touch.onFingerDown -= OnFingerDown;
             EnhancedTouch.Touch.onFingerMove -= OnFingerMove;
             EnhancedTouch.Touch.onFingerUp -= OnFingerUp;

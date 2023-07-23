@@ -50,7 +50,6 @@ namespace Plutono.Song
 
         public virtual void OnNoteMiss(NoteMissEvent<TNote> evt)
         {
-            Debug.Log("NoteSpawner OnNoteMiss noteId: " + evt.Note.id);
             notePool.Release(evt.Note);
         }
 

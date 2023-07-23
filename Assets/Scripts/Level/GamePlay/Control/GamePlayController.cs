@@ -133,8 +133,8 @@ namespace Plutono.Level.GamePlay
                 lastDspTime = curDspTime;
                 CurTime = (float)curDspTime - musicStartTime - configGlobalChartOffset + configChartMusicOffset;
 #if DEBUG
-                Debug.Log("--SynchronizeTime--\nStarOrResumeTime: " + StartOrResumeTime + " DspTime: " + curDspTime
-                    + " CurTime: " + CurTime + " musicTime: " + musicSource.time);
+                //Debug.Log("--SynchronizeTime--\nStarOrResumeTime: " + StartOrResumeTime + " DspTime: " + curDspTime
+                //    + " CurTime: " + CurTime + " musicTime: " + musicSource.time);
 #endif
             }
             else
@@ -254,8 +254,6 @@ namespace Plutono.Level.GamePlay
 
         private void OnNoteMiss(NoteMissEvent<PianoNote> evt)
         {
-            Debug.Log("GamePlayControl OnNoteMiss noteId: " + evt.Note.id);
-
             Status.CalculateScore(evt.Note.id, NoteGrade.Miss);
         }
 
