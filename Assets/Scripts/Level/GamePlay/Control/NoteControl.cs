@@ -116,11 +116,11 @@ namespace Plutono.GamePlay.Control
                 if (!note.IsClear && note.ShouldBeMiss())
                 {
                     note.IsClear = true;
+                    Debug.Log("NoteControl Broadcast NoteMissEvent\n" +
+                              $"Note: {note.id} Time: {note.time} CurTime: {curTime} Pos: {note.pos} JudgeSize: {(note.size < 1.2 ? 0.6 : note.size / 2)}");
                     EventCenter.Broadcast(new NoteMissEvent<PianoNote> { Note = note });
                     pianoNotes.Remove(note);
                 }
-                Debug.Log("NoteControl Broadcast NoteMissEvent\n" +
-                          $"Note: {note.id} Time: {note.time} CurTime: {curTime} JudgeSize: {(note.size < 1.2 ? 1.2 : note.size)}");
                 note.OnMove(chartPlaySpeed, curTime);
             }
 

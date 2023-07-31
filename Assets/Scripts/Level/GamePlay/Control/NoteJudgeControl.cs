@@ -73,6 +73,10 @@ namespace Plutono.GamePlay.Control
                 if (FindClosestHitNote(noteControl.blankNotes, worldPos, curTime,
                         out var note, out var deltaTime, out var deltaXPos))
                 {
+#if DEBUG
+                    Debug.Log("NoteJudgeControl Broadcast NoteClearEvent\n" +
+                              $"Note: {note.id} Time: {note.time} CurTime: {curTime} Pos: {note.pos} JudgeSize: {(note.size < 1.2 ? 0.6 : note.size / 2)}");
+#endif
                     EventCenter.Broadcast(new NoteClearEvent<BlankNote>
                     {
                         Note = note,
@@ -80,21 +84,25 @@ namespace Plutono.GamePlay.Control
                         DeltaXPos = deltaXPos
                     });
                     noteControl.blankNotes.Remove(note);
+                    return;
                 }
             }
             {
                 // Piano note
                 if (FindClosestHitNote(noteControl.pianoNotes, worldPos, curTime, out var note, out var deltaTime, out var deltaXPos))
                 {
+#if DEBUG
+                    Debug.Log("NoteJudgeControl Broadcast NoteClearEvent\n" +
+                              $"Note: {note.id} Time: {note.time} CurTime: {curTime} Pos: {note.pos} JudgeSize: {(note.size < 1.2 ? 0.6 : note.size / 2)}");
+#endif
                     EventCenter.Broadcast(new NoteClearEvent<PianoNote>
                     {
                         Note = note,
                         Grade = NoteGradeJudgment.Judge(deltaTime, mode),
                         DeltaXPos = deltaXPos
                     });
-                    Debug.Log("NoteJudgeControl OnFingerDown\n" +
-                              $"Note: {note.id} Time: {note.time} CurTime: {curTime} JudgeSize: {(note.size < 1.2 ? 1.2 : note.size)}");
                     noteControl.pianoNotes.Remove(note);
+                    return;
                 }
             }
         }

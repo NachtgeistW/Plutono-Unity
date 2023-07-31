@@ -21,7 +21,7 @@ namespace Plutono.GamePlay.Notes
         {
             transform.position = new Vector3(pos, 0, Settings.maximumNoteRange);
 
-            SpriteRenderer.transform.localScale = new Vector3((float)size, 1, 1);
+            SpriteRenderer.size = new Vector2((float)size * 1.42f, 0.57f);
         }
 
         public void OnMove(float chartPlaySpeed, double curTime)
