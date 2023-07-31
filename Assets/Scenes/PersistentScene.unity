@@ -434,7 +434,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49fa987dc06d7ec4dafc21b0b063a32f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <StoragePath>k__BackingField: D:\DeemoDIY\Plutono\Assets\StreamingAssets\TestChart
+  <StoragePath>k__BackingField: D:\DeemoDIY\Charts\PlutonoTestChart
   songSourceList: []
 --- !u!1001 &1944975647
 PrefabInstance:
@@ -490,6 +490,10 @@ PrefabInstance:
     - target: {fileID: 406632, guid: 6d0acc00cc82d436b9d11446d2ddfef6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11484734, guid: 6d0acc00cc82d436b9d11446d2ddfef6, type: 3}
+      propertyPath: m_settings.emails.Array.size
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6d0acc00cc82d436b9d11446d2ddfef6, type: 3}
