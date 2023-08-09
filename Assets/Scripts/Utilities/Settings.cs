@@ -39,8 +39,8 @@ public static class Settings
     public static class ArboMode
     {
         public const float perfectDeltaTime = 0.05f;
-        public const float goodDeltaTime = 0.07f;
-        public const float badDeltaTime = 0.1f;
+        public const float goodDeltaTime = 0.12f;
+        public const float badDeltaTime = 0.3f;
     }
 
     /// <summary>

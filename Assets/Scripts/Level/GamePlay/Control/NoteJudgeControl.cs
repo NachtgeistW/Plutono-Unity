@@ -129,6 +129,10 @@ namespace Plutono.GamePlay.Control
                     });
                     notesOnSliding.Remove(evt.Finger.index);
                     noteControl.slideNotes.Remove(note);
+#if DEBUG
+                    Debug.Log("NoteJudgeControl Broadcast NoteClearEvent\n" +
+                              $"Note: {note.id} Time: {note.time} CurTime: {curTime} Pos: {note.pos} JudgeSize: {(note.size < 1.2 ? 0.6 : note.size / 2)}");
+#endif
                 }
             }
             else
@@ -161,6 +165,10 @@ namespace Plutono.GamePlay.Control
                 });
                 notesOnSliding.Remove(evt.Finger.index);
                 noteControl.slideNotes.Remove(note);
+#if DEBUG
+                Debug.Log("NoteJudgeControl Broadcast NoteClearEvent\n" +
+                          $"Note: {note.id} Time: {note.time} CurTime: {curTime} Pos: {note.pos} JudgeSize: {(note.size < 1.2 ? 0.6 : note.size / 2)}");
+#endif
             }
         }
 
@@ -188,23 +196,38 @@ namespace Plutono.GamePlay.Control
 
             var lastDeltaXPos = float.MaxValue;
             var lastDeltaTime = double.MaxValue;
+            var grade = NoteGrade.None;
             foreach (var curDetectingNote in notes)
             {
                 if (!curDetectingNote.IsHit(pos.x, out deltaXPos, touchTime, out deltaTime))
                     continue;
-                if (deltaXPos < lastDeltaXPos)
+                var curNoteGrade = NoteGradeJudgment.Judge(deltaTime, mode);
+                if (curNoteGrade > grade)
                 {
                     note = curDetectingNote;
                     lastDeltaXPos = deltaXPos;
-                    lastDeltaTime = deltaTime;
+                    grade = curNoteGrade;
                 }
-                // Touch point is closer to the centre of this note, despite having a larger interval.
-                else if (deltaXPos >= lastDeltaXPos && deltaTime < lastDeltaTime)
+                else if (curNoteGrade == grade && deltaXPos < lastDeltaXPos)
                 {
                     note = curDetectingNote;
                     lastDeltaXPos = deltaXPos;
-                    lastDeltaTime = deltaTime;
+                    grade = curNoteGrade;
                 }
+                //if (deltaXPos < lastDeltaXPos)
+                //{
+                //    note = curDetectingNote;
+                //    lastDeltaXPos = deltaXPos;
+                //    lastDeltaTime = deltaTime;
+                //}
+                //// Touch point is closer to the centre of this note, despite having a larger interval.
+                //else if (deltaXPos >= lastDeltaXPos && deltaTime < lastDeltaTime)
+                //{
+                //    note = curDetectingNote;
+                //    lastDeltaXPos = deltaXPos;
+                //    lastDeltaTime = deltaTime;
+                //}
+
                 //if (deltaTime < lastDeltaTime)
                 //{
                 //    note = curDetectingNote;

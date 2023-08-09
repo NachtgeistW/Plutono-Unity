@@ -43,7 +43,10 @@ namespace Plutono.GamePlay.Notes
             transform.position = new Vector3(pos, 0, z);
         }
 
-        public bool ShouldBeMiss() => transform.position.z <= 0;
+        public bool ShouldBeMiss(GameMode mode)
+        {
+
+        }
 
         public bool OnTap(Vector2 worldPos, double hitTime, out double deltaTime, out float deltaXPos)
         {

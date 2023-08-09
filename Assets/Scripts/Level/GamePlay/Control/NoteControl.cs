@@ -69,8 +69,9 @@ namespace Plutono.GamePlay.Control
                 var nextNote = GamePlayController.Instance.ChartDetail.noteDetails[lastAppearanceNoteIndex];
                 //添加生成的提前量
                 var nextNoteTime = nextNote.time;
-                if (nextNoteTime - (curTime + noteGenerationLeadTime) < 0.01
-                    || curTime + noteGenerationLeadTime >= nextNoteTime)
+                if (curTime + noteGenerationLeadTime >= nextNoteTime
+                // || nextNoteTime - (curTime + noteGenerationLeadTime) < 0.001
+                    )
                 {
                     switch (nextNote.type)
                     {
@@ -96,7 +97,7 @@ namespace Plutono.GamePlay.Control
                     break;
             }
         }
-        
+
         private void MoveAndCollect()
         {
             foreach (var note in blankNotes.ToList())
@@ -140,10 +141,10 @@ namespace Plutono.GamePlay.Control
         {
             foreach (var note in blankNotes.ToList())
             {
-                if (!note.IsClear && note.ShouldBeMiss())
+                if (!note.IsClear && note.transform.position.z <= 0)
                 {
                     note.IsClear = true;
-                    EventCenter.Broadcast(new NoteClearEvent<BlankNote> { Note = note, DeltaXPos = 0, Grade = NoteGrade.Perfect});
+                    EventCenter.Broadcast(new NoteClearEvent<BlankNote> { Note = note, DeltaXPos = 0, Grade = NoteGrade.Perfect });
                     blankNotes.Remove(note);
                 }
 

@@ -133,8 +133,8 @@ namespace Plutono.Level.GamePlay
                 lastDspTime = curDspTime;
                 CurTime = (float)curDspTime - musicStartTime - configGlobalChartOffset + configChartMusicOffset;
 #if DEBUG
-                //Debug.Log("--SynchronizeTime--\nStarOrResumeTime: " + StartOrResumeTime + " DspTime: " + curDspTime
-                //    + " CurTime: " + CurTime + " musicTime: " + musicSource.time);
+                Debug.Log("--SynchronizeTime--\nStarOrResumeTime: " + StartOrResumeTime + " DspTime: " + curDspTime
+                    + " CurTime: " + CurTime + " musicTime: " + musicSource.time);
 #endif
             }
             else
@@ -175,8 +175,9 @@ namespace Plutono.Level.GamePlay
             Status.IsStarted = true;
 
 #if DEBUG
-            // Debug.Log("StarOrResumeTime: " + StartOrResumeTime + " DspTime: " + curDspTime + " musicStartTime: " + musicStartTime);
-            // Debug.Log("globalLatency/musicPlayingDelay: " + musicPlayingDelay + " chartMusicOffset: " + configChartMusicOffset + " ConfigChartOffset: " + configGlobalChartOffset);
+            Debug.Log($"StarOrResumeTime: {StartOrResumeTime} DspTime: {curDspTime} musicStartTime: {musicStartTime}\n" +
+                      $"globalLatency/musicPlayingDelay: {musicPlayingDelay} chartMusicOffset: {configChartMusicOffset} ConfigChartOffset: {configGlobalChartOffset}"
+                      );
 #endif
         }
 
@@ -240,11 +241,19 @@ namespace Plutono.Level.GamePlay
         private void OnNoteClear(NoteClearEvent<PianoNote> evt)
         {
             Status.CalculateScore(evt.Note.id, Status.Mode == GameMode.Autoplay ? NoteGrade.Perfect : evt.Grade);
+#if DEBUG
+            Debug.Log("GamePlayControl On NoteClearEvent\n" +
+                      $"Note: {evt.Note.id} Time: {evt.Note.time} CurTime: {CurTime} NoteJudge: {Status.GetJudgment(evt.Note.id).Grade}");
+#endif
         }
-        
+
         private void OnNoteClear(NoteClearEvent<SlideNote> evt)
         {
             Status.CalculateScore(evt.Note.id, Status.Mode == GameMode.Autoplay ? NoteGrade.Perfect : evt.Grade);
+#if DEBUG
+            Debug.Log("GamePlayControl On NoteClearEvent\n" +
+                      $"Note: {evt.Note.id} Time: {evt.Note.time} CurTime: {CurTime} NoteJudge: {Status.GetJudgment(evt.Note.id).Grade}");
+#endif
         }
 
         private void OnNoteMiss(NoteMissEvent<BlankNote> evt)
@@ -255,11 +264,19 @@ namespace Plutono.Level.GamePlay
         private void OnNoteMiss(NoteMissEvent<PianoNote> evt)
         {
             Status.CalculateScore(evt.Note.id, NoteGrade.Miss);
+#if DEBUG
+            Debug.Log("GamePlayControl On NoteMissEvent\n" +
+                      $"Note: {evt.Note.id} Time: {evt.Note.time} CurTime: {CurTime} NoteJudge: {Status.GetJudgment(evt.Note.id).Grade}");
+#endif
         }
 
         private void OnNoteMiss(NoteMissEvent<SlideNote> evt)
         {
             Status.CalculateScore(evt.Note.id, NoteGrade.Miss);
+#if DEBUG
+            Debug.Log("GamePlayControl On NoteMissEvent\n" +
+                      $"Note: {evt.Note.id} Time: {evt.Note.time} CurTime: {CurTime} NoteJudge: {Status.GetJudgment(evt.Note.id).Grade}");
+#endif
         }
     }
 }

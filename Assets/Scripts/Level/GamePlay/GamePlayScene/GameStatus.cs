@@ -150,7 +150,7 @@ public sealed class GameStatus
 
     private bool IsJudged(uint noteId) => Judgments[noteId].IsJudged;
 
-    private NoteJudgmentStatus GetJudgment(uint noteId) => Judgments[noteId];
+    public NoteJudgmentStatus GetJudgment(uint noteId) => Judgments[noteId];
 }
 public class NoteJudgmentStatus
 {
