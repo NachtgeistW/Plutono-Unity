@@ -2,23 +2,43 @@ using UnityEngine;
 
 public class Singleton<T> : MonoBehaviour where T : Singleton<T>
 {
-    private static T instance;
+    private static T _instance;
     public static T Instance
     {
-        get { return instance; }
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = (T)FindObjectOfType(typeof(T));
+                if (_instance == null)
+                {
+                    SetupInstance();
+                }
+            }
+            return _instance;
+        }
     }
 
     protected virtual void Awake()
     {
-        if (instance != null)
+        if (_instance != null)
             Destroy(gameObject);
         else
-            instance = (T)this;
+        {
+            _instance = this as T;
+        }
     }
 
-    protected virtual void OnDestroy()
+    private static void SetupInstance()
     {
-        if (instance == this)
-            instance = null;
+        _instance = (T)FindObjectOfType(typeof(T));
+        if (_instance == null)
+        {
+            var obj = new GameObject
+            {
+                name = typeof(T).Name
+            };
+            _instance = obj.AddComponent<T>();
+        }
     }
 }
