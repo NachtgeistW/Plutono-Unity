@@ -14,16 +14,12 @@
         "com.unity.services.core": "1.0.1"
       },
       "url": "https://packages.unity.cn"
-=======
-      "url": "https://packages.unity.com"
->>>>>>> 1a359878a7456f5602f494a6c8cb969753ca5bec
     },
     "com.unity.ext.nunit": {
       "version": "1.0.6",
       "depth": 1,
       "source": "registry",
       "dependencies": {},
-<<<<<<< HEAD
       "url": "https://packages.unity.cn"
     },
     "com.unity.ide.rider": {
@@ -42,18 +38,13 @@
       "dependencies": {
         "com.unity.test-framework": "1.1.9"
       },
-<<<<<<< HEAD
       "url": "https://packages.unity.cn"
-=======
-      "url": "https://packages.unity.com"
->>>>>>> 1a359878a7456f5602f494a6c8cb969753ca5bec
     },
     "com.unity.ide.vscode": {
       "version": "1.2.5",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
-<<<<<<< HEAD
       "url": "https://packages.unity.cn"
     },
     "com.unity.inputsystem": {
@@ -82,9 +73,6 @@
         "com.unity.modules.androidjni": "1.0.0"
       },
       "url": "https://packages.unity.cn"
-=======
-      "url": "https://packages.unity.com"
->>>>>>> 1a359878a7456f5602f494a6c8cb969753ca5bec
     },
     "com.unity.test-framework": {
       "version": "1.1.31",
@@ -95,11 +83,7 @@
         "com.unity.modules.imgui": "1.0.0",
         "com.unity.modules.jsonserialize": "1.0.0"
       },
-<<<<<<< HEAD
       "url": "https://packages.unity.cn"
-=======
-      "url": "https://packages.unity.com"
->>>>>>> 1a359878a7456f5602f494a6c8cb969753ca5bec
     },
     "com.unity.textmeshpro": {
       "version": "3.0.6",
@@ -108,7 +92,6 @@
       "dependencies": {
         "com.unity.ugui": "1.0.0"
       },
-<<<<<<< HEAD
       "url": "https://packages.unity.cn"
     },
     "com.unity.timeline": {
@@ -121,11 +104,7 @@
         "com.unity.modules.audio": "1.0.0",
         "com.unity.modules.particlesystem": "1.0.0"
       },
-<<<<<<< HEAD
       "url": "https://packages.unity.cn"
-=======
-      "url": "https://packages.unity.com"
->>>>>>> 1a359878a7456f5602f494a6c8cb969753ca5bec
     },
     "com.unity.ugui": {
       "version": "1.0.0",
@@ -144,11 +123,7 @@
         "com.unity.ugui": "1.0.0",
         "com.unity.modules.jsonserialize": "1.0.0"
       },
-<<<<<<< HEAD
       "url": "https://packages.unity.cn"
-=======
-      "url": "https://packages.unity.com"
->>>>>>> 1a359878a7456f5602f494a6c8cb969753ca5bec
     },
     "com.unity.modules.ai": {
       "version": "1.0.0",
