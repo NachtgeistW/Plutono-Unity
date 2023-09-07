@@ -10,7 +10,7 @@ namespace Plutono.Level.Result
             StartCoroutine(Capture());
 
             var share = new Utilities.Android.AndroidNativeShareAdapter();
-            share.ShareWithScreenshot(Application.persistentDataPath + "/Screenshot.png");
+            share.ShareWithText(message: "Greeting from Plutono");
         }
 
         private static IEnumerator Capture()
